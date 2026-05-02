@@ -1,53 +1,52 @@
 gsap.registerPlugin(ScrollTrigger);
 
-// 1. Canvas 手绘线条特效
+// 1. 背景手绘线条动画 (Canvas)
 const canvas = document.getElementById('sketch-bg');
 const ctx = canvas.getContext('2d');
-let points = [];
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resize);
-resize();
-
-// 简单的动态线条逻辑：随鼠标和滚动产生“笔触”
-function drawSketch() {
+let time = 0;
+function animateBg() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = 'rgba(0,0,0,0.05)';
-    ctx.lineWidth = 1;
-    
     ctx.beginPath();
-    // 这里可以根据 scroll 进度绘制出类似地图路径的曲线
-    ctx.moveTo(0, canvas.height/2);
-    ctx.bezierCurveTo(canvas.width/3, 0, canvas.width/1.5, canvas.height, canvas.width, canvas.height/2);
-    ctx.stroke();
-    
-    requestAnimationFrame(drawSketch);
-}
-drawSketch();
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.lineWidth = 0.5;
 
-// 2. Ergodic Flow：内容的视觉引导进入
-const panels = gsap.utils.toArray('.panel');
-panels.forEach((panel, i) => {
-    gsap.to(panel, {
+    // 绘制随时间摆动的“流向线”
+    for (let i = 0; i < canvas.width; i += 100) {
+        ctx.moveTo(i, 0);
+        ctx.bezierCurveTo(
+            i + Math.sin(time) * 50, canvas.height / 2,
+            i - Math.cos(time) * 50, canvas.height / 2,
+            i, canvas.height
+        );
+    }
+    ctx.stroke();
+    time += 0.01;
+    requestAnimationFrame(animateBg);
+}
+animateBg();
+
+// 2. Ergodic Flow：板块渐显与位移引导
+const panels = document.querySelectorAll('.panel');
+panels.forEach((panel) => {
+    gsap.from(panel.querySelector('.inner'), {
+        y: 50,
+        opacity: 0,
+        duration: 1.2,
         scrollTrigger: {
             trigger: panel,
-            start: "top center",
-            end: "bottom center",
-            toggleActions: "play reverse play reverse",
-        },
-        opacity: 1,
-        y: -30,
-        duration: 1,
-        ease: "power2.out"
+            start: "top 80%",
+            end: "top 20%",
+            toggleActions: "play none none reverse"
+        }
     });
 });
 
-// 3. 引导点动画
+// 3. 进度点随滚动移动
 gsap.to(".flow-indicator .dot", {
-    y: "60vh",
+    y: 92,
     ease: "none",
     scrollTrigger: {
         trigger: "body",
@@ -55,4 +54,35 @@ gsap.to(".flow-indicator .dot", {
         end: "bottom bottom",
         scrub: true
     }
+});
+
+// 4. 3D滑动区域拖拽交互
+const slider = document.querySelector('.slider-container');
+let isDown = false;
+let startX;
+let scrollLeft;
+
+slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    slider.style.cursor = 'grabbing';
+    startX = e.pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+});
+
+slider.addEventListener('mouseleave', () => {
+    isDown = false;
+    slider.style.cursor = 'grab';
+});
+
+slider.addEventListener('mouseup', () => {
+    isDown = false;
+    slider.style.cursor = 'grab';
+});
+
+slider.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startX) * 2;
+    slider.scrollLeft = scrollLeft - walk;
 });
