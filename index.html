@@ -2,72 +2,96 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Personal Odyssey | Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品集 | 沉浸式手绘空间</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- 背景层：手绘沉浸式特效 -->
+    <!-- 动态手绘背景 -->
     <canvas id="sketch-bg"></canvas>
 
-    <!-- 进度指示器 (Ergodic Flow 引导器) -->
+    <!-- 进度指示器 -->
     <div class="flow-indicator">
-        <div class="line"></div>
         <div class="dot"></div>
     </div>
 
-    <div id="viewport">
-        <!-- Section 1: 个人简介 (Intro) -->
+    <main id="viewport">
+        <!-- 01 个人简介 -->
         <section class="panel" id="about">
             <div class="inner">
-                <h1 class="hand-drawn-text"> [Quella] 作品集</h1>
-                <div class="bio-card">
-                    <p><strong>联系wx:</strong> W17720585880</p>
+                <h1 class="hand-drawn-title">Hello, I'm [Name]</h1>
+                <div class="card">
+                    <p><strong>SCHOOL:</strong> XX美术学院 · 数字媒体</p>
+                    <p><strong>CONTACT:</strong> yourname@example.com</p>
+                    <p><strong>EXP:</strong> 专注于虚幻引擎特效、3D场景建模与手绘沉浸式交互设计。</p>
                 </div>
             </div>
         </section>
 
-        <!-- Section 2: 3D动画与场景 (3D & Scene) -->
+        <!-- 02 3D场景设计 (左右滑动区域) -->
         <section class="panel" id="scene-3d">
-            <div class="inner right">
-                <h2 class="section-title">3D动画和场景设计</h2>
-                <div class="work-preview">
-                    <img src="assets/cave2.png" alt="Cave 2 场景设计作品" class="work-img">
-                    <p class="desc">// 动态光影与构思</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 3: 游戏设计 (Game/UE/Unity) -->
-        <section class="panel" id="game">
             <div class="inner">
-                <h2 class="section-title">游戏设计</h2>
-                <div class="video-placeholder">
-                    <div class="play-icon">▶</div>
-                    <span>[ 这里嵌入 UE/Unity 特效视频链接 ]</span>
+                <h2 class="section-title">3D场景设计 // Scene Design</h2>
+                <div class="slider-container">
+                    <div class="slider-track">
+                        <div class="slide-item">
+                            <img src="assets/cave2.png" alt="Cave 2">
+                            <p class="slide-desc">// Cave 2 - 氛围渲染</p>
+                        </div>
+                        <div class="slide-item">
+                            <img src="assets/snow.png" alt="Snow">
+                            <p class="slide-desc">// Snow - 极地环境</p>
+                        </div>
+                        <div class="slide-item">
+                            <img src="assets/gufeng.jpg" alt="Ancient">
+                            <p class="slide-desc">// 古风建筑 - 材质研究</p>
+                        </div>
+                        <div class="slide-item">
+                            <img src="assets/fansy%20door.png" alt="Fantasy Door">
+                            <p class="slide-desc">// Fantasy Door - 幻想入口</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="hint">← HOLD & DRAG TO EXPLORE →</p>
+            </div>
+        </section>
+
+        <!-- 03 游戏设计视频 (UE/Unity) -->
+        <section class="panel" id="game-design">
+            <div class="inner">
+                <h2 class="section-title">游戏特效 & 设计 // Game Dev</h2>
+                <div class="card video-box">
+                    <!-- 替换为你的实际视频地址 -->
+                    <div class="placeholder-video">
+                        <span>VIDEO: UE5/Unity Effect Showcase</span>
+                    </div>
+                    <p>// 包含：粒子特效、技能表现、关卡设计</p>
                 </div>
             </div>
         </section>
 
-        <!-- Section 4: 平面与手绘 (Graphic & Hand-drawn) -->
-        <section class="panel" id="hand-drawn">
-            <div class="inner center">
-                <h2 class="section-title">平面插画</h2>
-                <div class="sketch-gallery">
-                    <div class="sketch-item">手稿 A</div>
-                    <div class="sketch-item">手稿 B</div>
+        <!-- 04 平面设计 & 手绘沉浸 -->
+        <section class="panel" id="graphic">
+            <div class="inner">
+                <h2 class="section-title">平面 & 手绘特效 // Sketch</h2>
+                <div class="sketch-grid">
+                    <div class="sketch-card">手绘特效演示 A</div>
+                    <div class="sketch-card">平面排版作品 B</div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 5: 探索 (Explore) -->
+        <!-- 05 探索 -->
         <section class="panel" id="explore">
-            <div class="inner">
-                <h2 class="section-title">探索</h2>
-                <p>不断打破边界，寻找新的视觉语言。</p>
+            <div class="inner center">
+                <h2 class="section-title">探索未来 // Exploration</h2>
+                <p class="discovery-text">追求数字媒介与手绘灵魂的极致融合。</p>
+                <a href="mailto:yourname@example.com" class="contact-btn">START COLLABORATION</a>
             </div>
         </section>
-    </div>
+    </main>
 
+    <!-- 脚本 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="script.js"></script>
