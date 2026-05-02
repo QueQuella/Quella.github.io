@@ -1,63 +1,212 @@
+/* 基础重置与变量 */
 :root {
-    --bg-color: #f0f0f0; /* 纸张质感底色 */
-    --line-color: #1a1a1a;
+    --bg-color: #050505;
+    --text-main: #f0f0f0;
+    --accent: #00ffcc; /* 游戏风青色强调色 */
+    --accent-hover: #ff00ff; /* 交互时的品红色 */
+    --grid-color: rgba(255, 255, 255, 0.03);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: none; /* 隐藏默认光标，使用自定义的 */
 }
 
 body {
-    margin: 0;
-    background: var(--bg-color);
-    font-family: 'Courier New', Courier, monospace; /* 模拟草图感 */
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Courier New', Courier, monospace; /* 程序员/复古游戏字体感 */
     overflow-x: hidden;
+    /* 背景网格纹理，增加空间感 */
+    background-image: 
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 50px 50px;
 }
 
-#sketch-bg {
+/* --- 自定义光标 --- */
+.cursor {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
     position: fixed;
-    top: 0; left: 0;
-    z-index: -1;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
 }
 
-.panel {
-    height: 100vh;
+.cursor-follower {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, border-color 0.2s;
+}
+
+/* --- 视觉引导线 (Ergodic flow) --- */
+.flow-line {
+    position: fixed;
+    left: 20%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 0;
+}
+.flow-progress {
     width: 100%;
+    background: var(--accent);
+    height: 0%; /* JS控制 */
+    box-shadow: 0 0 10px var(--accent);
+}
+
+/* --- 侧边导航 --- */
+.game-nav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 20%;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 10;
+    background: linear-gradient(90deg, rgba(5,5,5,0.9) 0%, rgba(5,5,5,0) 100%);
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--accent);
+    margin-bottom: 4rem;
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+.nav-links {
+    list-style: none;
+}
+
+.nav-links li {
+    margin-bottom: 1.5rem;
+}
+
+.nav-links a {
+    color: #666;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+}
+
+.nav-links a::before {
+    content: '>';
+    position: absolute;
+    left: -20px;
+    opacity: 0;
+    color: var(--accent);
+    transition: opacity 0.3s;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--text-main);
+}
+
+.nav-links a:hover::before, .nav-links a.active::before {
+    opacity: 1;
+}
+
+/* --- 核心内容区 --- */
+.content-wrapper {
+    margin-left: 20%; /* 留出侧边栏位置 */
+    position: relative;
+    z-index: 1;
+}
+
+.level-section {
+    min-height: 100vh;
+    padding: 5rem 10% 5rem 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* --- 占位图网格 (画廊UI) --- */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.placeholder-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    height: 250px;
     display: flex;
     align-items: center;
-    padding: 0 10vw;
-    box-sizing: border-box;
-    opacity: 0; /* 由 JS 控制显现 */
-}
-
-/* 手绘风格边框 */
-.bio-card, .work-preview, .video-placeholder {
-    border: 2px solid var(--line-color);
-    padding: 2rem;
-    background: white;
-    box-shadow: 8px 8px 0px var(--line-color);
+    justify-content: center;
+    color: #666;
+    transition: all 0.4s ease;
     position: relative;
-    /* 模拟不规则手绘边 */
-    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    overflow: hidden;
 }
 
-.hand-drawn-text {
-    font-size: 4rem;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-}
-
-/* 视觉流向引导条 */
-.flow-indicator {
-    position: fixed;
-    right: 5vw;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 60vh;
-    width: 2px;
-    background: rgba(0,0,0,0.1);
-}
-.flow-indicator .dot {
-    width: 10px;
-    height: 10px;
-    background: var(--line-color);
-    border-radius: 50%;
+/* 占位图 Hover 游戏感特效 */
+.placeholder-box::after {
+    content: '';
     position: absolute;
-    left: -4px;
+    top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+    transform: skewX(-25deg);
+    transition: left 0.5s;
+}
+
+.placeholder-box:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+    transform: translateY(-5px);
+}
+
+.placeholder-box:hover::after {
+    left: 200%;
+}
+
+.large { grid-column: span 2; }
+.tall { grid-row: span 2; height: 100%; }
+
+/* --- 动画与特效 --- */
+/* Glitch 标题效果 */
+.glitch {
+    font-size: 5rem;
+    font-weight: bold;
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+/* 滚动显现动画 */
+.hidden {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s cubic-bezier(0.1, 0.6, 0.2, 1);
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
 }
