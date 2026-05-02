@@ -1,32 +1,69 @@
-<!-- Section 2: 3D动画与场景设计 -->
-<section class="panel" id="scene-3d">
-    <div class="inner">
-        <h2 class="section-title">3D场景展示</h2>
-        
-        <div class="sketch-grid">
-            <!-- 大图：主推作品 -->
-            <div class="grid-item large">
-                <img src="assets/cave2.png" alt="Cave Scene">
-                <span class="caption">#01 Cave Concept</span>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Portfolio | 3D & Hand-Drawn</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 3D 渲染背景容器 -->
+    <canvas id="webgl"></canvas>
+
+    <!-- 加载遮罩 -->
+    <div id="loader">渲染场景中...</div>
+
+    <main>
+        <!-- 1. 个人简介 (Home) -->
+        <section class="section" id="about">
+            <div class="content">
+                <h1>姓名 / YOUR NAME</h1>
+                <p class="tagline">跨媒介设计师 | 3D艺术家 | 游戏开发者</p>
+                <div class="details">
+                    <p><strong>毕业院校：</strong> XX美术学院 / XX大学</p>
+                    <p><strong>联系方式：</strong> email@example.com</p>
+                    <p><strong>个人经历：</strong> 曾参与XX项目开发，深耕UE5特效与手绘表现力。</p>
+                </div>
             </div>
-            
-            <!-- 中图 -->
-            <div class="grid-item medium">
-                <img src="assets/snow.png" alt="Snow Scene">
-                <span class="caption">#02 Winter simulation</span>
+        </section>
+
+        <!-- 2. 游戏设计视频 (Game Design) -->
+        <section class="section" id="game-design">
+            <div class="content right">
+                <h2>游戏设计 & 特效</h2>
+                <div class="media-container">
+                    <!-- 这里替换为你自己的视频链接 -->
+                    <iframe src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+                    <p>UE/Unity 实时渲染、手绘沉浸式特效作品集</p>
+                </div>
             </div>
-            
-            <!-- 小图 A -->
-            <div class="grid-item small">
-                <img src="assets/gufeng.jpg" alt="Ancient Scene">
-                <span class="caption">#03 Ancient Architecture</span>
+        </section>
+
+        <!-- 3. 平面设计与手绘 (Design & Drawing) -->
+        <section class="section" id="graphic">
+            <div class="content">
+                <h2>平面设计 / 手绘沉浸</h2>
+                <div class="grid">
+                    <img src="https://via.placeholder.com/400x300?text=Hand+Drawn+1" alt="作品1">
+                    <img src="https://via.placeholder.com/400x300?text=Graphic+2" alt="作品2">
+                </div>
+                <p>探索手绘线条与数字媒介的边界。</p>
             </div>
-            
-            <!-- 小图 B (注意文件名中的空格处理) -->
-            <div class="grid-item small">
-                <img src="assets/fansy%20door.png" alt="Fantasy Door">
-                <span class="caption">#04 The Gate</span>
+        </section>
+
+        <!-- 4. 探索 (Discovery) -->
+        <section class="section" id="explore">
+            <div class="content center">
+                <h2>探索更多可能性</h2>
+                <p>CONTACT ME FOR COLLABORATION</p>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
+    </main>
+
+    <!-- 脚本引入 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
