@@ -1,122 +1,63 @@
 :root {
-    --ink-color: #1a1a1a;
-    --paper-color: #f4f4f2;
+    --bg-color: #f0f0f0; /* 纸张质感底色 */
+    --line-color: #1a1a1a;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
 body {
-    background-color: var(--paper-color);
-    font-family: 'Courier New', Courier, monospace;
-    color: var(--ink-color);
+    margin: 0;
+    background: var(--bg-color);
+    font-family: 'Courier New', Courier, monospace; /* 模拟草图感 */
     overflow-x: hidden;
 }
 
 #sketch-bg {
     position: fixed;
-    top: 0; left: 0; z-index: -1;
-    opacity: 0.3;
+    top: 0; left: 0;
+    z-index: -1;
 }
 
-/* 导航指示器 */
-.flow-indicator {
-    position: fixed;
-    right: 30px; top: 50%;
-    height: 100px; width: 2px;
-    background: rgba(0,0,0,0.1);
-    transform: translateY(-50%);
-}
-.flow-indicator .dot {
-    width: 8px; height: 8px;
-    background: var(--ink-color);
-    border-radius: 50%;
-    position: absolute; left: -3px;
-}
-
-/* 页面板块 */
 .panel {
-    min-height: 100vh;
+    height: 100vh;
+    width: 100%;
     display: flex;
     align-items: center;
-    padding: 5vw;
+    padding: 0 10vw;
+    box-sizing: border-box;
+    opacity: 0; /* 由 JS 控制显现 */
 }
 
-.inner { width: 100%; max-width: 1200px; margin: 0 auto; }
-.center { text-align: center; }
-
-/* 手绘风格标题 */
-.hand-drawn-title {
-    font-size: clamp(2rem, 8vw, 4rem);
-    margin-bottom: 2rem;
-    text-decoration: underline wavy var(--ink-color);
-}
-
-.section-title {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-    border-left: 4px solid var(--ink-color);
-    padding-left: 15px;
-}
-
-/* 卡片与手绘边框 */
-.card, .slide-item img, .placeholder-video {
-    background: #fff;
-    border: 2px solid var(--ink-color);
-    padding: 1.5rem;
-    box-shadow: 8px 8px 0px var(--ink-color);
-    /* 模拟手绘不规则边框 */
+/* 手绘风格边框 */
+.bio-card, .work-preview, .video-placeholder {
+    border: 2px solid var(--line-color);
+    padding: 2rem;
+    background: white;
+    box-shadow: 8px 8px 0px var(--line-color);
+    position: relative;
+    /* 模拟不规则手绘边 */
     border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
 }
 
-/* 3D 左右滑动区域 */
-.slider-container {
-    width: 100%;
-    overflow-x: auto;
-    cursor: grab;
-    padding-bottom: 20px;
-    scrollbar-width: none;
-}
-.slider-container::-webkit-scrollbar { display: none; }
-
-.slider-track {
-    display: flex;
-    gap: 30px;
+.hand-drawn-text {
+    font-size: 4rem;
+    text-transform: uppercase;
+    margin-bottom: 20px;
 }
 
-.slide-item {
-    flex: 0 0 600px;
+/* 视觉流向引导条 */
+.flow-indicator {
+    position: fixed;
+    right: 5vw;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60vh;
+    width: 2px;
+    background: rgba(0,0,0,0.1);
 }
-.slide-item img {
-    width: 100%;
-    height: 350px;
-    object-fit: cover;
-}
-
-.slide-desc { margin-top: 15px; font-style: italic; font-size: 0.9rem; }
-
-/* 视频占位 */
-.placeholder-video {
-    height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #eee;
-}
-
-.hint { margin-top: 10px; font-size: 0.8rem; color: #777; }
-
-/* 按钮 */
-.contact-btn {
-    display: inline-block;
-    margin-top: 2rem;
-    padding: 1rem 2rem;
-    border: 2px solid var(--ink-color);
-    text-decoration: none;
-    color: var(--ink-color);
-    font-weight: bold;
-    transition: 0.3s;
-}
-.contact-btn:hover {
-    background: var(--ink-color);
-    color: white;
+.flow-indicator .dot {
+    width: 10px;
+    height: 10px;
+    background: var(--line-color);
+    border-radius: 50%;
+    position: absolute;
+    left: -4px;
 }
