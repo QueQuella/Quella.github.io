@@ -60,4 +60,19 @@ body {
     border-radius: 50%;
     position: absolute;
     left: -4px;
+
+/* 给图片添加一个类名，或者直接控制 work-preview 下的 img */
+.work-preview img {
+    max-width: 100%;  /* 图片最大宽度不超过其父容器 */
+    height: auto;     /* 高度自动，保持比例 */
+    display: block;   /* 消除图片下方的空隙 */
+    margin-top: 20px;
+}
+
+/* 如果你想保持之前的手绘边框风格 */
+.hand-drawn-border {
+    border: 2px solid #1a1a1a;
+    box-shadow: 8px 8px 0px #1a1a1a;
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+
 }
