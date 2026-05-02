@@ -1,58 +1,80 @@
-gsap.registerPlugin(ScrollTrigger);
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. 自定义光标逻辑
+    const cursor = document.querySelector('.cursor');
+    const follower = document.querySelector('.cursor-follower');
+    const links = document.querySelectorAll('a, .placeholder-box');
 
-// 1. Canvas 手绘线条特效
-const canvas = document.getElementById('sketch-bg');
-const ctx = canvas.getContext('2d');
-let points = [];
-
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resize);
-resize();
-
-// 简单的动态线条逻辑：随鼠标和滚动产生“笔触”
-function drawSketch() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = 'rgba(0,0,0,0.05)';
-    ctx.lineWidth = 1;
-    
-    ctx.beginPath();
-    // 这里可以根据 scroll 进度绘制出类似地图路径的曲线
-    ctx.moveTo(0, canvas.height/2);
-    ctx.bezierCurveTo(canvas.width/3, 0, canvas.width/1.5, canvas.height, canvas.width, canvas.height/2);
-    ctx.stroke();
-    
-    requestAnimationFrame(drawSketch);
-}
-drawSketch();
-
-// 2. Ergodic Flow：内容的视觉引导进入
-const panels = gsap.utils.toArray('.panel');
-panels.forEach((panel, i) => {
-    gsap.to(panel, {
-        scrollTrigger: {
-            trigger: panel,
-            start: "top center",
-            end: "bottom center",
-            toggleActions: "play reverse play reverse",
-        },
-        opacity: 1,
-        y: -30,
-        duration: 1,
-        ease: "power2.out"
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        
+        // 稍微延迟的跟随外圈
+        setTimeout(() => {
+            follower.style.left = e.clientX + 'px';
+            follower.style.top = e.clientY + 'px';
+        }, 50);
     });
-});
 
-// 3. 引导点动画
-gsap.to(".flow-indicator .dot", {
-    y: "60vh",
-    ease: "none",
-    scrollTrigger: {
-        trigger: "body",
-        start: "top top",
-        end: "bottom bottom",
-        scrub: true
+    // 交互元素 hover 放大光标特效
+    links.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+            follower.style.width = '50px';
+            follower.style.height = '50px';
+            follower.style.borderColor = 'var(--accent-hover)';
+        });
+        link.addEventListener('mouseleave', () => {
+            follower.style.width = '30px';
+            follower.style.height = '30px';
+            follower.style.borderColor = 'var(--accent)';
+        });
+    });
+
+    // 2. 视觉引导线 (滚动进度)
+    const progressBar = document.querySelector('.flow-progress');
+    
+    window.addEventListener('scroll', () => {
+        let scrollDistance = document.documentElement.scrollTop;
+        let totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        let progress = (scrollDistance / totalHeight) * 100;
+        progressBar.style.height = progress + '%';
+    });
+
+    // 3. 滚动显现动画 (Level 触发)
+    const observerOptions = {
+        threshold: 0.2 // 当元素20%进入视口时触发
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+                // 同步更新侧边栏激活状态
+                updateNav(entry.target.parentElement.id);
+            }
+        });
+    }, observerOptions);
+
+    const hiddenElements = document.querySelectorAll('.hidden');
+    hiddenElements.forEach((el) => observer.observe(el));
+
+    // 4. 更新导航栏高亮
+    function updateNav(id) {
+        const navLinks = document.querySelectorAll('.nav-links a');
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${id}`) {
+                link.classList.add('active');
+            }
+        });
     }
+
+    // 平滑滚动处理
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
 });
