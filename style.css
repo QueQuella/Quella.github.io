@@ -1,0 +1,63 @@
+:root {
+    --bg-color: #f0f0f0; /* 纸张质感底色 */
+    --line-color: #1a1a1a;
+}
+
+body {
+    margin: 0;
+    background: var(--bg-color);
+    font-family: 'Courier New', Courier, monospace; /* 模拟草图感 */
+    overflow-x: hidden;
+}
+
+#sketch-bg {
+    position: fixed;
+    top: 0; left: 0;
+    z-index: -1;
+}
+
+.panel {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 10vw;
+    box-sizing: border-box;
+    opacity: 0; /* 由 JS 控制显现 */
+}
+
+/* 手绘风格边框 */
+.bio-card, .work-preview, .video-placeholder {
+    border: 2px solid var(--line-color);
+    padding: 2rem;
+    background: white;
+    box-shadow: 8px 8px 0px var(--line-color);
+    position: relative;
+    /* 模拟不规则手绘边 */
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+.hand-drawn-text {
+    font-size: 4rem;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+/* 视觉流向引导条 */
+.flow-indicator {
+    position: fixed;
+    right: 5vw;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60vh;
+    width: 2px;
+    background: rgba(0,0,0,0.1);
+}
+.flow-indicator .dot {
+    width: 10px;
+    height: 10px;
+    background: var(--line-color);
+    border-radius: 50%;
+    position: absolute;
+    left: -4px;
+}
