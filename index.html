@@ -2,21 +2,366 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Quella 作品集 | Player 1 Ready</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            background-color: #0a0c12;
+            font-family: 'Segoe UI', 'Courier New', 'Fira Code', monospace;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        /* 游戏风自定义光标 */
+        .cursor {
+            width: 8px;
+            height: 8px;
+            background: #00ffcc;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.05s linear;
+            box-shadow: 0 0 6px #00ffcc;
+        }
+        .cursor-follower {
+            width: 32px;
+            height: 32px;
+            border: 1.5px solid #00ffcc;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.12s ease-out;
+            backdrop-filter: blur(2px);
+        }
+
+        /* 视觉引导线 */
+        .flow-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 0%;
+            background: linear-gradient(to bottom, #00ffcc, #ff00aa);
+            z-index: 100;
+            transition: height 0.1s linear;
+            box-shadow: 0 0 8px #00ffcc;
+        }
+        .flow-progress {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #00ffcc, transparent);
+        }
+
+        /* 侧边导航 */
+        .game-nav {
+            position: fixed;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 200;
+            background: rgba(10, 12, 18, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            padding: 1.2rem 1rem;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #00ffcc;
+            text-align: center;
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+            font-family: monospace;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .nav-links li a {
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #b0b0b0;
+            transition: all 0.2s;
+            letter-spacing: 1px;
+            writing-mode: horizontal-tb;
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-family: monospace;
+        }
+        .nav-links li a:hover, .nav-links li a.active {
+            color: #00ffcc;
+            text-shadow: 0 0 5px #00ffcc;
+            background: rgba(0,255,204,0.1);
+        }
+
+        /* 主内容区 */
+        .content-wrapper {
+            margin-left: 8rem;
+            padding: 2rem 3rem 5rem 3rem;
+            max-width: 1400px;
+        }
+
+        .level-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 4rem 0;
+            border-bottom: 1px dashed rgba(0,255,204,0.3);
+        }
+        .level-content {
+            width: 100%;
+        }
+        .hidden {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.6s ease;
+        }
+        .level-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .glitch {
+            position: relative;
+            color: #fff;
+            text-shadow: 0.05em 0 0 #00ffcc, -0.05em -0.025em 0 #ff00aa;
+            animation: glitch-shake 0.3s infinite alternate;
+        }
+        @keyframes glitch-shake {
+            0% { transform: translate(0); }
+            100% { transform: translate(-1px, 1px); }
+        }
+        .typewriter {
+            font-size: 1.2rem;
+            border-right: 2px solid #00ffcc;
+            white-space: nowrap;
+            overflow: hidden;
+            width: fit-content;
+            max-width: 100%;
+            animation: blinkCursor 0.75s step-end infinite;
+        }
+        @keyframes blinkCursor {
+            0%, 100% { border-color: #00ffcc; }
+            50% { border-color: transparent; }
+        }
+        .scroll-hint {
+            margin-top: 3rem;
+            font-size: 0.8rem;
+            color: #00ffcc;
+            text-align: center;
+            animation: bounce 1.8s infinite;
+        }
+        @keyframes bounce {
+            0%,100%{transform:translateY(0); opacity:0.6;}
+            50%{transform:translateY(10px); opacity:1;}
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            border-left: 5px solid #00ffcc;
+            padding-left: 1rem;
+            color: #f0f0f0;
+            letter-spacing: 2px;
+        }
+
+        /* 统一的grid布局系统 */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 1.5rem 0;
+            align-items: start;
+        }
+        /* 特殊布局用于海报+视频左右 */
+        .layout-alt {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .layout-alt > * {
+            flex: 1 1 300px;
+        }
+        .layout-story {
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+
+        /* 图片视频统一样式 */
+        img, video {
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            transition: transform 0.2s, filter 0.2s;
+            border: 1px solid rgba(0,255,204,0.2);
+            background: #111;
+        }
+        img:hover, video:hover {
+            transform: scale(1.01);
+            filter: brightness(1.05);
+            border-color: #00ffcc;
+        }
+
+        .placeholder-box {
+            background: rgba(20, 25, 40, 0.7);
+            border-radius: 20px;
+            border: 1px dashed #00ffcc;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #aaa;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* 关键修正：让3D动画中的两张图片高度一致 + 右侧占位符区域完美对齐 */
+        .uniform-media-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            align-items: stretch;  /* 关键：让所有子项高度拉伸一致 */
+            margin: 1.5rem 0 2rem 0;
+        }
+        .media-card {
+            flex: 1 1 280px;
+            min-width: 240px;
+            background: rgba(15,18,28,0.5);
+            border-radius: 20px;
+            padding: 0.8rem;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(0,255,204,0.15);
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .media-card img {
+            width: 100%;
+            height: 280px;        /* 固定高度保证严格一致 */
+            object-fit: cover;
+            border-radius: 12px;
+            background: #1a1e2a;
+        }
+        /* 占位符卡片也需要统一高度, 加入特殊占位内容 */
+        .placeholder-card {
+            flex: 1 1 280px;
+            min-width: 240px;
+            background: rgba(15,18,28,0.5);
+            border-radius: 20px;
+            padding: 0.8rem;
+            border: 1px solid rgba(0,255,204,0.25);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .placeholder-inner {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            height: 280px;      /* 与图片高度严格一致 */
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: #00ffcc;
+            border: 1px dashed #00ffcc;
+            flex-direction: column;
+            gap: 12px;
+            backdrop-filter: blur(4px);
+        }
+        .caption-text {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #bcbcbc;
+        }
+
+        .project-subtitle {
+            color: #00ffcc;
+            font-size: 1.2rem;
+            margin: 2rem 0 1rem 0;
+            font-weight: 300;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .explore-text {
+            background: rgba(0,255,204,0.05);
+            padding: 1rem;
+            border-radius: 1rem;
+            margin: 1rem 0;
+        }
+
+        a {
+            color: #00ffcc;
+        }
+
+        /* 响应式 */
+        @media (max-width: 900px) {
+            .game-nav {
+                left: 0.5rem;
+                padding: 0.8rem 0.5rem;
+            }
+            .nav-links li a {
+                font-size: 0.7rem;
+                writing-mode: horizontal-tb;
+            }
+            .content-wrapper {
+                margin-left: 5rem;
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            .typewriter {
+                white-space: normal;
+                border-right: none;
+                animation: none;
+            }
+        }
+        @media (max-width: 700px) {
+            .uniform-media-row {
+                flex-direction: column;
+                align-items: center;
+            }
+            .media-card, .placeholder-card {
+                width: 100%;
+                max-width: 380px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- 游戏风自定义光标 -->
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
+    <div class="flow-line"><div class="flow-progress"></div></div>
 
-    <!-- 视觉引导线 (Ergodic flow) -->
-    <div class="flow-line">
-        <div class="flow-progress"></div>
-    </div>
-
-    <!-- 游戏风侧边导航 -->
     <nav class="game-nav">
         <div class="logo">QUELLA_</div>
         <ul class="nav-links">
@@ -29,9 +374,7 @@
         </ul>
     </nav>
 
-    <!-- 核心内容区 -->
     <main class="content-wrapper">
-        <!-- 00 Intro -->
         <section id="intro" class="level-section">
             <div class="level-content">
                 <h1 class="glitch" data-text="QUELLA 作品集">QUELLA 作品集</h1>
@@ -41,273 +384,264 @@
             </div>
         </section>
 
-        <!-- 01 3D Animation & Scene Design -->                                        
-<section id="3d-design" class="level-section">            
-    <div class="level-content hidden">                
-        <h2 class="section-title">01 // 3D动画与场景设计</h2>                
-            <!-- 第一个项目：dynamic simulation -->
-            <h3 class="project-subtitle" style="color: #00ffcc; font-size: 1.2em; margin: 2.5rem 0 1.5rem 0; font-weight: 300; text-align: center;">
-                动态模拟动画-The Rift Park/Maya
-            </h3>
-            <div class="gallery-grid layout-alt"> 
-            <div style="grid-column: 1 / -1; text-align: center;"> 
-                <video controls style="width: 100%; max-width: 880px; height: auto;">
-                    <source src="assets/simulation.mp4" type="video/mp4">
-                    您的浏览器不支持视频播放。
-                </video>
-                <p style="text-align: center; margin-top: 8px; font-size: 0.9em;">视频展示</p>
-            </div>
-        </div>
-            <!-- 第二个项目：3D动画 -->            
-            <h3 class="project-subtitle" style="color: #00ffcc; font-size: 1.2em; margin: 2.5rem 0 1.5rem 0; font-weight: 300; text-align: center;">
-            动画短片-制作中
-            </h3>
-            <div class="gallery-grid layout-alt">                    
-                <div class="placeholder-box large">【动画短篇 占位】</div>                    
-            </div>
-          
-</h3>
-<div class="gallery-grid layout-alt">
-  <div>
-    <img src="assets/Girl2.png" alt="3D角色建模"
-         style="width: 100%; max-width: 400px; height: auto; object-fit: cover;">
-    <p style="text-align: center; margin-top: 8px; font-size: 0.9em;">主角角色设定（绑定/表情/走动循环）</p>
-  </div>
-  <div>
-    <img src="assets/puppet-front.png" alt="木偶&舞台"
-         style="width: 100%; max-width: 400px; height: auto; object-fit: cover;">
-    <p style="text-align: center; margin-top: 8px; font-size: 0.9em;">提线木偶角色前视图（关键帧动画基础）</p>
-  </div>
-</div>
+        <!-- 01 3D Animation & Scene Design -->
+        <section id="3d-design" class="level-section">
+            <div class="level-content hidden">
+                <h2 class="section-title">01 // 3D动画与场景设计</h2>
+                <!-- 动态模拟视频 -->
+                <h3 class="project-subtitle" style="color: #00ffcc;">动态模拟动画-The Rift Park/Maya</h3>
+                <div style="text-align: center; margin: 1rem 0 2rem;">
+                    <video controls style="width: 100%; max-width: 880px; border-radius: 16px;">
+                        <source src="assets/simulation.mp4" type="video/mp4">
+                        您的浏览器不支持视频播放。
+                    </video>
+                    <p style="margin-top: 8px; font-size: 0.9em;">视频展示</p>
+                </div>
 
-        
-            
-        
-            <!-- 第三个项目：3D场景/blender -->
-            <h3 class="project-subtitle" style="color: #00ffcc; font-size: 1.2em; margin: 2.5rem 0 1.5rem 0; font-weight: 300; text-align: center;">
-            3D场景/blender
-            </h3>
-            <div class="gallery-grid"> 
-            <!-- cave2.png - 9:16画幅 -->            
-            <div>                
-            <img src="assets/cave2.png" alt="洞穴场景设计"                      
-                style="width: 100%; max-width: 400px; height: auto; object-fit: cover;">            
-            </div>                        
-            <!-- gufeng.jpg - 1:2画幅 -->            
-            <div>                
-            <img src="assets/gufeng.jpg" alt="古风场景概念"                      
-                style="width: 100%; max-width: 400px; height: auto; object-fit: cover;">            
-            </div>                        
-            <!-- snow.png - 9:16画幅 -->            
-            <div>                
-            <img src="assets/snow.png" alt="雪景"                      
-                style="width: 100%; max-width: 400px; height: auto; object-fit: cover;">            
-            </div>   
-                
-    </div>        
-</section>
+                <!-- 第二个项目：3D动画 重点修改区 -->
+                <h3 class="project-subtitle" style="color: #00ffcc; margin-top: 2rem;">动画短片-制作中</h3>
+                <!-- 原先的占位large不再使用，使用flex工整卡片布局 两张图片高度一致+右侧占位 -->
+                <div class="uniform-media-row">
+                    <!-- 卡片1：Girl2.png -->
+                    <div class="media-card">
+                        <img src="assets/Girl2.png" alt="3D角色建模">
+                        <div class="caption-text">主角角色设定（绑定/表情/走动循环）</div>
+                    </div>
+                    <!-- 卡片2：puppet-front.png -->
+                    <div class="media-card">
+                        <img src="assets/puppet-front.png" alt="木偶&舞台">
+                        <div class="caption-text">提线木偶角色前视图（关键帧动画基础）</div>
+                    </div>
+                    <!-- 右侧图片占位 (与原需求一致：右边空出一个图片占位) -->
+                    <div class="placeholder-card">
+                        <div class="placeholder-inner">
+                            🎬 动画分镜占位<br>
+                            [Coming Soon]
+                        </div>
+                        <div class="caption-text">新动画企划 · 敬请期待</div>
+                    </div>
+                </div>
 
-        <!-- 02 Game Design -->              
-<section id="game-design" class="level-section">            
-    <div class="level-content hidden">                
-        <h2 class="section-title">02 // 游戏设计</h2>
-        
-        <!-- 第一个项目：Lab 211 -->
-        <h3 class="project-subtitle" style="color: #00ffcc; font-size: 1.2em; margin: 0.5rem 0 1.5rem 0; font-weight: 300; text-align: center;">
-            Lab 211 游戏项目/Unity
-        </h3>
-        <div class="gallery-grid layout-alt">                    
-            <div class="large">
-                <video controls style="width: 100%; max-width: 600px; height: auto;">
-                    <source src="assets/Lab211_trail.mp4" type="video/mp4">
-                    您的浏览器不支持视频播放。
-                </video>
-                <p style="text-align: center; margin-top: 8px; font-size: 0.9em; margin-bottom: 4px;">
-                Lab 211 - 游戏实机演示
-                </p>
-                <p style="text-align: center; font-size: 0.85em; color: #cccccc; margin-top: 0;">
-                负责迷宫世界的关卡设计和实现，以及poster设计等等
-                </p>
+                <!-- 第三个项目：3D场景/blender -->
+                <h3 class="project-subtitle" style="color: #00ffcc;">3D场景/blender</h3>
+                <div class="gallery-grid">
+                    <div><img src="assets/cave2.png" alt="洞穴场景设计" style="width:100%; max-width:400px; height:auto; object-fit:cover;"></div>
+                    <div><img src="assets/gufeng.jpg" alt="古风场景概念" style="width:100%; max-width:400px; height:auto; object-fit:cover;"></div>
+                    <div><img src="assets/snow.png" alt="雪景" style="width:100%; max-width:400px; height:auto; object-fit:cover;"></div>
+                </div>
             </div>
-            
-            <div>
-                <img src="assets/Poster_Lab 211.jpg" alt="Lab 211 游戏宣传海报" 
-                     style="width: 100%; max-width: 300px; height: auto; object-fit: cover;">
-                <p style="text-align: center; margin-top: 8px; font-size: 0.9em;">游戏宣传海报设计</p>
+        </section>
+
+        <!-- 02 Game Design -->
+        <section id="game-design" class="level-section">
+            <div class="level-content hidden">
+                <h2 class="section-title">02 // 游戏设计</h2>
+                <h3 class="project-subtitle">Lab 211 游戏项目/Unity</h3>
+                <div class="layout-alt">
+                    <div>
+                        <video controls style="width:100%; max-width:600px;">
+                            <source src="assets/Lab211_trail.mp4" type="video/mp4">
+                        </video>
+                        <p style="text-align:center; margin-top:8px;">Lab 211 - 游戏实机演示</p>
+                        <p style="text-align:center; font-size:0.85em;">负责迷宫世界的关卡设计和实现，以及poster设计等等</p>
+                    </div>
+                    <div>
+                        <img src="assets/Poster_Lab 211.jpg" alt="Lab 211 游戏宣传海报" style="width:100%; max-width:300px;">
+                        <p style="text-align:center; margin-top:8px;">游戏宣传海报设计</p>
+                    </div>
+                </div>
+
+                <h3 class="project-subtitle">UE5</h3>
+                <div style="text-align:center;">
+                    <video controls style="width:100%; max-width:800px;">
+                        <source src="assets/UE5 tasks.mp4" type="video/mp4">
+                    </video>
+                    <p style="margin-top:8px;">UE5 HLSL 实验演示</p>
+                </div>
+
+                <h3 class="project-subtitle">FYP</h3>
+                <div class="layout-alt">
+                    <div class="placeholder-box large">【游戏实机/UI展示 占位】</div>
+                    <div class="placeholder-box">【游戏机制图解 占位】</div>
+                </div>
             </div>
-        </div>
-        
-        <!-- 第二个项目：UE5 -->
-        <h3 class="project-subtitle" style="color: #00ffcc; font-size: 1.2em; margin: 2.5rem 0 1.5rem 0; font-weight: 300; text-align: center;">
-            UE5
-        </h3>
-        <div class="gallery-grid">
-            <div style="grid-column: 1 / -1; text-align: center;">
-                <video controls style="width: 100%; max-width: 800px; height: auto;">
-                    <source src="assets/UE5 tasks.mp4" type="video/mp4">
-                    您的浏览器不支持视频播放。
-                </video>
-                <p style="text-align: center; margin-top: 8px; font-size: 0.9em;">UE5 HLSL 实验演示</p>
-            </div>
-        </div>
-        
-        <!-- 第三个项目：FYP -->
-        <h3 class="project-subtitle" style="color: #00ffcc; font-size: 1.2em; margin: 2.5rem 0 1.5rem 0; font-weight: 300; text-align: center;">
-            FYP
-        </h3>
-        <div class="gallery-grid layout-alt">                    
-            <div class="placeholder-box large">【游戏实机/UI展示 占位】</div>                    
-            <div class="placeholder-box">【游戏机制图解 占位】</div>
-        </div>
-    </div>        
-</section>
+        </section>
 
         <!-- 03 Script & Storyboard -->
-<section id="storyboard" class="level-section">
-    <div class="level-content hidden">
-        <h2 class="section-title">03 // 剧本与故事板</h2>
-        <div class="gallery-grid layout-story">
-            <!-- 剧本PPT展示 -->
-            <div>
-                <img src="assets/scriptppt.png" alt="剧本结构PPT - 叙事框架与角色设定" 
-                     style="width: 100%; max-width: 300px; height: auto; object-fit: cover;">
-                <p style="text-align: center; margin-top: 8px; font-size: 0.9em;">剧本结构PPT展示</p>
+        <section id="storyboard" class="level-section">
+            <div class="level-content hidden">
+                <h2 class="section-title">03 // 剧本与故事板</h2>
+                <div class="gallery-grid layout-story">
+                    <div><img src="assets/scriptppt.png" alt="剧本结构PPT" style="width:100%;"><p style="text-align:center; margin-top:8px;">剧本结构PPT展示</p></div>
+                    <div><img src="assets/storyboard4.png" alt="故事板分镜" style="width:100%;"><p style="text-align:center; margin-top:8px;">故事板分镜设计</p></div>
+                    <div><img src="assets/storyline_MV.png" alt="MV故事线" style="width:100%;"><p style="text-align:center; margin-top:8px;">MV故事线规划</p></div>
+                    <div><img src="assets/treatment_book.png" alt="剧本处理手册" style="width:100%;"><p style="text-align:center; margin-top:8px;">书本改编的脚本</p></div>
+                </div>
             </div>
-            
-            <!-- 故事板4 -->
-            <div>
-                <img src="assets/storyboard4.png" alt="故事板分镜 - 镜头语言与节奏规划" 
-                     style="width: 100%; max-width: 300px; height: auto; object-fit: cover;">
-                <p style="text-align: center; margin-top: 8px; font-size: 0.9em;">故事板分镜设计</p>
-            </div>
-            
-            <!-- MV故事线 -->
-            <div>
-                <img src="assets/storyline_MV.png" alt="MV故事线 - 音乐视频叙事结构" 
-                     style="width: 100%; max-width: 300px; height: auto; object-fit: cover;">
-                <p style="text-align: center; margin-top: 8px; font-size: 0.9em;">MV故事线规划</p>
-            </div>
-            
-            <!-- 剧本处理手册 -->
-            <div>
-                <img src="assets/treatment_book.png" alt="剧本处理手册 - 场景分析与导演阐述" 
-                     style="width: 100%; max-width: 300px; height: auto; object-fit: cover;">
-                <p style="text-align: center; margin-top: 8px; font-size: 0.9em;">书本改编的脚本</p>
-            </div>
-        </div>
-    </div>
-</section>
-
+        </section>
 
         <!-- 04 Illustration -->
-<section id="illustration" class="level-section">
-    <div class="level-content hidden">
-        <h2 class="section-title">04 // 平面插画</h2>
-        <div class="gallery-grid">
-            <!-- 第一行：characterDesign.png 和 illustration2.png bookcover1.png-->
-            <div>
-                <img src="assets/characterDesign.png" alt="角色设计 - 人物造型与色彩表现" 
-                     style="width: 100%; max-width: 400px; height: auto; object-fit: cover;">
+        <section id="illustration" class="level-section">
+            <div class="level-content hidden">
+                <h2 class="section-title">04 // 平面插画</h2>
+                <div class="gallery-grid">
+                    <div><img src="assets/characterDesign.png" alt="角色设计" style="width:100%;"></div>
+                    <div><img src="assets/illustration2.png" alt="场景插画" style="width:100%;"></div>
+                    <div><img src="assets/bookcover1.png" alt="书面设计" style="width:100%;"></div>
+                    <div style="grid-column: 1 / -1; text-align:center;"><img src="assets/illustration1.png" alt="主题插画" style="width:100%; max-width:800px;"></div>
+                </div>
             </div>
-            <div>
-                <img src="assets/illustration2.png" alt="场景插画 - 氛围营造与构图设计" 
-                     style="width: 100%; max-width: 400px; height: auto; object-fit: cover;">
-            </div>
-            <div>
-                <img src="assets/bookcover1.png" alt="书面设计 - 儿童文学视觉化" 
-                     style="width: 100%; max-width: 400px; height: auto; object-fit: cover;">
-            </div>
-            
-            <!-- 第二行：illustration1.png 单独占一行 -->
-            <div style="grid-column: 1 / -1; text-align: center;">
-                <img src="assets/illustration1.png" alt="主题插画 - 创意概念与视觉叙事" 
-                     style="width: 100%; max-width: 800px; height: auto; object-fit: cover;">
-        </div>
-    </div>
-</section>
+        </section>
+
         <!-- 05 Explore -->
-<section id="explore" class="level-section">
-    <div class="level-content hidden">
-        <h2 class="section-title">05 // 探索·未知</h2>
-        <p class="explore-text">在这里放置你的实验性项目、草图或未分类的灵感碎片...</p>
-        
-        <!-- 互动设计/Processing -->
-        <h3 class="project-subtitle" style="color: #00ffcc; font-size: 1.2em; margin: 2rem 0 1rem 0; font-weight: 300;">
-            互动设计/Processing
-        </h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 2.5rem;">
-            <div>
-                <video controls style="width: 100%; max-width: 500px; height: auto;">
-                    <source src="assets/portrait_interaction.mp4" type="video/mp4">
-                    您的浏览器不支持视频播放。
-                </video>
-                <p style="text-align: center; margin-top: 8px; font-size: 0.9em;">肖像互动设计</p>
-            </div>
-            <div>
-                <video controls style="width: 100%; max-width: 500px; height: auto;">
-                    <source src="assets/music interaction.mp4" type="video/mp4">
-                    您的浏览器不支持视频播放。
-                </video>
-                <p style="text-align: center; margin-top: 8px; font-size: 0.9em;">音乐交互体验</p>
-            </div>
-        </div>
-        
-        <!-- 网站UI设计 -->
-        <h3 class="project-subtitle" style="color: #00ffcc; font-size: 1.2em; margin: 2rem 0 1rem 0; font-weight: 300;">
-            VOIDRAFT UI设计/Figma
-        </h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 2rem;">
-            <div>
-                <img src="assets/WebUI_poster.png" alt="网站UI海报设计 - 目标与互动" 
-                     style="width: 100%; max-width: 400px; height: auto; object-fit: cover;">
-                <p style="text-align: center; margin-top: 8px; font-size: 0.9em;">网站UI海报设计</p>
-            </div>
-            <div>
-                <img src="assets/web_concept.png" alt="网页概念设计 - 互动界面布局" 
-                     style="width: 100%; max-width: 400px; height: auto; object-fit: cover;">
-                <p style="text-align: center; margin-top: 8px; font-size: 0.9em;">网页概念设计</p>
-                <p style="text-align: center; margin-top: 4px; font-size: 0.8em; color: #00ffcc;">
-                <a href="https://www.figma.com/design/kDGXzLiS2urJjuBvBqnfNS/web_Voidraft?node-id=0-1&t=e3RLNUxpmsJSbW8U-1" 
-                   target="_blank" 
-                   style="color: #00ffcc; text-decoration: none;">
-                    点击体验-Figma链接
-                </a>
-            </p>
-            </div>
-        </div>
-        
-        <!-- 原有的探索内容 -->        
-<div>
-    <!-- 其他小标题 -->
-    <h3 class="project-subtitle" style="color: #00ffcc; font-size: 1.2em; margin: 0 0 1rem 0; font-weight: 300;">
-        其他
-    </h3>
-    
-    <!-- 左右布局结构 -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start;">
-        
-        <!-- 左边：视频 -->
-        <div>
-            <video controls style="width: 100%; max-width: 400px; height: auto;">
-                <source src="assets/AI MV_childrenofthemechine.mp4" type="video/mp4">
-                您的浏览器不支持视频播放。
-            </video>
-            <p style="text-align: left; margin-top: 8px; font-size: 0.9em;">AI视频-音乐MV</p>
-        </div>
-        
-        <!-- 右边：两个占位框的垂直排列 -->
-        <div style="display: flex; flex-direction: column; gap: 15px;">
-            <div class="placeholder-box">【更多/正在维护中...】</div>
-            <div class="placeholder-box">【联系方式/简历】</div>
-        </div>
-    </div>
-</div>
+        <section id="explore" class="level-section">
+            <div class="level-content hidden">
+                <h2 class="section-title">05 // 探索·未知</h2>
+                <p class="explore-text">在这里放置你的实验性项目、草图或未分类的灵感碎片...</p>
+                
+                <h3 class="project-subtitle">互动设计/Processing</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:20px;">
+                    <div><video controls style="width:100%;"><source src="assets/portrait_interaction.mp4" type="video/mp4"></video><p style="text-align:center;">肖像互动设计</p></div>
+                    <div><video controls style="width:100%;"><source src="assets/music interaction.mp4" type="video/mp4"></video><p style="text-align:center;">音乐交互体验</p></div>
+                </div>
+                
+                <h3 class="project-subtitle">VOIDRAFT UI设计/Figma</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:20px;">
+                    <div><img src="assets/WebUI_poster.png" alt="网站UI海报" style="width:100%;"><p>网站UI海报设计</p></div>
+                    <div><img src="assets/web_concept.png" alt="网页概念设计" style="width:100%;"><p>网页概念设计<br><a href="https://www.figma.com/design/kDGXzLiS2urJjuBvBqnfNS/web_Voidraft?node-id=0-1&t=e3RLNUxpmsJSbW8U-1" target="_blank" style="color:#00ffcc;">点击体验-Figma链接</a></p></div>
+                </div>
 
-
-</section>
-
+                <h3 class="project-subtitle">其他</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:20px; align-items:start;">
+                    <div>
+                        <video controls style="width:100%; max-width:400px;"><source src="assets/AI MV_childrenofthemechine.mp4" type="video/mp4"></video>
+                        <p>AI视频-音乐MV</p>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap:15px;">
+                        <div class="placeholder-box">【更多/正在维护中...】</div>
+                        <div class="placeholder-box">【联系方式/简历】</div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <script src="script.js"></script>
+    <script>
+        // 自定义光标跟随
+        const cursor = document.querySelector('.cursor');
+        const follower = document.querySelector('.cursor-follower');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate(${e.clientX - 4}px, ${e.clientY - 4}px)`;
+            follower.style.transform = `translate(${e.clientX - 16}px, ${e.clientY - 16}px)`;
+        });
+        document.addEventListener('mouseleave', () => {
+            cursor.style.opacity = '0';
+            follower.style.opacity = '0';
+        });
+        document.addEventListener('mouseenter', () => {
+            cursor.style.opacity = '1';
+            follower.style.opacity = '1';
+        });
+
+        // 滚动进度条 + 导航高亮 + 视差渐现
+        const flowLine = document.querySelector('.flow-line');
+        const sections = document.querySelectorAll('.level-section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        
+        function updateProgress() {
+            const winScroll = window.scrollY;
+            const height = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = (winScroll / height) * 100;
+            flowLine.style.height = scrolled + '%';
+        }
+        
+        function revealSections() {
+            sections.forEach(sec => {
+                const contentDiv = sec.querySelector('.level-content');
+                if(!contentDiv) return;
+                const rect = sec.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                if(rect.top < windowHeight - 120) {
+                    contentDiv.classList.add('visible');
+                } else {
+                    // 不强制移除，保持可见后永久显示即可
+                }
+            });
+        }
+        
+        function setActiveNav() {
+            let current = '';
+            sections.forEach(sec => {
+                const rect = sec.getBoundingClientRect();
+                if(rect.top <= 200 && rect.bottom >= 100) {
+                    current = sec.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                const href = link.getAttribute('href').substring(1);
+                if(href === current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', () => {
+            updateProgress();
+            revealSections();
+            setActiveNav();
+        });
+        window.addEventListener('load', () => {
+            revealSections();
+            updateProgress();
+            setActiveNav();
+            // 让intro区域的打字机效果优化宽度自适应
+            const tw = document.querySelector('.typewriter');
+            if(tw) {
+                const textLen = tw.innerText.length;
+                tw.style.width = (textLen + 1) + 'ch';
+            }
+            // 额外保证所有的隐藏内容显示(刷新优化)
+            setTimeout(() => {
+                revealSections();
+            }, 200);
+        });
+        
+        // 平滑滚动导航 (原生)
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if(targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+        
+        // 针对3D动画板块内图片加载后保持高度一致性（防止某些图片未完全加载影响布局，但flex stretch已经保证）
+        // 额外添加检测占位高度跟随
+        const style = document.createElement('style');
+        style.textContent = `
+            .media-card img {
+                height: 280px;
+                width: 100%;
+                object-fit: cover;
+            }
+            .placeholder-inner {
+                height: 280px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            @media (max-width: 700px) {
+                .media-card img, .placeholder-inner {
+                    height: 240px;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
