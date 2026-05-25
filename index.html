@@ -189,7 +189,7 @@
         /* 基础grid */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
             margin: 1.5rem 0;
             align-items: start;
@@ -228,7 +228,6 @@
             border-color: #00ffcc;
             box-shadow: 0 12px 24px rgba(0,255,204,0.1);
         }
-        /* 关键: 16:9 横向比例 */
         .story-card img {
             width: 100%;
             aspect-ratio: 16 / 9;
@@ -245,43 +244,48 @@
             letter-spacing: 0.5px;
         }
 
-        /* ========= 04 平面插画：9:16 竖屏比例，完美适配 ========= */
-        .illustration-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        /* ========= 04 平面插画 ========= */
+        /* 前三行: 保持图片原比例，但高度一致 (使用flex容器 + 固定高度确保每张图片高度统一，同时保留宽高比) */
+        .illust-top-row {
+            display: flex;
+            flex-wrap: wrap;
             gap: 2rem;
+            justify-content: center;
             margin-bottom: 2.5rem;
         }
         .illust-card {
+            flex: 1 1 280px;
             background: rgba(0,0,0,0.25);
             border-radius: 18px;
             overflow: hidden;
             transition: transform 0.2s, filter 0.2s;
             box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
         }
         .illust-card:hover {
             transform: scale(1.02);
         }
-        /* 9:16 竖屏核心比例 */
+        /* 关键：高度固定为320px，图片按原比例裁剪居中，确保视觉高度一致 */
         .illust-card img {
             width: 100%;
-            aspect-ratio: 9 / 16;
+            height: 320px;
             object-fit: cover;
             display: block;
-            border-radius: 14px;
             background: #0a0c12;
+            border-radius: 14px;
         }
-        /* 最后一张独立行 保持9:16比例但宽度限幅，美观居中 */
+        /* 最后一张单独行，16:9比例且居中 */
         .fullwidth-illust {
-            margin-top: 0.8rem;
+            margin-top: 1rem;
             text-align: center;
             display: flex;
             justify-content: center;
         }
         .fullwidth-illust img {
             width: 100%;
-            max-width: 500px;      /* 优雅限制宽度，但仍然保持9:16 */
-            aspect-ratio: 9 / 16;
+            max-width: 880px;
+            aspect-ratio: 16 / 9;
             object-fit: cover;
             border-radius: 24px;
             box-shadow: 0 15px 30px rgba(0,0,0,0.6);
@@ -293,37 +297,7 @@
             border-color: #00ffcc;
         }
 
-        /* 通用图片/视频样式 */
-        img, video {
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-            transition: transform 0.2s, filter 0.2s;
-            border: 1px solid rgba(0,255,204,0.2);
-            background: #111;
-        }
-        img:hover, video:hover {
-            transform: scale(1.01);
-            filter: brightness(1.05);
-            border-color: #00ffcc;
-        }
-
-        .placeholder-box {
-            background: rgba(20, 25, 40, 0.7);
-            border-radius: 20px;
-            border: 1px dashed #00ffcc;
-            min-height: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            color: #aaa;
-            backdrop-filter: blur(4px);
-            transition: 0.2s;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        /* 3d动画板块保持一致 */
+        /* 3D动画短片区域：主角角色设定图片原比例且与右边占位高度一致 */
         .uniform-media-row {
             display: flex;
             flex-wrap: wrap;
@@ -343,10 +317,12 @@
             display: flex;
             flex-direction: column;
         }
+        /* 主角角色设定图片保持原比例，但通过固定容器高度 + contain? 但为了与右边占位高度一致，用max-height限制并使用object-fit contain保证比例完整显示 */
         .media-card img {
             width: 100%;
             height: 280px;
-            object-fit: cover;
+            object-fit: contain;   /* 保持原比例，不裁剪，完整显示图片内容 */
+            background: #0f121c;
             border-radius: 12px;
         }
         .placeholder-card {
@@ -381,6 +357,69 @@
             margin-top: 12px;
             font-size: 0.85rem;
             color: #bcbcbc;
+        }
+
+        /* 3D场景/blender 三张占一行，图片比例不变（用grid + object-fit cover保持比例不变形，同时统一尺寸） */
+        .scene-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+        .scene-item {
+            background: rgba(10, 12, 18, 0.4);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .scene-item img {
+            width: 100%;
+            aspect-ratio: auto;  /* 保留原始比例, 但通过高度自适应保证等宽展示不同比例图片 */
+            height: auto;
+            max-height: 360px;
+            object-fit: contain;  /* 保证图片完整展示不变形，背景填充 */
+            background: #0a0c12;
+            border-radius: 12px;
+            display: block;
+            margin: 0 auto;
+        }
+        /* 为了让三张图片视觉上和谐，可设置统一背景区域 */
+        .scene-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.2);
+            padding: 0.5rem;
+        }
+
+        /* 通用其他元素 */
+        img, video {
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            transition: transform 0.2s, filter 0.2s;
+            border: 1px solid rgba(0,255,204,0.2);
+            background: #111;
+        }
+        img:hover, video:hover {
+            transform: scale(1.01);
+            filter: brightness(1.05);
+            border-color: #00ffcc;
+        }
+
+        .placeholder-box {
+            background: rgba(20, 25, 40, 0.7);
+            border-radius: 20px;
+            border: 1px dashed #00ffcc;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #aaa;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
+            padding: 2rem;
+            text-align: center;
         }
 
         .project-subtitle {
@@ -427,19 +466,27 @@
             .storyboard-grid {
                 gap: 1.2rem;
             }
-            .illustration-grid {
+            .scene-grid {
                 gap: 1rem;
+                grid-template-columns: 1fr;
+            }
+            .illust-top-row {
+                flex-direction: column;
+                align-items: center;
             }
         }
         @media (max-width: 760px) {
             .storyboard-grid {
-                grid-template-columns: 1fr;  /* 手机单列，依然是16:9卡片 */
+                grid-template-columns: 1fr;
             }
-            .illustration-grid {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            .scene-grid {
                 grid-template-columns: 1fr;
             }
             .fullwidth-illust img {
-                max-width: 90%;
+                max-width: 95%;
             }
         }
     </style>
@@ -484,6 +531,7 @@
                     <p style="margin-top: 8px; font-size: 0.9em;">视频展示</p>
                 </div>
 
+                <!-- 动画短片-制作中：主角角色设定图片原比例并与右边占位高度一致 -->
                 <h3 class="project-subtitle" style="margin-top: 2rem;">动画短片-制作中</h3>
                 <div class="uniform-media-row">
                     <div class="media-card">
@@ -503,11 +551,12 @@
                     </div>
                 </div>
 
+                <!-- 3D场景/blender 三张刚好占一行，图片比例不变 -->
                 <h3 class="project-subtitle">3D场景/blender</h3>
-                <div class="gallery-grid">
-                    <div><img src="assets/cave2.png" alt="洞穴场景设计" style="width:100%; max-width:400px; height:auto; object-fit:cover;"></div>
-                    <div><img src="assets/gufeng.jpg" alt="古风场景概念" style="width:100%; max-width:400px; height:auto; object-fit:cover;"></div>
-                    <div><img src="assets/snow.png" alt="雪景" style="width:100%; max-width:400px; height:auto; object-fit:cover;"></div>
+                <div class="scene-grid">
+                    <div class="scene-item"><img src="assets/cave2.png" alt="洞穴场景设计"></div>
+                    <div class="scene-item"><img src="assets/gufeng.jpg" alt="古风场景概念"></div>
+                    <div class="scene-item"><img src="assets/snow.png" alt="雪景"></div>
                 </div>
             </div>
         </section>
@@ -547,37 +596,37 @@
             </div>
         </section>
 
-        <!-- 03 剧本与故事板: 16:9 横向比例，两两一行，大小统一 -->
+        <!-- 03 剧本与故事板: 16:9 -->
         <section id="storyboard" class="level-section">
             <div class="level-content hidden">
                 <h2 class="section-title">03 // 剧本与故事板</h2>
                 <div class="storyboard-grid">
                     <div class="story-card">
-                        <img src="assets/scriptppt.png" alt="剧本结构PPT - 叙事框架与角色设定">
+                        <img src="assets/scriptppt.png" alt="剧本结构PPT">
                         <p>剧本结构PPT展示</p>
                     </div>
                     <div class="story-card">
-                        <img src="assets/storyboard4.png" alt="故事板分镜 - 镜头语言与节奏规划">
+                        <img src="assets/storyboard4.png" alt="故事板分镜">
                         <p>故事板分镜设计</p>
                     </div>
                     <div class="story-card">
-                        <img src="assets/storyline_MV.png" alt="MV故事线 - 音乐视频叙事结构">
+                        <img src="assets/storyline_MV.png" alt="MV故事线">
                         <p>MV故事线规划</p>
                     </div>
                     <div class="story-card">
-                        <img src="assets/treatment_book.png" alt="剧本处理手册 - 场景分析与导演阐述">
+                        <img src="assets/treatment_book.png" alt="剧本处理手册">
                         <p>书本改编的脚本</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 04 平面插画: 9:16 竖屏比例，前三张均分一行，第四张单独居中且比例同样为9:16 -->
+        <!-- 04 平面插画: 前三张高度一致原比例，最后一张16:9居中展示 -->
         <section id="illustration" class="level-section">
             <div class="level-content hidden">
                 <h2 class="section-title">04 // 平面插画</h2>
-                <!-- 前三张，采用9:16竖屏卡片 -->
-                <div class="illustration-grid">
+                <!-- 前三张占一行，高度一致，图片原比例通过object-fit cover保持区域统一但内容无拉伸变形 -->
+                <div class="illust-top-row">
                     <div class="illust-card">
                         <img src="assets/characterDesign.png" alt="角色设计 - 人物造型与色彩表现">
                     </div>
@@ -588,14 +637,14 @@
                         <img src="assets/bookcover1.png" alt="书面设计 - 儿童文学视觉化">
                     </div>
                 </div>
-                <!-- 最后一张单独行，保持9:16比例且大小合适，居中展示 -->
+                <!-- 最后一张单独行，16:9比例居中展示 -->
                 <div class="fullwidth-illust">
                     <img src="assets/illustration1.png" alt="主题插画 - 创意概念与视觉叙事">
                 </div>
             </div>
         </section>
 
-        <!-- 05 Explore 探索板块 -->
+        <!-- 05 Explore -->
         <section id="explore" class="level-section">
             <div class="level-content hidden">
                 <h2 class="section-title">05 // 探索·未知</h2>
@@ -715,21 +764,6 @@
                 }
             });
         });
-        
-        // 确保所有卡片比例严格生效
-        const extraStyle = document.createElement('style');
-        extraStyle.textContent = `
-            .story-card img {
-                aspect-ratio: 16 / 9 !important;
-                width: 100%;
-                object-fit: cover;
-            }
-            .illust-card img, .fullwidth-illust img {
-                aspect-ratio: 9 / 16 !important;
-                object-fit: cover;
-            }
-        `;
-        document.head.appendChild(extraStyle);
     </script>
 </body>
 </html>
