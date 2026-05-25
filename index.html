@@ -186,7 +186,7 @@
             letter-spacing: 2px;
         }
 
-        /* 统一的grid布局系统 */
+        /* 基础grid */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -195,7 +195,6 @@
             align-items: start;
         }
         
-        /* 特殊布局用于海报+视频左右 */
         .layout-alt {
             display: flex;
             flex-wrap: wrap;
@@ -207,7 +206,7 @@
             flex: 1 1 300px;
         }
         
-        /* 修改点：故事板专用网格：强制两列，且卡片尺寸完全一致 */
+        /* ========= 03 剧本与故事板：16:9 横向格式 ========= */
         .storyboard-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -215,67 +214,86 @@
             margin: 1.5rem 0;
         }
         .story-card {
-            background: rgba(15, 18, 28, 0.5);
+            background: rgba(15, 18, 28, 0.6);
             border-radius: 20px;
             overflow: hidden;
             backdrop-filter: blur(4px);
-            border: 1px solid rgba(0, 255, 204, 0.2);
-            transition: transform 0.2s, border-color 0.2s;
+            border: 1px solid rgba(0, 255, 204, 0.25);
+            transition: transform 0.25s, border-color 0.2s;
             display: flex;
             flex-direction: column;
         }
         .story-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px);
             border-color: #00ffcc;
+            box-shadow: 0 12px 24px rgba(0,255,204,0.1);
         }
+        /* 关键: 16:9 横向比例 */
         .story-card img {
             width: 100%;
-            aspect-ratio: 4 / 3;  /* 统一宽高比，大小完全一致 */
+            aspect-ratio: 16 / 9;
             object-fit: cover;
-            background: #11161f;
+            background: #0f121c;
             display: block;
+            border-bottom: 1px solid rgba(0,255,204,0.2);
         }
         .story-card p {
             text-align: center;
-            margin: 12px 12px 16px 12px;
+            margin: 14px 12px 18px;
             font-size: 0.9rem;
-            color: #cccccc;
+            color: #dddddd;
+            letter-spacing: 0.5px;
         }
 
-        /* 插画区域: 前三张均分一行，第四张居中且大小不变 */
+        /* ========= 04 平面插画：9:16 竖屏比例，完美适配 ========= */
         .illustration-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
         .illust-card {
-            background: rgba(0,0,0,0.3);
-            border-radius: 16px;
+            background: rgba(0,0,0,0.25);
+            border-radius: 18px;
             overflow: hidden;
-            transition: transform 0.2s;
+            transition: transform 0.2s, filter 0.2s;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.4);
         }
+        .illust-card:hover {
+            transform: scale(1.02);
+        }
+        /* 9:16 竖屏核心比例 */
         .illust-card img {
             width: 100%;
-            aspect-ratio: 1 / 1;  /* 正方形比例，视觉整齐 */
+            aspect-ratio: 9 / 16;
             object-fit: cover;
             display: block;
-            border-radius: 12px;
+            border-radius: 14px;
+            background: #0a0c12;
         }
+        /* 最后一张独立行 保持9:16比例但宽度限幅，美观居中 */
         .fullwidth-illust {
-            margin-top: 0.5rem;
+            margin-top: 0.8rem;
             text-align: center;
+            display: flex;
+            justify-content: center;
         }
         .fullwidth-illust img {
             width: 100%;
-            max-width: 800px;
-            border-radius: 20px;
-            margin: 0 auto;
-            display: block;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            max-width: 500px;      /* 优雅限制宽度，但仍然保持9:16 */
+            aspect-ratio: 9 / 16;
+            object-fit: cover;
+            border-radius: 24px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            transition: transform 0.2s;
+            border: 1px solid rgba(0,255,204,0.3);
         }
-        
-        /* 通用图片样式 */
+        .fullwidth-illust img:hover {
+            transform: scale(1.01);
+            border-color: #00ffcc;
+        }
+
+        /* 通用图片/视频样式 */
         img, video {
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.5);
@@ -305,6 +323,7 @@
             text-align: center;
         }
 
+        /* 3d动画板块保持一致 */
         .uniform-media-row {
             display: flex;
             flex-wrap: wrap;
@@ -406,22 +425,21 @@
                 animation: none;
             }
             .storyboard-grid {
-                gap: 1rem;
+                gap: 1.2rem;
             }
             .illustration-grid {
                 gap: 1rem;
             }
         }
-        @media (max-width: 700px) {
+        @media (max-width: 760px) {
             .storyboard-grid {
-                grid-template-columns: 1fr;  /* 手机视图单列 */
+                grid-template-columns: 1fr;  /* 手机单列，依然是16:9卡片 */
             }
             .illustration-grid {
                 grid-template-columns: 1fr;
             }
-            .uniform-media-row {
-                flex-direction: column;
-                align-items: center;
+            .fullwidth-illust img {
+                max-width: 90%;
             }
         }
     </style>
@@ -453,7 +471,7 @@
             </div>
         </section>
 
-        <!-- 01 3D Animation & Scene Design (保留原有完整设计) -->
+        <!-- 01 3D Animation & Scene Design -->
         <section id="3d-design" class="level-section">
             <div class="level-content hidden">
                 <h2 class="section-title">01 // 3D动画与场景设计</h2>
@@ -494,7 +512,7 @@
             </div>
         </section>
 
-        <!-- 02 Game Design (保持不变) -->
+        <!-- 02 Game Design -->
         <section id="game-design" class="level-section">
             <div class="level-content hidden">
                 <h2 class="section-title">02 // 游戏设计</h2>
@@ -529,27 +547,23 @@
             </div>
         </section>
 
-        <!-- 03 剧本与故事板 (修改: 两两一行，大小完全一致) -->
+        <!-- 03 剧本与故事板: 16:9 横向比例，两两一行，大小统一 -->
         <section id="storyboard" class="level-section">
             <div class="level-content hidden">
                 <h2 class="section-title">03 // 剧本与故事板</h2>
                 <div class="storyboard-grid">
-                    <!-- 卡片1: 剧本PPT -->
                     <div class="story-card">
                         <img src="assets/scriptppt.png" alt="剧本结构PPT - 叙事框架与角色设定">
                         <p>剧本结构PPT展示</p>
                     </div>
-                    <!-- 卡片2: 故事板4 -->
                     <div class="story-card">
                         <img src="assets/storyboard4.png" alt="故事板分镜 - 镜头语言与节奏规划">
                         <p>故事板分镜设计</p>
                     </div>
-                    <!-- 卡片3: MV故事线 -->
                     <div class="story-card">
                         <img src="assets/storyline_MV.png" alt="MV故事线 - 音乐视频叙事结构">
                         <p>MV故事线规划</p>
                     </div>
-                    <!-- 卡片4: 剧本处理手册 -->
                     <div class="story-card">
                         <img src="assets/treatment_book.png" alt="剧本处理手册 - 场景分析与导演阐述">
                         <p>书本改编的脚本</p>
@@ -558,11 +572,11 @@
             </div>
         </section>
 
-        <!-- 04 平面插画 (前三张一行，最后一张单独居中保持不变但大小宽幅不变) -->
+        <!-- 04 平面插画: 9:16 竖屏比例，前三张均分一行，第四张单独居中且比例同样为9:16 -->
         <section id="illustration" class="level-section">
             <div class="level-content hidden">
                 <h2 class="section-title">04 // 平面插画</h2>
-                <!-- 上三张图片，占一行，等比例一致 -->
+                <!-- 前三张，采用9:16竖屏卡片 -->
                 <div class="illustration-grid">
                     <div class="illust-card">
                         <img src="assets/characterDesign.png" alt="角色设计 - 人物造型与色彩表现">
@@ -574,14 +588,14 @@
                         <img src="assets/bookcover1.png" alt="书面设计 - 儿童文学视觉化">
                     </div>
                 </div>
-                <!-- 最后一张单独占一行，大小不变 (保持原始宽幅，居中) -->
+                <!-- 最后一张单独行，保持9:16比例且大小合适，居中展示 -->
                 <div class="fullwidth-illust">
                     <img src="assets/illustration1.png" alt="主题插画 - 创意概念与视觉叙事">
                 </div>
             </div>
         </section>
 
-        <!-- 05 Explore (保留原始丰富内容) -->
+        <!-- 05 Explore 探索板块 -->
         <section id="explore" class="level-section">
             <div class="level-content hidden">
                 <h2 class="section-title">05 // 探索·未知</h2>
@@ -631,7 +645,7 @@
             follower.style.opacity = '1';
         });
 
-        // 滚动进度条 + 导航高亮 + 视差渐现
+        // 滚动进度条 + 高亮 + 渐现动画
         const flowLine = document.querySelector('.flow-line');
         const sections = document.querySelectorAll('.level-section');
         const navLinks = document.querySelectorAll('.nav-links a');
@@ -702,29 +716,20 @@
             });
         });
         
-        // 额外样式微调保障故事板图片宽高比统一
-        const styleInline = document.createElement('style');
-        styleInline.textContent = `
+        // 确保所有卡片比例严格生效
+        const extraStyle = document.createElement('style');
+        extraStyle.textContent = `
             .story-card img {
-                aspect-ratio: 4 / 3;
+                aspect-ratio: 16 / 9 !important;
                 width: 100%;
                 object-fit: cover;
             }
-            .illust-card img {
-                aspect-ratio: 1 / 1;
-                width: 100%;
+            .illust-card img, .fullwidth-illust img {
+                aspect-ratio: 9 / 16 !important;
                 object-fit: cover;
-            }
-            @media (max-width: 700px) {
-                .illustration-grid {
-                    grid-template-columns: 1fr;
-                }
-                .storyboard-grid {
-                    grid-template-columns: 1fr;
-                }
             }
         `;
-        document.head.appendChild(styleInline);
+        document.head.appendChild(extraStyle);
     </script>
 </body>
 </html>
