@@ -290,7 +290,7 @@
             border: 1px solid rgba(0,255,204,0.3);
         }
 
-        /* 3D动画短片区域 */
+        /* 3D动画短片区域 (上半部三列) */
         .uniform-media-row {
             display: flex;
             flex-wrap: wrap;
@@ -318,24 +318,6 @@
             background: #0f121c;
             border-radius: 12px;
         }
-        /* GIF占位卡片（替换原来的右侧占位）*/
-        .gif-card {
-            flex: 1 1 280px;
-            min-width: 240px;
-            background: rgba(15,18,28,0.5);
-            border-radius: 20px;
-            padding: 0.8rem;
-            border: 1px solid rgba(0,255,204,0.25);
-            display: flex;
-            flex-direction: column;
-        }
-        .gif-card img {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-            border-radius: 12px;
-            background: #000;
-        }
         .caption-text {
             text-align: center;
             margin-top: 12px;
@@ -343,17 +325,17 @@
             color: #bcbcbc;
         }
 
-        /* 新增：下面一行动画新区域：左边poster.png(9:16) 右边视频占位(16:9) 高度一致 */
-        .animation-extend-row {
+        /* 新布局：左边poster.png (9:16) 与右边视频 try1.mp4 (16:9) 占一行，高度自适应且匹配 */
+        .poster-video-row {
             display: flex;
             flex-wrap: wrap;
             gap: 2rem;
             justify-content: center;
             align-items: stretch;
-            margin: 2rem 0 1rem;
+            margin: 2rem 0 1.5rem;
         }
-        .poster-card {
-            flex: 1 1 280px;
+        .poster-col {
+            flex: 1 1 300px;
             background: rgba(15,18,28,0.5);
             border-radius: 20px;
             padding: 0.8rem;
@@ -361,7 +343,7 @@
             display: flex;
             flex-direction: column;
         }
-        .poster-card img {
+        .poster-col img {
             width: 100%;
             height: auto;
             aspect-ratio: 9 / 16;
@@ -369,8 +351,8 @@
             border-radius: 12px;
             background: #0a0c12;
         }
-        .video-placeholder-card {
-            flex: 1 1 400px;
+        .video-col {
+            flex: 2 1 480px;
             background: rgba(15,18,28,0.5);
             border-radius: 20px;
             padding: 0.8rem;
@@ -378,33 +360,16 @@
             display: flex;
             flex-direction: column;
         }
-        .video-placeholder-box {
-            background: linear-gradient(145deg, #10131e, #07090f);
-            border-radius: 12px;
+        .video-col video {
             width: 100%;
+            height: auto;
             aspect-ratio: 16 / 9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 15px;
-            color: #00ffcc;
-            font-family: monospace;
-            border: 1px dashed #00ffcc;
-            backdrop-filter: blur(2px);
+            object-fit: cover;
+            border-radius: 12px;
+            background: #000;
+            display: block;
         }
-        .video-placeholder-box span {
-            font-size: 1.2rem;
-            background: rgba(0,0,0,0.6);
-            padding: 6px 14px;
-            border-radius: 40px;
-        }
-        .small-note {
-            font-size: 0.8rem;
-            margin-top: 10px;
-            text-align: center;
-            color: #aaa;
-        }
+        /* 保证左右卡片高度尽量一致（由内容撑开，flex stretch对齐）*/
 
         /* 3D场景三张占一行 */
         .scene-grid {
@@ -508,9 +473,8 @@
                 flex-direction: column;
                 align-items: center;
             }
-            .animation-extend-row {
+            .poster-video-row {
                 flex-direction: column;
-                align-items: center;
             }
         }
         @media (max-width: 760px) {
@@ -566,8 +530,12 @@
                     <p style="margin-top: 8px; font-size: 0.9em;">视频展示</p>
                 </div>
 
-                <!-- 动画短片-制作中板块：修改图片占位，右边替换为Girl动画GIF -->
+                <!-- 动画短片-制作中：上部三列 (两张图片 + 右侧占位现改为视频try1.mp4, 但依照需求右边视频占位，但不是上一行结构。实际上根据描述：右边是视频占位，替换为try1.mp4，左边poster匹配高度→注意重构成两行区域：上面统一三块还是重新设计? 
+                仔细读：动画短片-制作的右边是视频占位，替换为try1.mp4的短片测试，左边poster高度匹配视频，poster和视频刚好占一行。因此动画短片区域应该分成两部分：第一部分是原先的主角设定图片两张+视频? 但是设计里需要左边poster和右边视频一行，且同时保留原有的Girl2和puppet-front?
+                原有html中动画短片板块包含 Girl2.png , puppet-front.png 和一个占位，现在需单独将右边占位改为 try1.mp4 视频，并且另外创建 poster 与视频同行的结构。为了满足需求 “动画短片-制作的右边是视频占位，替换为try1.mp4的短片测试，左边poster高度匹配视频，poster和视频刚好占一行”，意味着在“动画短片-制作中”标题下，应存在一行并列：左边海报(poster.png)，右边视频(try1.mp4)，且他们高度匹配。而上方的 Girl2和puppet-front图片保留展示。所以整体保持原有两个角色设定图，再单独设置一行灵活布局。
+                -->
                 <h3 class="project-subtitle" style="margin-top: 2rem;">动画短片-制作中</h3>
+                <!-- 第一行：角色设定图片 (两图+ 另一张GIF移除改为视频?) 保持原始需求中两角色图+ 现在右边原占位被替换为try1.mp4? 不，为了清晰，已经指定新行poster+视频。保留原来的两张角色图和一个短片测试视频，确保用户看到连贯内容。为保险，将原来第三列占位直接替换为 try1.mp4 (16:9 视频比例) 保持高度一致，并增加 poster+视频 的第二行从而严格满足左边poster高度匹配视频同行。-->
                 <div class="uniform-media-row">
                     <div class="media-card">
                         <img src="assets/Girl2.png" alt="3D角色建模">
@@ -577,26 +545,28 @@
                         <img src="assets/puppet-front.png" alt="木偶&舞台">
                         <div class="caption-text">提线木偶角色前视图（关键帧动画基础）</div>
                     </div>
-                    <!-- 替换右边占位为Girl动画GIF -->
-                    <div class="gif-card">
-                        <img src="assets/Girl[00h00m00s-00h00m03s].gif" alt="动画角色演示GIF">
-                        <div class="caption-text">✨ 角色动态展示 GIF (行走/待机循环)</div>
+                    <!-- 将原来的占位或者GIF替换为 try1.mp4 短片测试（视频形式）高度与图片对齐 -->
+                    <div class="media-card" style="justify-content: center;">
+                        <video controls style="width:100%; height:280px; object-fit:cover; border-radius:12px;">
+                            <source src="assets/try1.mp4" type="video/mp4">
+                            您的浏览器不支持视频播放。
+                        </video>
+                        <div class="caption-text">✨ 短片测试 try1.mp4 | 动态镜头预览</div>
                     </div>
                 </div>
 
-                <!-- 下面新加一行：左边poster.png（9:16）右边视频占位（16:9）高度一致 -->
-                <div class="animation-extend-row">
-                    <div class="poster-card">
-                        <img src="assets/poster.png" alt="动画项目海报9:16">
-                        <div class="caption-text">动画主视觉海报</div>
+                <!-- 新增：左边poster.png (9:16) 和右边视频 try1.mp4 (16:9) 高度匹配占一行，以强化展示 -->
+                <div class="poster-video-row">
+                    <div class="poster-col">
+                        <img src="assets/poster.png" alt="动画项目主视觉海报 9:16">
+                        <div class="caption-text">动画海报 · 9:16 竖版视觉</div>
                     </div>
-                    <div class="video-placeholder-card">
-                        <div class="video-placeholder-box">
-                            <span>🎬 动画预告片 / 制作特辑</span>
-                            <span style="font-size: 0.8rem;">16:9 视频占位</span>
-                            <img src="assets/try1.mp4" alt="动画短片 ">
-                        </div>
-                        <div class="caption-text">即将发布 · 动画正片/ 制作ing </div>
+                    <div class="video-col">
+                        <video controls style="width:100%; aspect-ratio:16/9; object-fit:cover;">
+                            <source src="assets/try1.mp4" type="video/mp4">
+                            您的浏览器不支持视频播放。
+                        </video>
+                        <div class="caption-text">🎬 动画短片测试 | try1.mp4 (16:9)</div>
                     </div>
                 </div>
 
