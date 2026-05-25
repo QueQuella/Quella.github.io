@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Quella 作品集 | Player 1 Ready</title>
     <style>
         * {
@@ -194,6 +194,7 @@
             margin: 1.5rem 0;
             align-items: start;
         }
+        
         /* 特殊布局用于海报+视频左右 */
         .layout-alt {
             display: flex;
@@ -205,11 +206,76 @@
         .layout-alt > * {
             flex: 1 1 300px;
         }
-        .layout-story {
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        
+        /* 修改点：故事板专用网格：强制两列，且卡片尺寸完全一致 */
+        .storyboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+        .story-card {
+            background: rgba(15, 18, 28, 0.5);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .story-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ffcc;
+        }
+        .story-card img {
+            width: 100%;
+            aspect-ratio: 4 / 3;  /* 统一宽高比，大小完全一致 */
+            object-fit: cover;
+            background: #11161f;
+            display: block;
+        }
+        .story-card p {
+            text-align: center;
+            margin: 12px 12px 16px 12px;
+            font-size: 0.9rem;
+            color: #cccccc;
         }
 
-        /* 图片视频统一样式 */
+        /* 插画区域: 前三张均分一行，第四张居中且大小不变 */
+        .illustration-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .illust-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .illust-card img {
+            width: 100%;
+            aspect-ratio: 1 / 1;  /* 正方形比例，视觉整齐 */
+            object-fit: cover;
+            display: block;
+            border-radius: 12px;
+        }
+        .fullwidth-illust {
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+        .fullwidth-illust img {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 20px;
+            margin: 0 auto;
+            display: block;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        
+        /* 通用图片样式 */
         img, video {
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.5);
@@ -239,13 +305,12 @@
             text-align: center;
         }
 
-        /* 关键修正：让3D动画中的两张图片高度一致 + 右侧占位符区域完美对齐 */
         .uniform-media-row {
             display: flex;
             flex-wrap: wrap;
             gap: 2rem;
             justify-content: center;
-            align-items: stretch;  /* 关键：让所有子项高度拉伸一致 */
+            align-items: stretch;
             margin: 1.5rem 0 2rem 0;
         }
         .media-card {
@@ -256,18 +321,15 @@
             padding: 0.8rem;
             backdrop-filter: blur(2px);
             border: 1px solid rgba(0,255,204,0.15);
-            transition: 0.2s;
             display: flex;
             flex-direction: column;
         }
         .media-card img {
             width: 100%;
-            height: 280px;        /* 固定高度保证严格一致 */
+            height: 280px;
             object-fit: cover;
             border-radius: 12px;
-            background: #1a1e2a;
         }
-        /* 占位符卡片也需要统一高度, 加入特殊占位内容 */
         .placeholder-card {
             flex: 1 1 280px;
             min-width: 240px;
@@ -283,7 +345,7 @@
         .placeholder-inner {
             background: rgba(0,0,0,0.5);
             border-radius: 12px;
-            height: 280px;      /* 与图片高度严格一致 */
+            height: 280px;
             width: 100%;
             display: flex;
             align-items: center;
@@ -322,7 +384,7 @@
             color: #00ffcc;
         }
 
-        /* 响应式 */
+        /* 响应式优化 */
         @media (max-width: 900px) {
             .game-nav {
                 left: 0.5rem;
@@ -330,7 +392,6 @@
             }
             .nav-links li a {
                 font-size: 0.7rem;
-                writing-mode: horizontal-tb;
             }
             .content-wrapper {
                 margin-left: 5rem;
@@ -344,15 +405,23 @@
                 border-right: none;
                 animation: none;
             }
+            .storyboard-grid {
+                gap: 1rem;
+            }
+            .illustration-grid {
+                gap: 1rem;
+            }
         }
         @media (max-width: 700px) {
+            .storyboard-grid {
+                grid-template-columns: 1fr;  /* 手机视图单列 */
+            }
+            .illustration-grid {
+                grid-template-columns: 1fr;
+            }
             .uniform-media-row {
                 flex-direction: column;
                 align-items: center;
-            }
-            .media-card, .placeholder-card {
-                width: 100%;
-                max-width: 380px;
             }
         }
     </style>
@@ -384,12 +453,11 @@
             </div>
         </section>
 
-        <!-- 01 3D Animation & Scene Design -->
+        <!-- 01 3D Animation & Scene Design (保留原有完整设计) -->
         <section id="3d-design" class="level-section">
             <div class="level-content hidden">
                 <h2 class="section-title">01 // 3D动画与场景设计</h2>
-                <!-- 动态模拟视频 -->
-                <h3 class="project-subtitle" style="color: #00ffcc;">动态模拟动画-The Rift Park/Maya</h3>
+                <h3 class="project-subtitle">动态模拟动画-The Rift Park/Maya</h3>
                 <div style="text-align: center; margin: 1rem 0 2rem;">
                     <video controls style="width: 100%; max-width: 880px; border-radius: 16px;">
                         <source src="assets/simulation.mp4" type="video/mp4">
@@ -398,21 +466,16 @@
                     <p style="margin-top: 8px; font-size: 0.9em;">视频展示</p>
                 </div>
 
-                <!-- 第二个项目：3D动画 重点修改区 -->
-                <h3 class="project-subtitle" style="color: #00ffcc; margin-top: 2rem;">动画短片-制作中</h3>
-                <!-- 原先的占位large不再使用，使用flex工整卡片布局 两张图片高度一致+右侧占位 -->
+                <h3 class="project-subtitle" style="margin-top: 2rem;">动画短片-制作中</h3>
                 <div class="uniform-media-row">
-                    <!-- 卡片1：Girl2.png -->
                     <div class="media-card">
                         <img src="assets/Girl2.png" alt="3D角色建模">
                         <div class="caption-text">主角角色设定（绑定/表情/走动循环）</div>
                     </div>
-                    <!-- 卡片2：puppet-front.png -->
                     <div class="media-card">
                         <img src="assets/puppet-front.png" alt="木偶&舞台">
                         <div class="caption-text">提线木偶角色前视图（关键帧动画基础）</div>
                     </div>
-                    <!-- 右侧图片占位 (与原需求一致：右边空出一个图片占位) -->
                     <div class="placeholder-card">
                         <div class="placeholder-inner">
                             🎬 动画分镜占位<br>
@@ -422,8 +485,7 @@
                     </div>
                 </div>
 
-                <!-- 第三个项目：3D场景/blender -->
-                <h3 class="project-subtitle" style="color: #00ffcc;">3D场景/blender</h3>
+                <h3 class="project-subtitle">3D场景/blender</h3>
                 <div class="gallery-grid">
                     <div><img src="assets/cave2.png" alt="洞穴场景设计" style="width:100%; max-width:400px; height:auto; object-fit:cover;"></div>
                     <div><img src="assets/gufeng.jpg" alt="古风场景概念" style="width:100%; max-width:400px; height:auto; object-fit:cover;"></div>
@@ -432,7 +494,7 @@
             </div>
         </section>
 
-        <!-- 02 Game Design -->
+        <!-- 02 Game Design (保持不变) -->
         <section id="game-design" class="level-section">
             <div class="level-content hidden">
                 <h2 class="section-title">02 // 游戏设计</h2>
@@ -467,33 +529,59 @@
             </div>
         </section>
 
-        <!-- 03 Script & Storyboard -->
+        <!-- 03 剧本与故事板 (修改: 两两一行，大小完全一致) -->
         <section id="storyboard" class="level-section">
             <div class="level-content hidden">
                 <h2 class="section-title">03 // 剧本与故事板</h2>
-                <div class="gallery-grid layout-story">
-                    <div><img src="assets/scriptppt.png" alt="剧本结构PPT" style="width:100%;"><p style="text-align:center; margin-top:8px;">剧本结构PPT展示</p></div>
-                    <div><img src="assets/storyboard4.png" alt="故事板分镜" style="width:100%;"><p style="text-align:center; margin-top:8px;">故事板分镜设计</p></div>
-                    <div><img src="assets/storyline_MV.png" alt="MV故事线" style="width:100%;"><p style="text-align:center; margin-top:8px;">MV故事线规划</p></div>
-                    <div><img src="assets/treatment_book.png" alt="剧本处理手册" style="width:100%;"><p style="text-align:center; margin-top:8px;">书本改编的脚本</p></div>
+                <div class="storyboard-grid">
+                    <!-- 卡片1: 剧本PPT -->
+                    <div class="story-card">
+                        <img src="assets/scriptppt.png" alt="剧本结构PPT - 叙事框架与角色设定">
+                        <p>剧本结构PPT展示</p>
+                    </div>
+                    <!-- 卡片2: 故事板4 -->
+                    <div class="story-card">
+                        <img src="assets/storyboard4.png" alt="故事板分镜 - 镜头语言与节奏规划">
+                        <p>故事板分镜设计</p>
+                    </div>
+                    <!-- 卡片3: MV故事线 -->
+                    <div class="story-card">
+                        <img src="assets/storyline_MV.png" alt="MV故事线 - 音乐视频叙事结构">
+                        <p>MV故事线规划</p>
+                    </div>
+                    <!-- 卡片4: 剧本处理手册 -->
+                    <div class="story-card">
+                        <img src="assets/treatment_book.png" alt="剧本处理手册 - 场景分析与导演阐述">
+                        <p>书本改编的脚本</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 04 Illustration -->
+        <!-- 04 平面插画 (前三张一行，最后一张单独居中保持不变但大小宽幅不变) -->
         <section id="illustration" class="level-section">
             <div class="level-content hidden">
                 <h2 class="section-title">04 // 平面插画</h2>
-                <div class="gallery-grid">
-                    <div><img src="assets/characterDesign.png" alt="角色设计" style="width:100%;"></div>
-                    <div><img src="assets/illustration2.png" alt="场景插画" style="width:100%;"></div>
-                    <div><img src="assets/bookcover1.png" alt="书面设计" style="width:100%;"></div>
-                    <div style="grid-column: 1 / -1; text-align:center;"><img src="assets/illustration1.png" alt="主题插画" style="width:100%; max-width:800px;"></div>
+                <!-- 上三张图片，占一行，等比例一致 -->
+                <div class="illustration-grid">
+                    <div class="illust-card">
+                        <img src="assets/characterDesign.png" alt="角色设计 - 人物造型与色彩表现">
+                    </div>
+                    <div class="illust-card">
+                        <img src="assets/illustration2.png" alt="场景插画 - 氛围营造与构图设计">
+                    </div>
+                    <div class="illust-card">
+                        <img src="assets/bookcover1.png" alt="书面设计 - 儿童文学视觉化">
+                    </div>
+                </div>
+                <!-- 最后一张单独占一行，大小不变 (保持原始宽幅，居中) -->
+                <div class="fullwidth-illust">
+                    <img src="assets/illustration1.png" alt="主题插画 - 创意概念与视觉叙事">
                 </div>
             </div>
         </section>
 
-        <!-- 05 Explore -->
+        <!-- 05 Explore (保留原始丰富内容) -->
         <section id="explore" class="level-section">
             <div class="level-content hidden">
                 <h2 class="section-title">05 // 探索·未知</h2>
@@ -563,8 +651,6 @@
                 const windowHeight = window.innerHeight;
                 if(rect.top < windowHeight - 120) {
                     contentDiv.classList.add('visible');
-                } else {
-                    // 不强制移除，保持可见后永久显示即可
                 }
             });
         }
@@ -595,19 +681,16 @@
             revealSections();
             updateProgress();
             setActiveNav();
-            // 让intro区域的打字机效果优化宽度自适应
             const tw = document.querySelector('.typewriter');
             if(tw) {
                 const textLen = tw.innerText.length;
                 tw.style.width = (textLen + 1) + 'ch';
             }
-            // 额外保证所有的隐藏内容显示(刷新优化)
             setTimeout(() => {
                 revealSections();
             }, 200);
         });
         
-        // 平滑滚动导航 (原生)
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -619,29 +702,29 @@
             });
         });
         
-        // 针对3D动画板块内图片加载后保持高度一致性（防止某些图片未完全加载影响布局，但flex stretch已经保证）
-        // 额外添加检测占位高度跟随
-        const style = document.createElement('style');
-        style.textContent = `
-            .media-card img {
-                height: 280px;
+        // 额外样式微调保障故事板图片宽高比统一
+        const styleInline = document.createElement('style');
+        styleInline.textContent = `
+            .story-card img {
+                aspect-ratio: 4 / 3;
                 width: 100%;
                 object-fit: cover;
             }
-            .placeholder-inner {
-                height: 280px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
+            .illust-card img {
+                aspect-ratio: 1 / 1;
+                width: 100%;
+                object-fit: cover;
             }
             @media (max-width: 700px) {
-                .media-card img, .placeholder-inner {
-                    height: 240px;
+                .illustration-grid {
+                    grid-template-columns: 1fr;
+                }
+                .storyboard-grid {
+                    grid-template-columns: 1fr;
                 }
             }
         `;
-        document.head.appendChild(style);
+        document.head.appendChild(styleInline);
     </script>
 </body>
 </html>
