@@ -1,774 +1,173 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Quella 作品集 | Player 1 Ready</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: none;
-        }
-
-        body {
-            background-color: #0a0c12;
-            font-family: 'Segoe UI', 'Courier New', 'Fira Code', monospace;
-            color: #e0e0e0;
-            overflow-x: hidden;
-            line-height: 1.5;
-        }
-
-        /* 游戏风自定义光标 */
-        .cursor {
-            width: 8px;
-            height: 8px;
-            background: #00ffcc;
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.05s linear;
-            box-shadow: 0 0 6px #00ffcc;
-        }
-        .cursor-follower {
-            width: 32px;
-            height: 32px;
-            border: 1.5px solid #00ffcc;
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9998;
-            transition: transform 0.12s ease-out;
-            backdrop-filter: blur(2px);
-        }
-
-        /* 视觉引导线 */
-        .flow-line {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 3px;
-            height: 0%;
-            background: linear-gradient(to bottom, #00ffcc, #ff00aa);
-            z-index: 100;
-            transition: height 0.1s linear;
-            box-shadow: 0 0 8px #00ffcc;
-        }
-        .flow-progress {
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, #00ffcc, transparent);
-        }
-
-        /* 侧边导航 */
-        .game-nav {
-            position: fixed;
-            left: 2rem;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 200;
-            background: rgba(10, 12, 18, 0.7);
-            backdrop-filter: blur(12px);
-            border-radius: 2rem;
-            padding: 1.2rem 1rem;
-            border: 1px solid rgba(0, 255, 204, 0.3);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-        .logo {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #00ffcc;
-            text-align: center;
-            margin-bottom: 2rem;
-            letter-spacing: 2px;
-            font-family: monospace;
-        }
-        .nav-links {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-        }
-        .nav-links li a {
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #b0b0b0;
-            transition: all 0.2s;
-            letter-spacing: 1px;
-            writing-mode: horizontal-tb;
-            display: inline-block;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-            font-family: monospace;
-        }
-        .nav-links li a:hover, .nav-links li a.active {
-            color: #00ffcc;
-            text-shadow: 0 0 5px #00ffcc;
-            background: rgba(0,255,204,0.1);
-        }
-
-        /* 主内容区 */
-        .content-wrapper {
-            margin-left: 8rem;
-            padding: 2rem 3rem 5rem 3rem;
-            max-width: 1400px;
-        }
-
-        .level-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 4rem 0;
-            border-bottom: 1px dashed rgba(0,255,204,0.3);
-        }
-        .level-content {
-            width: 100%;
-        }
-        .hidden {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.6s ease;
-        }
-        .level-content.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        h1 {
-            font-size: 4rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        .glitch {
-            position: relative;
-            color: #fff;
-            text-shadow: 0.05em 0 0 #00ffcc, -0.05em -0.025em 0 #ff00aa;
-            animation: glitch-shake 0.3s infinite alternate;
-        }
-        @keyframes glitch-shake {
-            0% { transform: translate(0); }
-            100% { transform: translate(-1px, 1px); }
-        }
-        .typewriter {
-            font-size: 1.2rem;
-            border-right: 2px solid #00ffcc;
-            white-space: nowrap;
-            overflow: hidden;
-            width: fit-content;
-            max-width: 100%;
-            animation: blinkCursor 0.75s step-end infinite;
-        }
-        @keyframes blinkCursor {
-            0%, 100% { border-color: #00ffcc; }
-            50% { border-color: transparent; }
-        }
-        .scroll-hint {
-            margin-top: 3rem;
-            font-size: 0.8rem;
-            color: #00ffcc;
-            text-align: center;
-            animation: bounce 1.8s infinite;
-        }
-        @keyframes bounce {
-            0%,100%{transform:translateY(0); opacity:0.6;}
-            50%{transform:translateY(10px); opacity:1;}
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            border-left: 5px solid #00ffcc;
-            padding-left: 1rem;
-            color: #f0f0f0;
-            letter-spacing: 2px;
-        }
-
-        /* 通用布局 */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin: 1.5rem 0;
-            align-items: start;
-        }
-        
-        .layout-alt {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            align-items: flex-start;
-        }
-        .layout-alt > * {
-            flex: 1 1 300px;
-        }
-        
-        /* 03 剧本与故事板：16:9 */
-        .storyboard-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin: 1.5rem 0;
-        }
-        .story-card {
-            background: rgba(15, 18, 28, 0.6);
-            border-radius: 20px;
-            overflow: hidden;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(0, 255, 204, 0.25);
-            transition: transform 0.25s, border-color 0.2s;
-            display: flex;
-            flex-direction: column;
-        }
-        .story-card:hover {
-            transform: translateY(-6px);
-            border-color: #00ffcc;
-            box-shadow: 0 12px 24px rgba(0,255,204,0.1);
-        }
-        .story-card img {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            background: #0f121c;
-            display: block;
-            border-bottom: 1px solid rgba(0,255,204,0.2);
-        }
-        .story-card p {
-            text-align: center;
-            margin: 14px 12px 18px;
-            font-size: 0.9rem;
-            color: #dddddd;
-        }
-
-        /* ========= 04 平面插画：前三张原比例高度一致 ========= */
-        .illust-top-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            margin-bottom: 2.5rem;
-        }
-        .illust-card {
-            flex: 1 1 280px;
-            background: rgba(0,0,0,0.25);
-            border-radius: 18px;
-            overflow: hidden;
-            transition: transform 0.2s;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.4);
-            display: flex;
-            flex-direction: column;
-        }
-        .illust-card:hover {
-            transform: scale(1.02);
-        }
-        .illust-card img {
-            width: 100%;
-            height: 320px;
-            object-fit: contain;
-            background: #0a0c12;
-            display: block;
-            border-radius: 14px;
-        }
-        /* 最后一张单独行，16:9 */
-        .fullwidth-illust {
-            margin-top: 1rem;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-        }
-        .fullwidth-illust img {
-            width: 100%;
-            max-width: 880px;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            border-radius: 24px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
-            border: 1px solid rgba(0,255,204,0.3);
-        }
-
-        /* 3D动画短片区域 (上半部三列：两个图片 + GIF) */
-        .uniform-media-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            align-items: stretch;
-            margin: 1.5rem 0 2rem 0;
-        }
-        .media-card {
-            flex: 1 1 280px;
-            min-width: 240px;
-            background: rgba(15,18,28,0.5);
-            border-radius: 20px;
-            padding: 0.8rem;
-            backdrop-filter: blur(2px);
-            border: 1px solid rgba(0,255,204,0.15);
-            display: flex;
-            flex-direction: column;
-        }
-        /* 原比例图片：高度固定，contain保证完整显示 */
-        .media-card img {
-            width: 100%;
-            height: 280px;
-            object-fit: contain;
-            background: #0f121c;
-            border-radius: 12px;
-        }
-        /* GIF卡片专用，高度一致且cover展示动图更好看 */
-        .gif-card {
-            flex: 1 1 280px;
-            min-width: 240px;
-            background: rgba(15,18,28,0.5);
-            border-radius: 20px;
-            padding: 0.8rem;
-            border: 1px solid rgba(0,255,204,0.25);
-            display: flex;
-            flex-direction: column;
-        }
-        .gif-card img {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-            border-radius: 12px;
-            background: #000;
-        }
-        .caption-text {
-            text-align: center;
-            margin-top: 12px;
-            font-size: 0.85rem;
-            color: #bcbcbc;
-        }
-
-        /* 海报+视频同行布局 (poster 9:16 , 视频 16:9) */
-        .poster-video-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            align-items: stretch;
-            margin: 2rem 0 1.5rem;
-        }
-        .poster-col {
-            flex: 1 1 300px;
-            background: rgba(15,18,28,0.5);
-            border-radius: 20px;
-            padding: 0.8rem;
-            border: 1px solid rgba(0,255,204,0.2);
-            display: flex;
-            flex-direction: column;
-        }
-        .poster-col img {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 9 / 16;
-            object-fit: cover;
-            border-radius: 12px;
-            background: #0a0c12;
-        }
-        .video-col {
-            flex: 2 1 480px;
-            background: rgba(15,18,28,0.5);
-            border-radius: 20px;
-            padding: 0.8rem;
-            border: 1px solid rgba(0,255,204,0.2);
-            display: flex;
-            flex-direction: column;
-        }
-        .video-col video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            border-radius: 12px;
-            background: #000;
-            display: block;
-        }
-
-        /* 3D场景三张占一行 */
-        .scene-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin: 1.5rem 0;
-        }
-        .scene-item {
-            background: rgba(10, 12, 18, 0.4);
-            border-radius: 16px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0.5rem;
-        }
-        .scene-item img {
-            width: 100%;
-            height: auto;
-            max-height: 360px;
-            object-fit: contain;
-            background: #0a0c12;
-            border-radius: 12px;
-        }
-
-        .placeholder-box {
-            background: rgba(20, 25, 40, 0.7);
-            border-radius: 20px;
-            border: 1px dashed #00ffcc;
-            min-height: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            color: #aaa;
-            backdrop-filter: blur(4px);
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .project-subtitle {
-            color: #00ffcc;
-            font-size: 1.2rem;
-            margin: 2rem 0 1rem 0;
-            font-weight: 300;
-            text-align: center;
-            letter-spacing: 1px;
-        }
-
-        .explore-text {
-            background: rgba(0,255,204,0.05);
-            padding: 1rem;
-            border-radius: 1rem;
-            margin: 1rem 0;
-        }
-
-        a {
-            color: #00ffcc;
-        }
-
-        img, video {
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-            transition: transform 0.2s, filter 0.2s;
-            border: 1px solid rgba(0,255,204,0.2);
-        }
-        img:hover, video:hover {
-            transform: scale(1.01);
-            filter: brightness(1.05);
-            border-color: #00ffcc;
-        }
-
-        @media (max-width: 900px) {
-            .game-nav {
-                left: 0.5rem;
-                padding: 0.8rem 0.5rem;
-            }
-            .nav-links li a {
-                font-size: 0.7rem;
-            }
-            .content-wrapper {
-                margin-left: 5rem;
-                padding: 1rem;
-            }
-            h1 {
-                font-size: 2.5rem;
-            }
-            .typewriter {
-                white-space: normal;
-                border-right: none;
-                animation: none;
-            }
-            .storyboard-grid {
-                gap: 1rem;
-            }
-            .scene-grid {
-                gap: 1rem;
-                grid-template-columns: 1fr;
-            }
-            .illust-top-row {
-                flex-direction: column;
-                align-items: center;
-            }
-            .poster-video-row {
-                flex-direction: column;
-            }
-        }
-        @media (max-width: 760px) {
-            .storyboard-grid {
-                grid-template-columns: 1fr;
-            }
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-            .scene-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quella's portfolio of animation, games, websites, moving images, and illustration.">
+  <title>Quella — Portfolio Archive</title>
+  <style>
+    :root { --paper:#f4f2ed; --ink:#24231f; --muted:#68675f; --line:#c9c6be; --accent:#443c9a; --panel:#eae7df; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.55 Arial,Helvetica,sans-serif; }
+    a { color:inherit; text-underline-offset:3px; }
+    a:hover { color:var(--accent); }
+    button { font:inherit; }
+    img,video { display:block; width:100%; background:#dedbd3; }
+    img { object-fit:cover; }
+    .shell { max-width:1480px; margin:auto; padding:0 4vw; }
+    .masthead { border-bottom:1px solid var(--ink); }
+    .masthead-inner { min-height:94px; display:flex; align-items:center; justify-content:space-between; gap:2rem; }
+    .brand { text-decoration:none; font-size:clamp(1.6rem,3vw,2.9rem); font-weight:800; letter-spacing:-.06em; line-height:1; }
+    .brand span { color:var(--accent); }
+    .masthead-note { color:var(--muted); text-align:right; font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; }
+    .topnav { position:sticky; top:0; z-index:20; background:rgba(244,242,237,.96); backdrop-filter:blur(10px); border-bottom:1px solid var(--ink); }
+    .topnav .shell { display:flex; gap:clamp(1.2rem,3vw,3rem); overflow-x:auto; white-space:nowrap; }
+    .topnav a { padding:1rem 0; text-decoration:none; font-size:.82rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; border-bottom:3px solid transparent; }
+    .topnav a:hover,.topnav a[aria-current="page"] { border-color:var(--accent); color:var(--accent); }
+    section { scroll-margin-top:85px; padding:4rem 0 5rem; border-bottom:1px solid var(--ink); }
+    .intro { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(250px,.6fr); gap:3rem; padding:6rem 0 5rem; }
+    .eyebrow,.index,.meta,.item-number { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.13em; color:var(--muted); }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { font-size:clamp(3.5rem,8vw,9rem); line-height:.9; letter-spacing:-.085em; margin:.8rem 0 2rem; }
+    .intro p { max-width:620px; font-size:1.15rem; }
+    .intro-aside { align-self:end; border-top:1px solid var(--ink); padding-top:1rem; color:var(--muted); }
+    .section-head { display:grid; grid-template-columns: minmax(0,1fr) minmax(230px,.45fr); gap:2rem; align-items:end; margin-bottom:2.5rem; }
+    h2 { font-size:clamp(2.5rem,5.2vw,5.4rem); line-height:.98; letter-spacing:-.065em; margin:.5rem 0 0; }
+    .section-head p { color:var(--muted); max-width:350px; margin:0; }
+    .filters { display:flex; gap:.55rem; flex-wrap:wrap; margin:0 0 2rem; }
+    .filters button { padding:.52rem .85rem; border:1px solid var(--line); background:transparent; color:var(--ink); cursor:pointer; font-size:.77rem; text-transform:uppercase; letter-spacing:.08em; }
+    .filters button:hover,.filters button[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); color:var(--paper); }
+    .archive-item { display:grid; grid-template-columns:58px minmax(230px, .9fr) minmax(0,1.1fr); gap:clamp(1rem,3vw,3rem); padding:2rem 0; border-top:1px solid var(--line); align-items:start; }
+    .archive-item[hidden] { display:none; }
+    .archive-item h3 { font:normal clamp(1.7rem,2.5vw,2.7rem)/1.08 Georgia,serif; letter-spacing:-.035em; margin:.3rem 0 1rem; }
+    .archive-item p { max-width:580px; color:#4e4d47; }
+    .item-link { font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
+    .media-stack { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.55rem; }
+    .media-stack.one { grid-template-columns:1fr; }
+    .media-stack img { aspect-ratio:4/3; }
+    .media-stack.wide img { aspect-ratio:16/9; }
+    .media-stack.portrait img { aspect-ratio:3/4; object-fit:contain; }
+    .media-stack video { aspect-ratio:16/9; object-fit:contain; background:#111; }
+    .caption { grid-column:1/-1; color:var(--muted); font-size:.73rem; }
+    .bio-grid { display:grid; grid-template-columns: minmax(0,1fr) minmax(240px,.65fr); gap:4rem; border-top:1px solid var(--line); padding-top:2rem; }
+    .bio-grid p { max-width:690px; font:clamp(1.35rem,2.3vw,2.4rem)/1.3 Georgia,serif; }
+    .cv-list { list-style:none; padding:0; margin:0; }
+    .cv-list li { border-top:1px solid var(--line); padding:.8rem 0; display:flex; justify-content:space-between; gap:1rem; }
+    .cv-list span { color:var(--muted); }
+    .empty { border-top:1px solid var(--line); padding:2rem 0; max-width:700px; color:var(--muted); }
+    footer { display:flex; justify-content:space-between; gap:2rem; padding:2rem 0 4rem; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; }
+    @media(max-width:850px) {
+      .intro,.section-head,.bio-grid { grid-template-columns:1fr; gap:1.5rem; }
+      .archive-item { grid-template-columns:40px minmax(0,1fr); }
+      .archive-item .media-stack { grid-column:2; }
+      .masthead-note { display:none; }
+    }
+    @media(max-width:560px) {
+      .shell { padding:0 1.1rem; }
+      section { padding:3rem 0; }
+      .intro { padding:4rem 0; }
+      .archive-item { grid-template-columns:1fr; gap:.7rem; }
+      .archive-item .media-stack { grid-column:1; }
+      .media-stack { grid-template-columns:1fr; }
+      .caption { grid-column:1; }
+      footer { flex-direction:column; }
+    }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+  </style>
 </head>
 <body>
-    <div class="cursor"></div>
-    <div class="cursor-follower"></div>
-    <div class="flow-line"><div class="flow-progress"></div></div>
+  <header class="masthead" id="top"><div class="shell masthead-inner">
+    <a class="brand" href="#top">QUELLA<span> / </span>ARCHIVE</a>
+    <div class="masthead-note">Artist portfolio<br>Games · animation · visual experiments</div>
+  </div></header>
+  <nav class="topnav" aria-label="Main navigation"><div class="shell">
+    <a href="#biography">Biography and CV</a>
+    <a href="#projects">Projects</a>
+    <a href="#images">Images</a>
+    <a href="#videos">Videos</a>
+    <a href="#articles">Articles</a>
+  </div></nav>
+  <main class="shell">
+    <div class="intro">
+      <div><div class="eyebrow">Selected works / portfolio</div><h1>Quella.</h1><p>An archive of imagined worlds, interactive systems, moving images and visual stories.</p></div>
+      <div class="intro-aside">Browse by medium or follow a project across its images and videos. This archive is a living collection of works and experiments.</div>
+    </div>
 
-    <nav class="game-nav">
-        <div class="logo">QUELLA_</div>
-        <ul class="nav-links">
-            <li><a href="#intro" class="active" data-text="00_INTRO">00_INTRO</a></li>
-            <li><a href="#3d-design" data-text="01_3D_SCENE">01_3D</a></li>
-            <li><a href="#game-design" data-text="02_GAME_DESIGN">02_GAME_DESIGN</a></li>
-            <li><a href="#storyboard" data-text="03_STORYBOARD">03_STORYBOARD</a></li>
-            <li><a href="#illustration" data-text="04_ILLUSTRATION">04_ILLUSTRATION</a></li>
-            <li><a href="#explore" data-text="05_EXPLORE">05_EXPLORE</a></li>
-        </ul>
-    </nav>
+    <section id="biography" aria-labelledby="bio-title">
+      <div class="section-head"><div><div class="index">01 / Profile</div><h2 id="bio-title">Biography and CV</h2></div><p>Practice, background and contact.</p></div>
+      <div class="bio-grid">
+        <div><p>Quella works across game design, 3D animation, web interfaces and visual storytelling. Her practice brings together atmospheric environments, interactive experiences and narrative images.</p></div>
+        <div><div class="eyebrow">CV / selected practice</div><ul class="cv-list">
+          <li>Game design <span>Unity / Unreal Engine</span></li>
+          <li>3D animation <span>Maya / Blender</span></li>
+          <li>Web & UI design <span>Figma / Web</span></li>
+          <li>Visual storytelling <span>Storyboards / Illustration</span></li>
+        </ul><p class="meta" style="margin-top:2rem">Contact</p><a href="mailto:2780745213@qq.com">2780745213@qq.com</a></div>
+      </div>
+    </section>
 
-    <main class="content-wrapper">
-        <section id="intro" class="level-section">
-            <div class="level-content">
-                <h1 class="glitch" data-text="QUELLA 作品集">QUELLA 作品集</h1>
-                <p class="typewriter">Welcome to my universe. // 概念设计 / 3D美术 / 视觉探索</p>
-                <p class="typewriter">联系方式：电话17720585880/wx：W17720585880/邮箱：2780745213@qq.com</p>
-                <div class="scroll-hint">↓ SCROLL TO START ↓</div>
-            </div>
-        </section>
+    <section id="projects" aria-labelledby="projects-title">
+      <div class="section-head"><div><div class="index">02 / Selected work</div><h2 id="projects-title">Projects</h2></div><p>Explore work by discipline. Project records link to related moving-image material where available.</p></div>
+      <div class="filters" role="group" aria-label="Filter projects" data-filter="projects">
+        <button type="button" data-category="all" aria-pressed="true">Show All</button>
+        <button type="button" data-category="3d-animation" aria-pressed="false">3D Animation</button>
+        <button type="button" data-category="game" aria-pressed="false">Game</button>
+        <button type="button" data-category="website" aria-pressed="false">Website</button>
+      </div>
+      <article class="archive-item" data-group="projects" data-category="3d-animation"><div class="item-number">01</div><div><div class="meta">3D Animation / Maya</div><h3>The Rift Park</h3><p>A dynamic simulation study investigating movement, material and spatial transformation.</p><a class="item-link" href="#video-rift">Watch the simulation →</a></div><div class="media-stack one"><video controls preload="none" aria-label="The Rift Park simulation"><source src="assets/simulation.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item" data-group="projects" data-category="3d-animation"><div class="item-number">02</div><div><div class="meta">3D Animation / Work in progress</div><h3>The Manipulation of Power</h3><p>Character development, puppet imagery, poster design and an animation test for an evolving short film.</p><a class="item-link" href="#video-manipulation">Watch the animation test →</a></div><div class="media-stack"><img loading="lazy" src="assets/Girl2.png" alt="Main character design"><img loading="lazy" src="assets/puppet-front.png" alt="Puppet character front view"><img loading="lazy" src="assets/poster.png" alt="The Manipulation of Power poster"><img loading="lazy" src="assets/Girl[00h00m00s-00h00m03s].gif" alt="Animated character turnaround"></div></article>
+      <article class="archive-item" data-group="projects" data-category="3d-animation"><div class="item-number">03</div><div><div class="meta">3D Environment / Blender</div><h3>Environment Studies</h3><p>Experiments in atmosphere and spatial composition across cave, historical and snowy settings.</p></div><div class="media-stack"><img loading="lazy" src="assets/cave2.png" alt="Cave environment"><img loading="lazy" src="assets/gufeng.jpg" alt="Historical-inspired environment"><img loading="lazy" src="assets/snow.png" alt="Snow environment"></div></article>
+      <article class="archive-item" data-group="projects" data-category="game"><div class="item-number">04</div><div><div class="meta">Game / Unity</div><h3>Lab 211</h3><p>Level design and implementation for the maze world, alongside promotional poster design.</p><a class="item-link" href="#video-lab211">Watch the game trailer →</a></div><div class="media-stack one portrait"><img loading="lazy" src="assets/Poster_Lab 211.jpg" alt="Lab 211 promotional poster"></div></article>
+      <article class="archive-item" data-group="projects" data-category="game"><div class="item-number">05</div><div><div class="meta">Game / Unreal Engine 5</div><h3>UE5 Experiments</h3><p>Technical and visual studies created in Unreal Engine, including an HLSL experiment.</p><a class="item-link" href="#video-ue5">Watch the UE5 study →</a></div><div class="media-stack one"><video controls preload="none" aria-label="UE5 experiment"><source src="assets/UE5 tasks.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item" data-group="projects" data-category="website"><div class="item-number">06</div><div><div class="meta">Website / UI / Figma</div><h3>VOIDRAFT</h3><p>Interface concept and visual identity explored through a Figma prototype and web design studies.</p><a class="item-link" href="https://www.figma.com/design/kDGXzLiS2urJjuBvBqnfNS/web_Voidraft?node-id=0-1&amp;t=e3RLNUxpmsJSbW8U-1" target="_blank" rel="noopener noreferrer">Open Figma design ↗</a></div><div class="media-stack"><img loading="lazy" src="assets/WebUI_poster.png" alt="VOIDRAFT UI poster"><img loading="lazy" src="assets/web_concept.png" alt="VOIDRAFT website concept"></div></article>
+    </section>
 
-        <!-- 01 3D Animation & Scene Design -->
-        <section id="3d-design" class="level-section">
-            <div class="level-content hidden">
-                <h2 class="section-title">01 // 3D动画与场景设计</h2>
-                <h3 class="project-subtitle">动态模拟动画-The Rift Park/Maya</h3>
-                <div style="text-align: center; margin: 1rem 0 2rem;">
-                    <video controls style="width: 100%; max-width: 880px; border-radius: 16px;">
-                        <source src="assets/simulation.mp4" type="video/mp4">
-                        您的浏览器不支持视频播放。
-                    </video>
-                    <p style="margin-top: 8px; font-size: 0.9em;">视频展示</p>
-                </div>
+    <section id="images" aria-labelledby="images-title">
+      <div class="section-head"><div><div class="index">03 / Visual archive</div><h2 id="images-title">Images</h2></div><p>Storyboards, scripts and illustrations collected by format.</p></div>
+      <div class="filters" role="group" aria-label="Filter images" data-filter="images"><button type="button" data-category="all" aria-pressed="true">Show All</button><button type="button" data-category="storyboard" aria-pressed="false">Storyboard</button><button type="button" data-category="illustration" aria-pressed="false">Illustration</button></div>
+      <article class="archive-item" data-group="images" data-category="storyboard"><div class="item-number">01</div><div><div class="meta">Images / Storyboard</div><h3>Scripts and Storyboards</h3><p>Story structure, shot planning, music-video narrative and an adaptation treatment.</p></div><div class="media-stack wide"><img loading="lazy" src="assets/scriptppt.png" alt="Script structure presentation"><img loading="lazy" src="assets/storyboard4.png" alt="Storyboard panels"><img loading="lazy" src="assets/storyline_MV.png" alt="Music-video story outline"><img loading="lazy" src="assets/treatment_book.png" alt="Book adaptation treatment"><div class="caption">Script structure · Storyboard · Music-video storyline · Adaptation treatment</div></div></article>
+      <article class="archive-item" data-group="images" data-category="illustration"><div class="item-number">02</div><div><div class="meta">Images / Illustration</div><h3>Illustration and Character Studies</h3><p>Character, scene, book-cover and thematic illustrations.</p></div><div class="media-stack"><img loading="lazy" src="assets/characterDesign.png" alt="Character design"><img loading="lazy" src="assets/illustration2.png" alt="Scene illustration"><img loading="lazy" src="assets/bookcover1.png" alt="Book-cover design"><img loading="lazy" src="assets/illustration1.png" alt="Thematic illustration"></div></article>
+    </section>
 
-                <!-- 动画短片-制作中：恢复GIF在最右侧，替换之前的视频占位 -->
-                <h3 class="project-subtitle" style="margin-top: 2rem;">动画短片-The Manipulation of Power | 制作中</h3>
-                <div class="uniform-media-row">
-                    <div class="media-card">
-                        <img src="assets/Girl2.png" alt="3D角色建模">
-                        <div class="caption-text">主角角色设定 </div>
-                    </div>
-                    <div class="media-card">
-                        <img src="assets/puppet-front.png" alt="木偶&舞台">
-                        <div class="caption-text">提线木偶角色前视图 </div>
-                    </div>
-                    <!-- 最右边恢复为 Girl[00h00m00s-00h00m03s].gif 动图 -->
-                    <div class="gif-card">
-                        <img src="assets/Girl[00h00m00s-00h00m03s].gif" alt="角色动态演示GIF">
-                        <div class="caption-text">✨ 角色360演示 GIF</div>
-                    </div>
-                </div>
+    <section id="videos" aria-labelledby="videos-title">
+      <div class="section-head"><div><div class="index">04 / Moving image</div><h2 id="videos-title">Videos</h2></div><p>Film, game footage and interactive experiments, including videos previously held in Explore.</p></div>
+      <article class="archive-item" id="video-rift"><div class="item-number">01</div><div><div class="meta">Simulation / Maya</div><h3>The Rift Park</h3></div><div class="media-stack one"><video controls preload="none"><source src="assets/simulation.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item" id="video-manipulation"><div class="item-number">02</div><div><div class="meta">Animation test</div><h3>The Manipulation of Power</h3></div><div class="media-stack one"><video controls preload="none"><source src="assets/try1.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item" id="video-lab211"><div class="item-number">03</div><div><div class="meta">Game trailer / Unity</div><h3>Lab 211</h3></div><div class="media-stack one"><video controls preload="none"><source src="assets/Lab211_trail.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item" id="video-ue5"><div class="item-number">04</div><div><div class="meta">Technical study / Unreal Engine</div><h3>UE5 HLSL Experiment</h3></div><div class="media-stack one"><video controls preload="none"><source src="assets/UE5 tasks.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item"><div class="item-number">05</div><div><div class="meta">Interactive design / Processing</div><h3>Portrait Interaction</h3><p>An experimental portrait-based interaction study.</p></div><div class="media-stack one"><video controls preload="none"><source src="assets/portrait_interaction.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item"><div class="item-number">06</div><div><div class="meta">Interactive design / Processing</div><h3>Music Interaction</h3><p>An experiment connecting visual response and music.</p></div><div class="media-stack one"><video controls preload="none"><source src="assets/music interaction.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item"><div class="item-number">07</div><div><div class="meta">AI video / Music video</div><h3>Children of the Machine</h3></div><div class="media-stack one"><video controls preload="none"><source src="assets/AI MV_childrenofthemechine.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item"><div class="item-number">08</div><div><div class="meta">Additional moving-image studies</div><h3>Blendshape and Visual Experiments</h3></div><div class="media-stack"><video controls preload="none" aria-label="Blendshape experiment"><source src="assets/blendshape.mp4" type="video/mp4"></video><video controls preload="none" aria-label="Visual experiment"><source src="assets/portrait_interaction.mp4" type="video/mp4"></video></div></article>
+    </section>
 
-                <!-- 保留poster + try1.mp4 一行展示 (左边9:16海报，右边16:9视频测试) 符合额外展示需求 -->
-                <div class="poster-video-row">
-                    <div class="poster-col">
-                        <img src="assets/poster.png" alt="动画项目主视觉海报 ">
-                        <div class="caption-text"> 海报</div>
-                    </div>
-                    <div class="video-col">
-                        <video controls style="width:100%; aspect-ratio:16/9; object-fit:cover;">
-                            <source src="assets/try1.mp4" type="video/mp4">
-                            您的浏览器不支持视频播放。
-                        </video>
-                        <div class="caption-text">🎬 动画短片测试 </div>
-                    </div>
-                </div>
-
-                <!-- 3D场景/blender 三张占一行 -->
-                <h3 class="project-subtitle">3D场景/blender</h3>
-                <div class="scene-grid">
-                    <div class="scene-item"><img src="assets/cave2.png" alt="洞穴场景设计"></div>
-                    <div class="scene-item"><img src="assets/gufeng.jpg" alt="古风场景概念"></div>
-                    <div class="scene-item"><img src="assets/snow.png" alt="雪景"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 02 Game Design -->
-        <section id="game-design" class="level-section">
-            <div class="level-content hidden">
-                <h2 class="section-title">02 // 游戏设计</h2>
-                <h3 class="project-subtitle">Lab 211 游戏项目/Unity</h3>
-                <div class="layout-alt">
-                    <div>
-                        <video controls style="width:100%; max-width:600px;">
-                            <source src="assets/Lab211_trail.mp4" type="video/mp4">
-                        </video>
-                        <p style="text-align:center; margin-top:8px;">Lab 211 - 游戏实机演示</p>
-                        <p style="text-align:center; font-size:0.85em;">负责迷宫世界的关卡设计和实现，以及poster设计等等</p>
-                    </div>
-                    <div>
-                        <img src="assets/Poster_Lab 211.jpg" alt="Lab 211 游戏宣传海报" style="width:100%; max-width:300px;">
-                        <p style="text-align:center; margin-top:8px;">游戏宣传海报设计</p>
-                    </div>
-                </div>
-
-                <h3 class="project-subtitle">UE5</h3>
-                <div style="text-align:center;">
-                    <video controls style="width:100%; max-width:800px;">
-                        <source src="assets/UE5 tasks.mp4" type="video/mp4">
-                    </video>
-                    <p style="margin-top:8px;">UE5 HLSL 实验演示</p>
-                </div>
-
-                <h3 class="project-subtitle">FYP</h3>
-                <div class="layout-alt">
-                    <div class="placeholder-box large">【游戏实机/UI展示 占位】</div>
-                    <div class="placeholder-box">【游戏机制图解 占位】</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 03 剧本与故事板 16:9 -->
-        <section id="storyboard" class="level-section">
-            <div class="level-content hidden">
-                <h2 class="section-title">03 // 剧本与故事板</h2>
-                <div class="storyboard-grid">
-                    <div class="story-card"><img src="assets/scriptppt.png" alt="剧本结构PPT"><p>剧本结构PPT展示</p></div>
-                    <div class="story-card"><img src="assets/storyboard4.png" alt="故事板分镜"><p>故事板分镜设计</p></div>
-                    <div class="story-card"><img src="assets/storyline_MV.png" alt="MV故事线"><p>MV故事线规划</p></div>
-                    <div class="story-card"><img src="assets/treatment_book.png" alt="剧本处理手册"><p>书本改编的脚本</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 04 平面插画: 前三张原比例且高度一致，最后一张16:9 -->
-        <section id="illustration" class="level-section">
-            <div class="level-content hidden">
-                <h2 class="section-title">04 // 平面插画</h2>
-                <div class="illust-top-row">
-                    <div class="illust-card"><img src="assets/characterDesign.png" alt="角色设计"></div>
-                    <div class="illust-card"><img src="assets/illustration2.png" alt="场景插画"></div>
-                    <div class="illust-card"><img src="assets/bookcover1.png" alt="书面设计"></div>
-                </div>
-                <div class="fullwidth-illust">
-                    <img src="assets/illustration1.png" alt="主题插画">
-                </div>
-            </div>
-        </section>
-
-        <!-- 05 Explore -->
-        <section id="explore" class="level-section">
-            <div class="level-content hidden">
-                <h2 class="section-title">05 // 探索·未知</h2>
-                <p class="explore-text">在这里放置你的实验性项目、草图或未分类的灵感碎片...</p>
-                
-                <h3 class="project-subtitle">互动设计/Processing</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:20px;">
-                    <div><video controls style="width:100%;"><source src="assets/portrait_interaction.mp4" type="video/mp4"></video><p style="text-align:center;">肖像互动设计</p></div>
-                    <div><video controls style="width:100%;"><source src="assets/music interaction.mp4" type="video/mp4"></video><p style="text-align:center;">音乐交互体验</p></div>
-                </div>
-                
-                <h3 class="project-subtitle">VOIDRAFT UI设计/Figma</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:20px;">
-                    <div><img src="assets/WebUI_poster.png" alt="网站UI海报" style="width:100%;"><p>网站UI海报设计</p></div>
-                    <div><img src="assets/web_concept.png" alt="网页概念设计" style="width:100%;"><p>网页概念设计<br><a href="https://www.figma.com/design/kDGXzLiS2urJjuBvBqnfNS/web_Voidraft?node-id=0-1&t=e3RLNUxpmsJSbW8U-1" target="_blank" style="color:#00ffcc;">点击体验-Figma链接</a></p></div>
-                </div>
-
-                <h3 class="project-subtitle">其他</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:20px; align-items:start;">
-                    <div>
-                        <video controls style="width:100%; max-width:400px;"><source src="assets/AI MV_childrenofthemechine.mp4" type="video/mp4"></video>
-                        <p>AI视频-音乐MV</p>
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap:15px;">
-                        <div class="placeholder-box">【更多/正在维护中...】</div>
-                        <div class="placeholder-box">【联系方式/简历】</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script>
-        // 自定义光标跟随
-        const cursor = document.querySelector('.cursor');
-        const follower = document.querySelector('.cursor-follower');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.transform = `translate(${e.clientX - 4}px, ${e.clientY - 4}px)`;
-            follower.style.transform = `translate(${e.clientX - 16}px, ${e.clientY - 16}px)`;
+    <section id="articles" aria-labelledby="articles-title"><div class="section-head"><div><div class="index">05 / Writing</div><h2 id="articles-title">Articles</h2></div><p>Notes, essays and reflections on the creative process.</p></div><div class="empty">The writing archive is being prepared. No articles have been published here yet.</div></section>
+  </main>
+  <footer class="shell"><span>© Quella · Portfolio archive</span><a href="#top">Back to top ↑</a></footer>
+  <script>
+    document.querySelectorAll('.filters').forEach(group => {
+      group.addEventListener('click', event => {
+        const button = event.target.closest('button[data-category]');
+        if (!button) return;
+        const category = button.dataset.category;
+        group.querySelectorAll('button').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+        document.querySelectorAll('[data-group="' + group.dataset.filter + '"]').forEach(item => {
+          item.hidden = category !== 'all' && item.dataset.category !== category;
         });
-        document.addEventListener('mouseleave', () => {
-            cursor.style.opacity = '0';
-            follower.style.opacity = '0';
+      });
+    });
+    const navigation = document.querySelectorAll('.topnav a');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navigation.forEach(link => {
+          if (link.hash === '#' + entry.target.id) link.setAttribute('aria-current', 'page');
+          else link.removeAttribute('aria-current');
         });
-        document.addEventListener('mouseenter', () => {
-            cursor.style.opacity = '1';
-            follower.style.opacity = '1';
-        });
-
-        const flowLine = document.querySelector('.flow-line');
-        const sections = document.querySelectorAll('.level-section');
-        const navLinks = document.querySelectorAll('.nav-links a');
-        
-        function updateProgress() {
-            const winScroll = window.scrollY;
-            const height = document.documentElement.scrollHeight - window.innerHeight;
-            const scrolled = (winScroll / height) * 100;
-            flowLine.style.height = scrolled + '%';
-        }
-        
-        function revealSections() {
-            sections.forEach(sec => {
-                const contentDiv = sec.querySelector('.level-content');
-                if(!contentDiv) return;
-                const rect = sec.getBoundingClientRect();
-                const windowHeight = window.innerHeight;
-                if(rect.top < windowHeight - 120) {
-                    contentDiv.classList.add('visible');
-                }
-            });
-        }
-        
-        function setActiveNav() {
-            let current = '';
-            sections.forEach(sec => {
-                const rect = sec.getBoundingClientRect();
-                if(rect.top <= 200 && rect.bottom >= 100) {
-                    current = sec.getAttribute('id');
-                }
-            });
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                const href = link.getAttribute('href').substring(1);
-                if(href === current) {
-                    link.classList.add('active');
-                }
-            });
-        }
-        
-        window.addEventListener('scroll', () => {
-            updateProgress();
-            revealSections();
-            setActiveNav();
-        });
-        window.addEventListener('load', () => {
-            revealSections();
-            updateProgress();
-            setActiveNav();
-            const tw = document.querySelector('.typewriter');
-            if(tw) {
-                const textLen = tw.innerText.length;
-                tw.style.width = (textLen + 1) + 'ch';
-            }
-            setTimeout(() => revealSections(), 200);
-        });
-        
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = link.getAttribute('href').substring(1);
-                const targetSection = document.getElementById(targetId);
-                if(targetSection) {
-                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-    </script>
+      });
+    }, { rootMargin:'-25% 0px -60% 0px' });
+    document.querySelectorAll('main section[id]').forEach(section => observer.observe(section));
+  </script>
 </body>
 </html>
