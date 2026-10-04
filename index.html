@@ -6,90 +6,94 @@
   <meta name="description" content="Quella's portfolio of animation, games, websites, moving images, and illustration.">
   <title>Quella — Portfolio Archive</title>
   <style>
-    :root { --paper:#f4f2ed; --ink:#24231f; --muted:#68675f; --line:#c9c6be; --accent:#443c9a; --panel:#eae7df; }
+    :root { --paper:#f6f5f1; --ink:#24231f; --muted:#77746e; --line:#cbc9c3; --accent:#3c3992; }
     * { box-sizing:border-box; }
     html { scroll-behavior:smooth; }
-    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.55 Arial,Helvetica,sans-serif; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.6 Arial,Helvetica,sans-serif; }
     a { color:inherit; text-underline-offset:3px; }
     a:hover { color:var(--accent); }
-    button { font:inherit; }
-    img,video { display:block; width:100%; background:#dedbd3; }
-    img { object-fit:cover; }
-    .shell { max-width:1480px; margin:auto; padding:0 4vw; }
+    img,video { display:block; max-width:100%; background:#e7e5df; }
+    .shell { max-width:1640px; margin:auto; padding:0 clamp(1rem,2.6vw,3rem); }
     .masthead { border-bottom:1px solid var(--ink); }
-    .masthead-inner { min-height:94px; display:flex; align-items:center; justify-content:space-between; gap:2rem; }
-    .brand { text-decoration:none; font-size:clamp(1.6rem,3vw,2.9rem); font-weight:800; letter-spacing:-.06em; line-height:1; }
+    .masthead-inner { min-height:92px; display:flex; align-items:center; justify-content:space-between; gap:2rem; }
+    .brand { text-decoration:none; font-size:clamp(1.7rem,3vw,2.9rem); font-weight:800; letter-spacing:-.06em; line-height:1; }
     .brand span { color:var(--accent); }
-    .masthead-note { color:var(--muted); text-align:right; font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; }
-    .page-layout { display:grid; grid-template-columns:clamp(200px,19vw,270px) minmax(0,1fr); gap:clamp(2rem,4vw,5rem); align-items:start; }
-    .side-index { position:sticky; top:0; max-height:100vh; overflow-y:auto; padding:4rem 1.1rem 2rem 0; border-right:1px solid var(--ink); scrollbar-width:thin; }
-    .side-index nav { display:flex; flex-direction:column; align-items:stretch; gap:.2rem; }
-    .side-index a { display:block; text-decoration:none; overflow-wrap:anywhere; }
-    .side-main { padding:.5rem .2rem; color:#a7a39c; font-size:clamp(.94rem,1.4vw,1.2rem); font-weight:700; line-height:1.2; }
+    .masthead-note { color:var(--muted); text-align:right; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; }
+    .page-layout { display:grid; grid-template-columns:clamp(150px,13vw,210px) clamp(175px,17vw,260px) minmax(0,1fr); gap:0; align-items:start; }
+    body[data-active-section="biography"] .page-layout,body[data-active-section="articles"] .page-layout { grid-template-columns:clamp(150px,13vw,210px) minmax(0,1fr); }
+    .side-index,.subnav { position:sticky; top:0; max-height:100vh; overflow-y:auto; scrollbar-width:thin; padding:3.2rem 1rem 2rem 0; }
+    .side-index { border-right:2px solid var(--ink); }
+    .side-index nav,.subnav nav { display:flex; flex-direction:column; align-items:stretch; }
+    .side-index a,.subnav a { display:block; text-decoration:none; overflow-wrap:anywhere; line-height:1.25; }
+    .side-main { padding:.55rem .1rem; color:#aaa7a1; font-size:clamp(.9rem,1.2vw,1.15rem); font-weight:700; }
     .side-main:hover,.side-main[aria-current="page"] { color:var(--accent); }
-    .sub-index { display:none; border-left:2px solid var(--ink); margin:.55rem 0 1.1rem; padding-left:.85rem; }
-    body[data-active-section="projects"] .sub-index[data-for="projects"],
-    body[data-active-section="images"] .sub-index[data-for="images"],
-    body[data-active-section="videos"] .sub-index[data-for="videos"] { display:block; }
-    .sub-index a { color:var(--muted); font-size:.85rem; padding:.28rem 0; }
-    .sub-index a:not(.side-detail) { margin-top:.65rem; font-weight:700; color:var(--ink); text-transform:uppercase; font-size:.75rem; letter-spacing:.05em; }
-    .sub-index a:hover { color:var(--accent); text-decoration:underline; }
-    .sub-index .side-detail { padding-left:.6rem; font-size:.77rem; }
-    .content { min-width:0; }
-    section { scroll-margin-top:24px; padding:4rem 0 5rem; border-bottom:1px solid var(--ink); }
-    .intro { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(250px,.6fr); gap:3rem; padding:6rem 0 5rem; }
+    .subnav { display:none; padding-left:1.5rem; padding-right:1rem; border-right:2px solid var(--ink); }
+    body[data-active-section="projects"] .subnav[data-for="projects"],body[data-active-section="images"] .subnav[data-for="images"],body[data-active-section="videos"] .subnav[data-for="videos"] { display:block; }
+    .subnav a { color:var(--muted); font-size:.85rem; padding:.36rem 0; }
+    .subnav a:hover { color:var(--accent); text-decoration:underline; }
+    .subnav .group { font-size:1.25rem; font-family:Georgia,serif; color:var(--ink); margin:.3rem 0 .45rem; }
+    .subnav .group:not(:first-child) { margin-top:1.3rem; }
+    .subnav .detail { padding-left:.65rem; font-size:.76rem; }
+    .content { min-width:0; padding-left:clamp(1.3rem,3vw,3.2rem); }
+    section { scroll-margin-top:2rem; padding:4rem 0 5rem; border-bottom:1px solid var(--ink); }
+    article[id] { scroll-margin-top:1.5rem; }
+    .intro { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(180px,.6fr); gap:3rem; padding:6rem 0 5rem; }
     .eyebrow,.index,.meta,.item-number { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.13em; color:var(--muted); }
     h1,h2,h3,p { margin-top:0; }
-    h1 { font-size:clamp(3.5rem,8vw,9rem); line-height:.9; letter-spacing:-.085em; margin:.8rem 0 2rem; }
+    h1 { font-size:clamp(3.5rem,7vw,8rem); line-height:.9; letter-spacing:-.085em; margin:.8rem 0 2rem; }
     .intro p { max-width:620px; font-size:1.15rem; }
     .intro-aside { align-self:end; border-top:1px solid var(--ink); padding-top:1rem; color:var(--muted); }
-    .section-head { display:grid; grid-template-columns: minmax(0,1fr) minmax(230px,.45fr); gap:2rem; align-items:end; margin-bottom:2.5rem; }
-    h2 { font-size:clamp(2.5rem,5.2vw,5.4rem); line-height:.98; letter-spacing:-.065em; margin:.5rem 0 0; }
+    .section-head { display:grid; grid-template-columns:minmax(0,1fr) minmax(180px,.42fr); gap:2rem; align-items:end; margin-bottom:3rem; }
+    h2 { font-size:clamp(2.4rem,5vw,5rem); line-height:1; letter-spacing:-.065em; margin:.5rem 0 0; }
     .section-head p { color:var(--muted); max-width:350px; margin:0; }
-    .archive-item { display:grid; grid-template-columns:38px minmax(180px,.8fr) minmax(0,1.2fr); gap:clamp(1rem,3vw,3rem); padding:2rem 0; border-top:1px solid var(--line); align-items:start; }
-    .archive-item h3 { font:normal clamp(1.7rem,2.5vw,2.7rem)/1.08 Georgia,serif; letter-spacing:-.035em; margin:.3rem 0 1rem; }
-    .archive-item p { max-width:580px; color:#4e4d47; }
+    .archive-item { border-top:1px solid var(--line); padding:2.7rem 0 3.7rem; }
+    .archive-item h3 { font:normal clamp(1.8rem,3vw,3rem)/1.12 Georgia,serif; letter-spacing:-.035em; margin:.35rem 0 1rem; }
+    .archive-item > div:nth-child(2) { max-width:830px; }
+    .archive-item p { max-width:690px; color:#4d4b47; }
     .item-link { font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
-    .media-stack { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.7rem; min-width:0; }
-    .media-stack.one { grid-template-columns:1fr; }
-    .media-stack img,.media-stack video,.project-panel { width:100%; height:auto; aspect-ratio:16/9; object-fit:contain; background:#dedbd3; border:1px solid var(--line); }
-    .media-stack video { background:#111; }
-    .project-panel { display:flex; flex-direction:column; justify-content:space-between; padding:clamp(1.3rem,3vw,3rem); color:#f5f2ea; overflow:hidden; }
-    .project-panel span { font:italic clamp(1.8rem,3.2vw,4rem)/1 Georgia,serif; letter-spacing:-.04em; }
+    .media-stack { display:flex; flex-direction:column; gap:0; max-width:900px; margin-top:1.8rem; }
+    .media-stack img,.media-stack video,.project-panel { width:100%; height:auto; max-height:650px; object-fit:contain; border:1px solid var(--line); }
+    .media-stack video { aspect-ratio:16/9; background:#111; }
+    .media-stack img { background:#ebe9e3; }
+    .media-stack img + img,.media-stack video + img,.media-stack img + video { margin-top:2.6rem; }
+    .media-stack .media-note + img,.media-stack .media-note + video { margin-top:2.6rem; }
+    .media-note,.caption { color:var(--muted); font:normal .86rem/1.55 Arial,Helvetica,sans-serif; margin:.6rem 0 1.4rem; max-width:760px; }
+    .media-note strong { color:var(--ink); }
+    .project-panel { aspect-ratio:16/9; display:flex; flex-direction:column; justify-content:space-between; padding:clamp(1.3rem,3vw,3rem); color:#f5f2ea; overflow:hidden; }
+    .project-panel span { font:italic clamp(1.8rem,3vw,4rem)/1 Georgia,serif; letter-spacing:-.04em; }
     .project-panel small { text-transform:uppercase; letter-spacing:.13em; }
-    .dream-panel { background:radial-gradient(circle at 72% 75%,#8cbd95 0,transparent 30%),linear-gradient(150deg,#201d4d,#436e6c 65%,#163c3f); }
     .lake-panel { background:radial-gradient(circle at 72% 80%,#9c874d 0,transparent 25%),linear-gradient(160deg,#172128,#29493d 65%,#111e25); }
-    .caption { grid-column:1/-1; color:var(--muted); font-size:.73rem; }
-    .bio-grid { display:grid; grid-template-columns: minmax(0,1fr) minmax(240px,.65fr); gap:4rem; border-top:1px solid var(--line); padding-top:2rem; }
+    .bio-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,.65fr); gap:3rem; border-top:1px solid var(--line); padding-top:2rem; }
     .bio-grid p { max-width:690px; font:clamp(1.35rem,2.3vw,2.4rem)/1.3 Georgia,serif; }
     .cv-list { list-style:none; padding:0; margin:0; }
     .cv-list li { border-top:1px solid var(--line); padding:.8rem 0; display:flex; justify-content:space-between; gap:1rem; }
     .cv-list span { color:var(--muted); }
     .empty { border-top:1px solid var(--line); padding:2rem 0; max-width:700px; color:var(--muted); }
     footer { display:flex; justify-content:space-between; gap:2rem; padding:2rem 0 4rem; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; }
-    @media(max-width:1100px) {
-      .intro,.section-head,.bio-grid { grid-template-columns:1fr; gap:1.5rem; }
-      .page-layout { grid-template-columns:190px minmax(0,1fr); gap:1.5rem; }
-      .archive-item { grid-template-columns:40px minmax(0,1fr); }
-      .archive-item .media-stack { grid-column:2; }
-      .masthead-note { display:none; }
+    @media(max-width:1150px) {
+      .page-layout { grid-template-columns:150px 180px minmax(0,1fr); }
+      body[data-active-section="biography"] .page-layout,body[data-active-section="articles"] .page-layout { grid-template-columns:150px minmax(0,1fr); }
+      .content { padding-left:1.4rem; }
+      .intro,.section-head,.bio-grid { grid-template-columns:1fr; gap:1.4rem; }
     }
-    @media(max-width:700px) {
-      .page-layout { display:block; }
-      .side-index { position:relative; max-height:none; padding:1rem 0; border-right:0; border-bottom:1px solid var(--ink); }
-      .side-index nav { flex-direction:row; flex-wrap:wrap; gap:.1rem .8rem; }
-      .side-main { font-size:.8rem; }
-      .sub-index { flex-basis:100%; display:none; max-height:150px; overflow-y:auto; }
+    @media(max-width:780px) {
+      .page-layout,body[data-active-section="biography"] .page-layout,body[data-active-section="articles"] .page-layout { display:block; }
+      .side-index { position:sticky; z-index:10; top:0; max-height:none; padding:.6rem 0; border-right:0; border-bottom:1px solid var(--ink); background:var(--paper); }
+      .side-index nav { flex-direction:row; flex-wrap:wrap; gap:.1rem 1rem; }
+      .side-main { font-size:.78rem; white-space:nowrap; }
+      .subnav { position:relative; z-index:9; top:auto; max-height:170px; overflow-y:auto; padding:.5rem 0; border-right:0; border-bottom:1px solid var(--line); background:var(--paper); }
+      .subnav nav { display:flex; flex-direction:row; flex-wrap:wrap; gap:0 1rem; }
+      .subnav a,.subnav .group,.subnav .group:not(:first-child) { font:700 .75rem/1.3 Arial,sans-serif; padding:.35rem 0; margin:0; }
+      .subnav .detail { padding-left:0; font-weight:400; }
+      .content { padding-left:0; }
+      section,article[id] { scroll-margin-top:8rem; }
+      .masthead-note { display:none; }
+      .intro { padding:3rem 0; }
     }
     @media(max-width:560px) {
-      .shell { padding:0 1.1rem; }
+      .shell { padding:0 1rem; }
       section { padding:3rem 0; }
-      .intro { padding:4rem 0; }
-      .archive-item { grid-template-columns:1fr; gap:.7rem; }
-      .archive-item .media-stack { grid-column:1; }
-      .media-stack { grid-template-columns:1fr; }
-      .project-panel span { font-size:2rem; }
-      .caption { grid-column:1; }
+      .archive-item { padding:2rem 0 3rem; }
       footer { flex-direction:column; }
     }
     @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
@@ -101,38 +105,36 @@
     <div class="masthead-note">Artist portfolio<br>Games · animation · visual experiments</div>
   </div></header>
   <div class="page-layout shell">
-  <aside class="side-index" aria-label="Portfolio index">
-    <nav aria-label="Main sections">
-      <a class="side-main" href="#biography" data-section="biography">Biography and CV</a>
-      <a class="side-main" href="#projects" data-section="projects">Projects</a>
-      <div class="sub-index" data-for="projects">
-        <a href="#project-rift">3D Animation</a>
-        <a class="side-detail" href="#project-rift">The Rift Park</a>
-        <a class="side-detail" href="#project-manipulation">The Manipulation of Power</a>
-        <a href="#project-lab211">Game</a>
-        <a class="side-detail" href="#project-lab211">Lab 211</a>
-        <a class="side-detail" href="#project-programming">Programming Dream</a>
-        <a class="side-detail" href="#project-lakespeaker">Lakespeaker: Soliloquy</a>
-        <a href="#project-voidraft">Website</a>
-        <a class="side-detail" href="#project-voidraft">VOIDRAFT</a>
-      </div>
-      <a class="side-main" href="#images" data-section="images">Images</a>
-      <div class="sub-index" data-for="images">
-        <a href="#image-storyboard">Storyboard</a>
-        <a href="#image-illustration">Illustration</a>
-        <a href="#image-scenery">Scenery Design</a>
-      </div>
-      <a class="side-main" href="#videos" data-section="videos">Videos</a>
-      <div class="sub-index" data-for="videos">
-        <a href="#video-ue5">UE5 HLSL Experiment</a>
-        <a href="#video-portrait">Portrait Interaction</a>
-        <a href="#video-music">Music Interaction</a>
-        <a href="#video-children">Children of the Machine</a>
-        <a href="#video-blendshape">Blendshape Study</a>
-      </div>
-      <a class="side-main" href="#articles" data-section="articles">Articles</a>
-    </nav>
-  </aside>
+  <aside class="side-index" aria-label="Portfolio sections"><nav aria-label="Main sections">
+    <a class="side-main" href="#biography" data-section="biography">Biography and CV</a>
+    <a class="side-main" href="#projects" data-section="projects">Projects</a>
+    <a class="side-main" href="#images" data-section="images">Images</a>
+    <a class="side-main" href="#videos" data-section="videos">Videos</a>
+    <a class="side-main" href="#articles" data-section="articles">Articles</a>
+  </nav></aside>
+  <aside class="subnav" data-for="projects" aria-label="Project index"><nav>
+    <a class="group" href="#project-rift">3D Animation</a>
+    <a class="detail" href="#project-rift">The Rift Park</a>
+    <a class="detail" href="#project-manipulation">The Manipulation of Power</a>
+    <a class="group" href="#project-lab211">Game</a>
+    <a class="detail" href="#project-lab211">Lab 211</a>
+    <a class="detail" href="#project-programming">Programming Daydream</a>
+    <a class="detail" href="#project-lakespeaker">Lakespeaker: Soliloquy</a>
+    <a class="group" href="#project-voidraft">Website</a>
+    <a class="detail" href="#project-voidraft">VOIDRAFT</a>
+  </nav></aside>
+  <aside class="subnav" data-for="images" aria-label="Image index"><nav>
+    <a class="group" href="#image-storyboard">Storyboard</a>
+    <a class="group" href="#image-illustration">Illustration</a>
+    <a class="group" href="#image-scenery">Scenery Design</a>
+  </nav></aside>
+  <aside class="subnav" data-for="videos" aria-label="Video index"><nav>
+    <a href="#video-ue5">UE5 HLSL Experiment</a>
+    <a href="#video-portrait">Portrait Interaction</a>
+    <a href="#video-music">Music Interaction</a>
+    <a href="#video-children">Children of the Machine</a>
+    <a href="#video-blendshape">Blendshape Study</a>
+  </nav></aside>
   <main class="content">
     <div class="intro">
       <div><div class="eyebrow">Selected works / portfolio</div><h1>Quella.</h1><p>An archive of imagined worlds, interactive systems, moving images and visual stories.</p></div>
@@ -154,19 +156,39 @@
 
     <section id="projects" aria-labelledby="projects-title">
       <div class="section-head"><div><div class="index">02 / Selected work</div><h2 id="projects-title">Projects</h2></div><p>Explore work by discipline. Animation, games and interface projects, each with its own documentation.</p></div>
-      <article class="archive-item" id="project-rift"><div class="item-number">01</div><div><div class="meta">3D Animation / Maya</div><h3>The Rift Park</h3><p>A dynamic simulation study of movement, material and spatial transformation. The recorded sequence presents the changing scene as a single animation study.</p></div><div class="media-stack one"><video controls preload="metadata" aria-label="The Rift Park animation"><source src="assets/simulation.mp4" type="video/mp4"></video><div class="caption">Animation study · Maya</div></div></article>
-      <article class="archive-item" id="project-manipulation"><div class="item-number">02</div><div><div class="meta">3D Animation / Work in progress</div><h3>The Manipulation of Power</h3><p>A developing animated short built around a puppet-like character and the visual language of control. Character models, a poster and a moving-image test trace its development.</p></div><div class="media-stack"><img loading="lazy" src="assets/Girl2.png" alt="Character design for The Manipulation of Power"><img loading="lazy" src="assets/puppet-front.png" alt="Puppet character front view"><img loading="lazy" src="assets/poster.png" alt="Project poster"><video controls preload="metadata" aria-label="The Manipulation of Power animation test"><source src="assets/try1.mp4" type="video/mp4"></video><div class="caption">Character · Puppet study · Poster · Animation test</div></div></article>
-      <article class="archive-item" id="project-lab211"><div class="item-number">03</div><div><div class="meta">Game / Unity</div><h3>Lab 211</h3><p>A game project featuring a maze world. My contributions include level design and implementation, alongside promotional poster design.</p></div><div class="media-stack"><img loading="lazy" src="assets/Poster_Lab 211.jpg" alt="Lab 211 poster"><video controls preload="metadata" aria-label="Lab 211 game trailer"><source src="assets/Lab211_trail.mp4" type="video/mp4"></video><div class="caption">Promotional poster · Gameplay trailer</div></div></article>
-      <article class="archive-item" id="project-programming"><div class="item-number">04</div><div><div class="meta">Interactive project / Unreal Engine / In development</div><h3>Programming Dream</h3><p>A compact interactive experiment that begins at a floating computer on an animated sea. A participant enters a visual programming space where input, interpretation and audiovisual response form a feedback loop.</p><p class="meta">Scene and interaction documentation in progress.</p></div><div class="media-stack one"><div class="project-panel dream-panel" role="img" aria-label="Programming Dream project title card; media documentation in progress"><span>Programming Dream</span><small>Interactive experiment · In development</small></div></div></article>
-      <article class="archive-item" id="project-lakespeaker"><div class="item-number">05</div><div><div class="meta">FYP / Narrative game / Unreal Engine / In development</div><h3>Lakespeaker: Soliloquy</h3><p>A narrative exploration and puzzle game about memory, belief and the stories that shape a sense of self. The player follows traces through dream spaces and a lakeside landscape.</p><p class="meta">Gameplay and image documentation in progress.</p></div><div class="media-stack one"><div class="project-panel lake-panel" role="img" aria-label="Lakespeaker: Soliloquy project title card; media documentation in progress"><span>Lakespeaker:<br>Soliloquy</span><small>Graduation game · In development</small></div></div></article>
-      <article class="archive-item" id="project-voidraft"><div class="item-number">06</div><div><div class="meta">Website / UI / Figma</div><h3>VOIDRAFT</h3><p>A website interface concept and visual identity developed through a Figma prototype and design studies.</p><a class="item-link" href="https://www.figma.com/design/kDGXzLiS2urJjuBvBqnfNS/web_Voidraft?node-id=0-1&amp;t=e3RLNUxpmsJSbW8U-1" target="_blank" rel="noopener noreferrer">Open Figma design ↗</a></div><div class="media-stack"><img loading="lazy" src="assets/WebUI_poster.png" alt="VOIDRAFT interface poster"><img loading="lazy" src="assets/web_concept.png" alt="VOIDRAFT website concept"></div></article>
+      <article class="archive-item" id="project-rift"><div class="item-number">01 / 3D Animation</div><div><div class="meta">Maya · Dynamic simulation</div><h3>The Rift Park</h3><p>A study of changing materials, movement and spatial transformation. The sequence below records the simulation as an animation.</p></div><div class="media-stack"><video controls preload="metadata" aria-label="The Rift Park animation"><source src="assets/simulation.mp4" type="video/mp4"></video><p class="media-note"><strong>Animation study.</strong> The evolving scene is presented as one continuous moving-image work.</p></div></article>
+      <article class="archive-item" id="project-manipulation"><div class="item-number">02 / 3D Animation</div><div><div class="meta">Animated short · Work in progress</div><h3>The Manipulation of Power</h3><p>An animated short in development, exploring a puppet-like character and the visual language of control. These images show character, stage and poster development, followed by an animation test.</p></div><div class="media-stack">
+        <img loading="lazy" src="assets/Girl2.png" alt="Main character design for The Manipulation of Power"><p class="media-note"><strong>Character study.</strong> The protagonist's form establishes the film's visual direction.</p>
+        <img loading="lazy" src="assets/puppet-front.png" alt="Front view of the puppet character"><p class="media-note"><strong>Puppet study.</strong> A front view of the character and its theatrical references.</p>
+        <img loading="lazy" src="assets/Girl[00h00m00s-00h00m03s].gif" alt="Animated character turnaround"><p class="media-note"><strong>Turnaround.</strong> A short movement study of the character.</p>
+        <img loading="lazy" src="assets/poster.png" alt="The Manipulation of Power poster"><p class="media-note"><strong>Poster.</strong> The project's key visual.</p>
+        <video controls preload="metadata" aria-label="The Manipulation of Power animation test"><source src="assets/try1.mp4" type="video/mp4"></video><p class="media-note"><strong>Animation test.</strong> An early moving-image exploration of the film.</p>
+      </div></article>
+      <article class="archive-item" id="project-lab211"><div class="item-number">03 / Game</div><div><div class="meta">Unity · Level design</div><h3>Lab 211</h3><p>A game project featuring a maze world. My contributions include level design and implementation, as well as the promotional poster.</p></div><div class="media-stack"><img loading="lazy" src="assets/Poster_Lab 211.jpg" alt="Lab 211 promotional poster"><p class="media-note"><strong>Poster design.</strong> The promotional image introduces the game's world.</p><video controls preload="metadata" aria-label="Lab 211 game trailer"><source src="assets/Lab211_trail.mp4" type="video/mp4"></video><p class="media-note"><strong>Gameplay trailer.</strong> A look at the maze level in motion.</p></div></article>
+      <article class="archive-item" id="project-programming"><div class="item-number">04 / Game · Interactive</div><div><div class="meta">Unreal Engine · In development</div><h3>Programming Daydream</h3><p>A compact interactive experiment set around a floating computer on an animated sea. The participant enters a programming space where input, interpretation and audiovisual response form a loop.</p></div><div class="media-stack"><img loading="lazy" src="assets/programming-daydream.webp" alt="Programming Daydream title scene with a floating computer in a starry sea"><p class="media-note"><strong>Scene and interface concept.</strong> The floating computer sits beyond the ornate frame, while the right side introduces the project's title and menu. Gameplay documentation will follow as the experiment develops.</p></div></article>
+      <article class="archive-item" id="project-lakespeaker"><div class="item-number">05 / Game · FYP</div><div><div class="meta">Narrative exploration · Unreal Engine · In development</div><h3>Lakespeaker: Soliloquy</h3><p>A narrative exploration and puzzle game about memory, belief and the stories that shape a sense of self. The player follows traces through dream spaces and a lakeside landscape.</p></div><div class="media-stack"><div class="project-panel lake-panel" role="img" aria-label="Lakespeaker: Soliloquy title panel; project media in development"><span>Lakespeaker:<br>Soliloquy</span><small>Graduation game · In development</small></div><p class="media-note">Gameplay footage and project images will be added as development progresses.</p></div></article>
+      <article class="archive-item" id="project-voidraft"><div class="item-number">06 / Website</div><div><div class="meta">Website · UI · Figma</div><h3>VOIDRAFT</h3><p>A website interface concept and visual identity developed through a Figma prototype and design studies. <a class="item-link" href="https://www.figma.com/design/kDGXzLiS2urJjuBvBqnfNS/web_Voidraft?node-id=0-1&amp;t=e3RLNUxpmsJSbW8U-1" target="_blank" rel="noopener noreferrer">Open Figma design ↗</a></p></div><div class="media-stack"><img loading="lazy" src="assets/WebUI_poster.png" alt="VOIDRAFT interface poster"><p class="media-note"><strong>Interface poster.</strong> A visual introduction to the website concept.</p><img loading="lazy" src="assets/web_concept.png" alt="VOIDRAFT website concept"><p class="media-note"><strong>Web concept.</strong> An exploration of layout, typography and interaction.</p></div></article>
     </section>
 
     <section id="images" aria-labelledby="images-title">
       <div class="section-head"><div><div class="index">03 / Visual archive</div><h2 id="images-title">Images</h2></div><p>Storyboards, scripts and illustrations collected by format.</p></div>
-      <article class="archive-item" id="image-storyboard"><div class="item-number">01</div><div><div class="meta">Images / Storyboard</div><h3>Scripts and Storyboards</h3><p>Story structure, shot planning, music-video narrative and an adaptation treatment.</p></div><div class="media-stack wide"><img loading="lazy" src="assets/scriptppt.png" alt="Script structure presentation"><img loading="lazy" src="assets/storyboard4.png" alt="Storyboard panels"><img loading="lazy" src="assets/storyline_MV.png" alt="Music-video story outline"><img loading="lazy" src="assets/treatment_book.png" alt="Book adaptation treatment"><div class="caption">Script structure · Storyboard · Music-video storyline · Adaptation treatment</div></div></article>
-      <article class="archive-item" id="image-illustration"><div class="item-number">02</div><div><div class="meta">Images / Illustration</div><h3>Illustration and Character Studies</h3><p>Character, scene, book-cover and thematic illustrations.</p></div><div class="media-stack"><img loading="lazy" src="assets/characterDesign.png" alt="Character design"><img loading="lazy" src="assets/illustration2.png" alt="Scene illustration"><img loading="lazy" src="assets/bookcover1.png" alt="Book-cover design"><img loading="lazy" src="assets/illustration1.png" alt="Thematic illustration"></div></article>
-      <article class="archive-item" id="image-scenery"><div class="item-number">03</div><div><div class="meta">Images / Scenery Design / Blender</div><h3>Environment Studies</h3><p>Studies in environment, lighting and atmosphere across a cave, a historical-inspired scene and a snowy landscape.</p></div><div class="media-stack"><img loading="lazy" src="assets/cave2.png" alt="Cave scenery design"><img loading="lazy" src="assets/gufeng.jpg" alt="Historical-inspired scenery design"><img loading="lazy" src="assets/snow.png" alt="Snowy scenery design"></div></article>
+      <article class="archive-item" id="image-storyboard"><div class="item-number">01 / Storyboard</div><div><div class="meta">Images · Narrative planning</div><h3>Scripts and Storyboards</h3><p>Visual planning for scripts, shot sequences, a music video and a book adaptation.</p></div><div class="media-stack">
+        <img loading="lazy" src="assets/scriptppt.png" alt="Script structure presentation"><p class="media-note"><strong>Script structure.</strong> An overview of narrative development.</p>
+        <img loading="lazy" src="assets/storyboard4.png" alt="Storyboard panels"><p class="media-note"><strong>Storyboard.</strong> Shot-by-shot visual planning.</p>
+        <img loading="lazy" src="assets/storyline_MV.png" alt="Music video storyline"><p class="media-note"><strong>Music video storyline.</strong> A sequence of narrative beats.</p>
+        <img loading="lazy" src="assets/treatment_book.png" alt="Book adaptation treatment"><p class="media-note"><strong>Adaptation treatment.</strong> A script development document.</p>
+      </div></article>
+      <article class="archive-item" id="image-illustration"><div class="item-number">02 / Illustration</div><div><div class="meta">Images · Visual development</div><h3>Illustration and Character Studies</h3><p>A selection of character, scene, cover and thematic illustration work.</p></div><div class="media-stack">
+        <img loading="lazy" src="assets/characterDesign.png" alt="Character design"><p class="media-note">Character design study.</p>
+        <img loading="lazy" src="assets/illustration2.png" alt="Scene illustration"><p class="media-note">Scene illustration.</p>
+        <img loading="lazy" src="assets/bookcover1.png" alt="Book cover design"><p class="media-note">Book cover design.</p>
+        <img loading="lazy" src="assets/illustration1.png" alt="Thematic illustration"><p class="media-note">Thematic illustration.</p>
+      </div></article>
+      <article class="archive-item" id="image-scenery"><div class="item-number">03 / Scenery Design</div><div><div class="meta">Images · Blender environments</div><h3>Environment Studies</h3><p>Experiments in environment, lighting and atmosphere across cave, historical-inspired and snowy settings.</p></div><div class="media-stack">
+        <img loading="lazy" src="assets/cave2.png" alt="Cave scenery design"><p class="media-note"><strong>Cave.</strong> An interior environment and lighting study.</p>
+        <img loading="lazy" src="assets/gufeng.jpg" alt="Historical-inspired scenery design"><p class="media-note"><strong>Historical-inspired setting.</strong> An architectural and atmospheric study.</p>
+        <img loading="lazy" src="assets/snow.png" alt="Snowy scenery design"><p class="media-note"><strong>Snow.</strong> A landscape study in light and mood.</p>
+      </div></article>
     </section>
 
     <section id="videos" aria-labelledby="videos-title">
@@ -184,18 +206,23 @@
   <footer class="shell"><span>© Quella · Portfolio archive</span><a href="#top">Back to top ↑</a></footer>
   <script>
     const sectionLinks = document.querySelectorAll('.side-main');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        document.body.dataset.activeSection = entry.target.id;
-        sectionLinks.forEach(link => {
-          if (link.dataset.section === entry.target.id) link.setAttribute('aria-current', 'page');
-          else link.removeAttribute('aria-current');
-        });
+    const sectionIds = ['biography','projects','images','videos','articles'];
+    function setSection(id) {
+      if (!sectionIds.includes(id)) return;
+      document.body.dataset.activeSection = id;
+      sectionLinks.forEach(link => {
+        if (link.dataset.section === id) link.setAttribute('aria-current','page');
+        else link.removeAttribute('aria-current');
       });
-    }, { rootMargin: '-18% 0px -68% 0px' });
+    }
+    sectionLinks.forEach(link => link.addEventListener('click', () => setSection(link.dataset.section)));
+    document.querySelectorAll('.subnav a').forEach(link => link.addEventListener('click', () => setSection(link.closest('.subnav').dataset.for)));
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) setSection(entry.target.id); });
+    }, { rootMargin:'-22% 0px -62% 0px' });
     document.querySelectorAll('main section[id]').forEach(section => observer.observe(section));
-    document.body.dataset.activeSection = 'biography';
-    </script>
+    const initial = document.getElementById(location.hash.slice(1));
+    setSection(initial?.closest('section')?.id || 'biography');
+  </script>
 </body>
 </html>
