@@ -4,9 +4,9 @@
   const links = [...document.querySelectorAll('.side-main')];
   const sections = [...document.querySelectorAll('main > [id]')];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  const modes = {about:'walk', biography:'balloons', projects:'jump', images:'light', videos:'light', articles:'type'};
-  let active='about', hover=null, focus=null, target='walk', last=0, time=0, gait=0, tailPhase=0, raf=0;
-  const pose={sit:0,light:0,jump:0,balloons:0,walk:1};
+  const modes = {about:'still', biography:'balloons', projects:'sparks', images:'light', videos:'light', articles:'type'};
+  let active='about', hover=null, focus=null, target='still', last=0, time=0, tailPhase=0, walkClock=0, arrival=0, raf=0;
+  const pose={sit:0,light:0,sparks:0,balloons:0,still:1};
   // Twelve drawings at eight frames per second: contact, down, passing, up,
   // then the same weight transfer on the opposite leg. Grounded feet linger.
   const walkKeys=[
@@ -15,7 +15,11 @@
     [14,-17,0,0,2],[11,-14,2,0,2],[5,-9,8,0,0],
     [-3,-4,12,0,-2],[-11,4,6,0,-1]
   ];
-  function choose() { target=modes[hover || focus || active] || 'walk'; canvas.dataset.state=target; }
+  function choose() {
+    const next=modes[hover || focus || active] || 'still';
+    if(next!==target && next==='light'){arrival=1;walkClock=0;}
+    target=next;canvas.dataset.state=target;
+  }
   function setSection(id) {
     if (!modes[id]) return;
     active=id; document.body.dataset.activeSection=id;
@@ -46,14 +50,13 @@
   function draw(dt) {
     if(!reduce.matches)time+=dt;
     const easing=reduce.matches?1:1-Math.exp(-dt*7);
-    const poseMode={sit:'type',light:'light',jump:'jump',balloons:'balloons',walk:'walk'};
+    const poseMode={sit:'type',light:'light',sparks:'sparks',balloons:'balloons',still:'still'};
     for(const k of Object.keys(pose))pose[k]=mix(pose[k],Number(target===poseMode[k]),easing);
-    const {sit,light,jump,balloons,walk}=pose;
-    if(!reduce.matches){gait+=dt*(4.2+2*jump);tailPhase+=dt*(1.7+jump*2.6);}
-    const swing=Math.sin(gait);
-    const walkKey=walkKeys[Math.floor(time*8)%walkKeys.length];
-    const bounce=jump*Math.abs(Math.sin(gait))*12;
-    const bob=walk*walkKey[4]-bounce;
+    const {sit,light,sparks,balloons,still}=pose;
+    if(!reduce.matches){tailPhase+=dt*1.7;walkClock+=dt;arrival=Math.max(0,arrival-dt*1.2);}
+    const walk=reduce.matches?0:arrival;
+    const walkKey=walkKeys[Math.floor(walkClock*8)%walkKeys.length];
+    const bob=walk*walkKey[4];
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.save();ctx.scale(canvas.width/300,canvas.height/380);
     // A window opens into the dark-blue beam when Images or Videos is selected.
@@ -75,13 +78,13 @@
     ctx.globalAlpha=1;
     const x=109+sit*39, y=249+sit*26+bob;
     // Long fluffy tail, waved from its base with a slower follow-through at the tip.
-    ctx.save();ctx.translate(x+12,y-5);ctx.rotate((Math.sin(tailPhase)*(.055+jump*.065))*(1-sit*.6));ctx.scale(.55-sit*.05,.76);
+    ctx.save();ctx.translate(x+12,y-5);ctx.rotate(Math.sin(tailPhase)*.055*(1-sit*.6)*(1-still));ctx.scale(.55-sit*.05,.76);
     path('M0 0 C35 -10 48 30 81 36 C110 43 139 34 153 13 C161 0 168 -3 172 2 L171 -5 L178 4 L178 -1 C196 22 179 53 154 65 L159 65 C115 89 68 70 42 43 C24 22 19 8 0 10 Z');ctx.restore();
     // The front and back feet hold the ground during contact and down poses.
     for(const i of [1,0]){
-      const stepX=walkKey[i]*walk+jump*(i?1:-1)*Math.sin(gait)*15;
-      const footLift=walk*walkKey[i+2]+jump*Math.max(0,Math.sin(gait+i*Math.PI))*9;
-      const ankle=[mix(x+(i?-5:4)+stepX,x-42+(i?8:0),sit),mix(346-footLift-bounce,345,sit)];
+      const stepX=walkKey[i]*walk+still*(i?18:-7);
+      const footLift=walk*walkKey[i+2]+still*(i?9:0);
+      const ankle=[mix(x+(i?-5:4)+stepX,x-42+(i?8:0),sit),mix(346-footLift,345,sit)];
       const hip=[x+(i?-6:5),y];
       const knee=[mix((hip[0]+ankle[0])/2+(i?-5:5)+footLift*.2,x-37+(i?3:-3),sit),mix(y+45+footLift*.12,y+9,sit)];
       line([hip,knee,ankle],i?12:15);
@@ -92,16 +95,14 @@
     path('M-17 -14 L17 -15 L21 16 L-19 17 Z');
     path('M-12 -94 C-26 -85 -27 -64 -23 -46 L-20 -8 Q1 0 25 -16 C27 -51 12 -72 6 -93 Z');
     line([[-4,-94],[-7,-107]],12);
-    // The upturned face, tousled hair and pointed ear retain the supplied silhouette.
-    ctx.save();ctx.translate(-6,-109);ctx.rotate(-sit*.38-balloons*.38);
+    // Scale the head around the neck so the body-to-head ratio stays consistent.
+    ctx.save();ctx.translate(-6,-109);ctx.rotate(-sit*1.18-balloons*.58);ctx.scale(.67,.67);
     path('M-11 6 L-17 -18 L-29 -27 Q-39 -33 -32 -40 L-28 -46 L-28 -54 L-16 -51 C-14 -68 9 -73 21 -63 L18 -69 Q48 -76 56 -49 L61 -57 Q68 -38 57 -27 L70 -35 Q70 -13 55 -10 L66 -11 Q60 0 47 -2 L50 5 Q38 10 32 2 Q29 13 19 5 Q7 14 1 5 Z');
     path('M30 -37 L43 -48 L40 -26 L31 -17 L36 -33 Z','#f6f5f1');ctx.restore();
-    // Arms stay pocketed during the cautious walk and the quiet window pose.
+    // Arms stay pocketed during the still poses and brief cautious step.
     for(const sign of [-1,1]){
       const shoulder=[x+sign*8,y-82];
       let elbow=[x-24+sign*4,y-49], hand=[x-11+sign*3,y-22];
-      elbow=[mix(elbow[0],x+sign*(29+swing*8),jump),mix(elbow[1],y-52-sign*swing*13,jump)];
-      hand=[mix(hand[0],x+sign*(38+swing*8),jump),mix(hand[1],y-76-sign*swing*18,jump)];
       elbow=[mix(elbow[0],x-28,balloons),mix(elbow[1],y-53,balloons)];
       hand=[mix(hand[0],x-43,balloons),mix(hand[1],y-69,balloons)];
       elbow=[mix(elbow[0],x-26,sit),mix(elbow[1],y-23,sit)];
@@ -119,6 +120,18 @@
       ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(bx,by,13,18,-.12+(i-2)*.1,0,Math.PI*2);ctx.fill();
       path('M'+(bx-2)+' '+(by+18)+' L'+(bx+2)+' '+(by+18)+' L'+bx+' '+(by+22)+' Z',color);
     });
+    ctx.globalAlpha=1;
+    // Pixel sparks rise independently from the head in the Projects section.
+    const palette=['#d34f39','#b57c08','#5d49a4','#187f7d','#cc477e'];
+    for(let i=0;i<36;i++){
+      const progress=(time*(.56+(i%4)*.09)+i*.271)%1;
+      const spread=Math.sin(i*12.9898)*20;
+      const px=x-8+spread+Math.sin(progress*4+i)*5;
+      const py=y-160-progress*(52+(i%3)*13);
+      ctx.globalAlpha=sparks*(1-progress*.7);
+      ctx.fillStyle=palette[i%palette.length];
+      ctx.fillRect(Math.round(px),Math.round(py),i%5===0?6:4,i%5===0?6:4);
+    }
     ctx.restore();
   }
   function frame(now){const dt=Math.min((now-last)/1000||0,.04);last=now;draw(dt);raf=requestAnimationFrame(frame);}
