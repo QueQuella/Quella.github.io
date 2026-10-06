@@ -20,7 +20,7 @@
     .brand span { color:var(--accent); }
     .masthead-note { color:var(--muted); text-align:right; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; }
     .page-layout { display:grid; grid-template-columns:clamp(150px,13vw,210px) clamp(175px,17vw,260px) minmax(0,1fr); gap:0; align-items:start; }
-    body[data-active-section="biography"] .page-layout,body[data-active-section="articles"] .page-layout { grid-template-columns:clamp(150px,13vw,210px) minmax(0,1fr); }
+    body[data-active-section="about"] .page-layout,body[data-active-section="biography"] .page-layout,body[data-active-section="articles"] .page-layout { grid-template-columns:clamp(150px,13vw,210px) minmax(0,1fr); }
     .side-index,.subnav { position:sticky; top:0; max-height:100vh; overflow-y:auto; scrollbar-width:thin; padding:3.2rem 1rem 2rem 0; }
     .side-index { border-right:2px solid var(--ink); }
     .side-index nav,.subnav nav { display:flex; flex-direction:column; align-items:stretch; }
@@ -72,12 +72,12 @@
     footer { display:flex; justify-content:space-between; gap:2rem; padding:2rem 0 4rem; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; }
     @media(max-width:1150px) {
       .page-layout { grid-template-columns:150px 180px minmax(0,1fr); }
-      body[data-active-section="biography"] .page-layout,body[data-active-section="articles"] .page-layout { grid-template-columns:150px minmax(0,1fr); }
+      body[data-active-section="about"] .page-layout,body[data-active-section="biography"] .page-layout,body[data-active-section="articles"] .page-layout { grid-template-columns:150px minmax(0,1fr); }
       .content { padding-left:1.4rem; }
       .intro,.section-head,.bio-grid { grid-template-columns:1fr; gap:1.4rem; }
     }
     @media(max-width:780px) {
-      .page-layout,body[data-active-section="biography"] .page-layout,body[data-active-section="articles"] .page-layout { display:block; }
+      .page-layout,body[data-active-section="about"] .page-layout,body[data-active-section="biography"] .page-layout,body[data-active-section="articles"] .page-layout { display:block; }
       .side-index { position:sticky; z-index:10; top:0; max-height:none; padding:.6rem 0; border-right:0; border-bottom:1px solid var(--ink); background:var(--paper); }
       .side-index nav { flex-direction:row; flex-wrap:wrap; gap:.1rem 1rem; }
       .side-main { font-size:.78rem; white-space:nowrap; }
@@ -97,6 +97,9 @@
       footer { flex-direction:column; }
     }
     @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+      #quella-mascot { position:fixed; left:max(1rem,calc((100vw - 1640px)/2 + 2.6vw)); bottom:14px; width:min(clamp(130px,13vw,210px),calc((100vh - 430px)*.789)); aspect-ratio:300/380; height:auto; pointer-events:none; z-index:5; }
+    .intro { border-bottom:1px solid var(--ink); }
+    @media(max-width:780px),(max-height:560px) { #quella-mascot { display:none; } }
   </style>
 </head>
 <body>
@@ -106,12 +109,13 @@
   </div></header>
   <div class="page-layout shell">
   <aside class="side-index" aria-label="Portfolio sections"><nav aria-label="Main sections">
+    <a class="side-main" href="#about" data-section="about">About</a>
     <a class="side-main" href="#biography" data-section="biography">Biography and CV</a>
     <a class="side-main" href="#projects" data-section="projects">Projects</a>
     <a class="side-main" href="#images" data-section="images">Images</a>
     <a class="side-main" href="#videos" data-section="videos">Videos</a>
     <a class="side-main" href="#articles" data-section="articles">Articles</a>
-  </nav></aside>
+  </nav><canvas id="quella-mascot" width="300" height="380" aria-hidden="true"></canvas></aside>
   <aside class="subnav" data-for="projects" aria-label="Project index"><nav>
     <a class="group" href="#project-rift">3D Animation</a>
     <a class="detail" href="#project-rift">The Rift Park</a>
@@ -136,10 +140,10 @@
     <a href="#video-blendshape">Blendshape Study</a>
   </nav></aside>
   <main class="content">
-    <div class="intro">
+    <section class="intro" id="about" aria-label="About Quella">
       <div><div class="eyebrow">Selected works / portfolio</div><h1>Quella.</h1><p>An archive of imagined worlds, interactive systems, moving images and visual stories.</p></div>
       <div class="intro-aside">Browse by medium or follow a project across its images and videos. This archive is a living collection of works and experiments.</div>
-    </div>
+    </section>
 
     <section id="biography" aria-labelledby="bio-title">
       <div class="section-head"><div><div class="index">01 / Profile</div><h2 id="bio-title">Biography and CV</h2></div><p>Practice, background and contact.</p></div>
@@ -204,25 +208,6 @@
   </main>
   </div>
   <footer class="shell"><span>© Quella · Portfolio archive</span><a href="#top">Back to top ↑</a></footer>
-  <script>
-    const sectionLinks = document.querySelectorAll('.side-main');
-    const sectionIds = ['biography','projects','images','videos','articles'];
-    function setSection(id) {
-      if (!sectionIds.includes(id)) return;
-      document.body.dataset.activeSection = id;
-      sectionLinks.forEach(link => {
-        if (link.dataset.section === id) link.setAttribute('aria-current','page');
-        else link.removeAttribute('aria-current');
-      });
-    }
-    sectionLinks.forEach(link => link.addEventListener('click', () => setSection(link.dataset.section)));
-    document.querySelectorAll('.subnav a').forEach(link => link.addEventListener('click', () => setSection(link.closest('.subnav').dataset.for)));
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => { if (entry.isIntersecting) setSection(entry.target.id); });
-    }, { rootMargin:'-22% 0px -62% 0px' });
-    document.querySelectorAll('main section[id]').forEach(section => observer.observe(section));
-    const initial = document.getElementById(location.hash.slice(1));
-    setSection(initial?.closest('section')?.id || 'biography');
-  </script>
+  <script src="mascot.js" defer></script>
 </body>
 </html>
