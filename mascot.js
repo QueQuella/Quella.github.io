@@ -44,93 +44,96 @@
   addEventListener('hashchange',()=>{const el=document.getElementById(location.hash.slice(1));setSection(el?.closest('section')?.id || (el?.id==='about'?'about':active));});
   function resize(){const r=canvas.getBoundingClientRect();const d=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);}
   new ResizeObserver(resize).observe(canvas);
+
+  const shapes={"head":"M252,88 L262,88 L263,90 L254,96 L251,103 L264,97 L280,96 L287,91 L296,89 L316,90 L334,97 L348,107 L354,116 L359,136 L357,152 L365,140 L367,125 L370,124 L376,144 L376,175 L374,183 L365,198 L381,191 L390,182 L397,167 L401,166 L399,198 L390,217 L385,222 L386,224 L394,218 L396,222 L383,239 L369,244 L373,253 L379,256 L380,259 L366,261 L353,255 L352,268 L345,284 L336,295 L323,304 L319,304 L319,301 L324,290 L311,297 L305,297 L297,289 L293,290 L287,299 L287,305 L267,298 L259,289 L250,291 L253,296 L251,299 L240,293 L237,305 L229,301 L231,307 L240,307 L244,316 L232,316 L226,341 L159,341 L159,329 L166,325 L167,321 L167,303 L160,287 L155,258 L147,249 L120,230 L109,217 L110,211 L119,197 L120,185 L129,182 L129,166 L137,164 L139,148 L161,154 L173,152 L176,142 L189,127 L210,115 L224,112 L223,110 L214,111 L213,109 L216,106 L236,93 Z M203,134 L181,148 L181,150 L188,152 L198,159 L198,146 Z M333,154 L303,173 L297,185 L297,198 L312,178 L325,172 L324,187 L323,203 L311,227 L326,217 L333,204 L335,165 L335,154 Z","body":"M230,307 L247,326 L247,332 L275,378 L277,390 L286,412 L292,442 L295,490 L279,496 L274,507 L260,512 L254,550 L271,595 L272,630 L279,634 L282,652 L286,654 L287,658 L291,697 L299,739 L295,742 L282,744 L283,753 L198,768 L167,774 L163,774 L163,769 L135,769 L138,751 L135,746 L135,713 L139,682 L136,647 L141,640 L131,620 L129,600 L117,567 L108,528 L105,502 L121,413 L148,341 L157,336 L158,330 L166,325 L168,313 Z M138,459 L138,502 L162,521 L173,569 L167,608 L159,627 L161,629 L169,626 L181,622 L187,581 L164,514 L161,499 L142,495 Z","torso":"M230,307 L247,326 L247,332 L275,378 L277,390 L286,412 L292,442 L295,490 L279,496 L274,507 L260,512 L254,550 L271,595 L272,630 L279,634 L282,652 L286,654 L287,658 L291,697 L299,739 L295,742 L282,744 L283,753 L189,769 L167,774 L163,774 L163,769 L135,769 L168,627 L181,622 L187,588 L187,581 L164,514 L161,499 L151,498 L146,495 L135,448 L154,340 L158,330 L166,325 L169,318 Z","nearLeg":"M248,745 L260,786 L248,843 L236,919 L236,970 L240,980 L240,1023 L253,1083 L252,1124 L247,1175 L248,1205 L251,1223 L264,1261 L264,1279 L262,1285 L258,1287 L240,1286 L180,1294 L163,1294 L158,1297 L150,1295 L137,1297 L133,1294 L122,1295 L120,1292 L112,1290 L107,1284 L107,1277 L110,1273 L119,1272 L134,1264 L155,1259 L184,1245 L194,1236 L209,1215 L206,1161 L183,999 L174,976 L177,928 L168,860 L160,748 Z M263,799 L271,828 L250,901 L250,904 L248,904 L245,897 L247,874 Z","farLeg":"M275,744 L282,744 L291,785 L301,817 L326,946 L334,964 L351,984 L365,1010 L405,1149 L420,1170 L440,1186 L448,1201 L448,1208 L441,1218 L419,1232 L387,1264 L384,1271 L377,1278 L356,1285 L339,1285 L332,1288 L322,1286 L316,1278 L316,1273 L331,1263 L345,1258 L350,1253 L382,1188 L369,1150 L343,1099 L292,997 L274,979 L264,938 L245,897 L248,867 L262,810 L264,785 L259,786 L236,919 L236,970 L250,1024 L254,1062 L229,957 L246,748 Z","tail":"M1012,617 L1035,617 L1047,623 L1049,623 L1047,619 L1053,619 L1062,626 L1068,627 L1079,643 L1081,633 L1084,633 L1090,641 L1096,667 L1098,664 L1097,656 L1099,656 L1107,681 L1105,702 L1107,713 L1102,728 L1104,730 L1103,746 L1091,765 L1088,775 L1076,789 L1076,791 L1081,789 L1080,792 L1066,807 L1055,814 L1056,816 L1065,812 L1065,815 L1053,824 L1050,829 L1035,838 L1042,837 L1040,841 L1024,850 L1022,855 L1007,862 L1009,863 L1007,867 L980,877 L979,879 L988,878 L988,880 L966,887 L971,888 L970,890 L940,896 L950,897 L950,899 L926,904 L924,905 L925,909 L905,912 L903,915 L880,917 L879,921 L873,923 L851,924 L851,927 L813,925 L810,926 L812,930 L808,931 L783,930 L787,932 L786,934 L736,931 L723,932 L724,934 L710,932 L711,934 L708,935 L682,926 L678,929 L658,920 L655,920 L660,923 L658,925 L637,916 L633,917 L625,914 L607,903 L608,908 L604,908 L589,898 L584,898 L579,893 L574,892 L565,884 L560,886 L547,875 L543,877 L526,860 L523,863 L492,829 L489,830 L486,827 L477,810 L473,811 L469,798 L457,777 L449,770 L451,775 L451,778 L449,778 L434,755 L429,752 L420,738 L418,737 L419,741 L417,741 L407,731 L400,719 L386,706 L383,708 L377,706 L348,690 L310,688 L301,685 L290,687 L299,739 L295,742 L280,745 L278,634 L283,654 L304,650 L313,650 L313,652 L318,653 L366,654 L398,662 L404,665 L405,668 L423,674 L464,702 L467,709 L485,721 L485,726 L518,754 L516,757 L527,765 L533,774 L552,786 L546,786 L547,788 L569,797 L569,802 L593,811 L596,815 L611,819 L613,822 L636,825 L638,828 L647,830 L687,834 L732,830 L764,822 L773,823 L791,816 L806,815 L822,810 L837,798 L844,797 L863,780 L867,783 L877,773 L886,770 L893,762 L895,764 L892,768 L897,768 L897,772 L914,752 L917,754 L928,738 L928,736 L924,739 L921,737 L928,726 L924,726 L924,723 L932,710 L930,701 L938,689 L940,681 Z"};
   const mix=(a,b,t)=>a+(b-a)*t;
-  function path(d,fill='#090909'){ctx.fillStyle=fill;ctx.fill(new Path2D(d));}
-  function line(points,width=10,color='#090909') {ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p));ctx.lineWidth=width;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle=color;ctx.stroke();}
+  function shape(name,warp) {
+    let d=shapes[name];
+    if(warp)d=d.replace(/(-?\d+),(-?\d+)/g,(_,x,y)=>{const p=warp(+x,+y);return p[0]+','+p[1];});
+    ctx.fillStyle='#090909';ctx.fill(new Path2D(d),'evenodd');
+  }
+  function path(d,color='#090909'){ctx.fillStyle=color;ctx.fill(new Path2D(d));}
+  function line(p,width=1,color='#535450'){ctx.beginPath();p.forEach((v,i)=>i?ctx.lineTo(...v):ctx.moveTo(...v));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.stroke();}
   function draw(dt) {
-    if(!reduce.matches)time+=dt;
-    const easing=reduce.matches?1:1-Math.exp(-dt*7);
-    const poseMode={sit:'type',light:'light',sparks:'sparks',balloons:'balloons',still:'still'};
-    for(const k of Object.keys(pose))pose[k]=mix(pose[k],Number(target===poseMode[k]),easing);
+    if(!reduce.matches){time+=dt;tailPhase+=dt*1.2;walkClock+=dt;arrival=Math.max(0,arrival-dt*.5);}
+    const ease=reduce.matches?1:1-Math.exp(-dt*5);
+    const map={sit:'type',light:'light',sparks:'sparks',balloons:'balloons',still:'still'};
+    for(const k of Object.keys(pose))pose[k]=mix(pose[k],Number(target===map[k]),ease);
     const {sit,light,sparks,balloons,still}=pose;
-    if(!reduce.matches){tailPhase+=dt*1.7;walkClock+=dt;arrival=Math.max(0,arrival-dt*1.2);}
-    const walk=reduce.matches?0:arrival;
-    const walkKey=walkKeys[Math.floor(walkClock*8)%walkKeys.length];
-    const bob=walk*walkKey[4];
+    const walk=reduce.matches?0:Math.min(1,walkClock/.18,arrival/.24);
+    const step=walkClock*8,frameIndex=Math.floor(step)%walkKeys.length;
+    const blend=(step%1)*(step%1)*(3-2*(step%1));
+    const key=walkKeys[frameIndex].map((v,i)=>mix(v,walkKeys[(frameIndex+1)%walkKeys.length][i],blend));
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.save();ctx.scale(canvas.width/300,canvas.height/380);
-    // A window opens into the dark-blue beam when Images or Videos is selected.
     ctx.globalAlpha=light;
-    const glow=ctx.createLinearGradient(0,52,205,300);
-    glow.addColorStop(0,'rgba(22,104,174,.56)');glow.addColorStop(1,'rgba(27,111,189,.06)');
-    path('M0 23 L74 34 L224 346 L9 288 Z',glow);
-    // The sash pivots around its right edge as the beam comes in.
-    ctx.save();ctx.translate(69,30);ctx.rotate(-.12*light);ctx.scale(1-.18*light,1);
-    line([[-69,-10],[0,0],[0,68],[-69,48],[-69,-10]],5,'#18334c');
-    line([[-35,-5],[-35,58]],3,'#18334c');
-    line([[-69,18],[0,34]],3,'#18334c');ctx.restore();
-    ctx.globalAlpha=1;
-    // Small desk and chair face left, just like the character.
+    const beam=ctx.createLinearGradient(0,58,180,300);
+    beam.addColorStop(0,'rgba(28,111,165,.4)');beam.addColorStop(1,'rgba(71,136,174,.025)');
+    path('M0 20 L58 36 L210 340 L0 284 Z',beam);
+    ctx.save();ctx.translate(58,36);ctx.rotate(-.13*light);ctx.scale(1-.16*light,1);
+    line([[-58,-16],[0,0],[0,60],[-58,44],[-58,-16]],3,'#284659');
+    line([[-29,-8],[-29,52]],1.5,'#284659');line([[-58,14],[0,30]],1.5,'#284659');ctx.restore();
     ctx.globalAlpha=sit;
-    line([[37,265],[112,265]],5);line([[52,265],[45,354]],4);
-    path('M22 210 L64 213 L66 249 L20 247 Z');path('M43 247 L49 262 L32 262 L38 247 Z');
-    line([[133,286],[176,286],[184,350]],5);line([[133,286],[118,349]],4);line([[176,286],[185,244]],5);
+    // A restrained desk silhouette, all furniture facing the same direction.
+    path('M16 164 L44 165 L46 198 L15 197 Z');path('M30 197 L34 207 L22 207 L26 197 Z');
+    line([[13,208],[96,208]],3,'#111');line([[22,208],[22,340]],2,'#111');
+    line([[88,268],[126,268],[140,340]],3,'#111');line([[91,268],[81,340]],2,'#111');line([[125,268],[139,226]],3,'#111');
     ctx.globalAlpha=1;
-    const x=109+sit*39, y=249+sit*26+bob;
-    // Long fluffy tail, waved from its base with a slower follow-through at the tip.
-    ctx.save();ctx.translate(x+12,y-5);ctx.rotate(Math.sin(tailPhase)*.055*(1-sit*.6)*(1-still));ctx.scale(.55-sit*.05,.76);
-    path('M0 0 C35 -10 48 30 81 36 C110 43 139 34 153 13 C161 0 168 -3 172 2 L171 -5 L178 4 L178 -1 C196 22 179 53 154 65 L159 65 C115 89 68 70 42 43 C24 22 19 8 0 10 Z');ctx.restore();
-    // The front and back feet hold the ground during contact and down poses.
-    for(const i of [1,0]){
-      const stepX=walkKey[i]*walk+still*(i?18:-7);
-      const footLift=walk*walkKey[i+2]+still*(i?9:0);
-      const ankle=[mix(x+(i?-5:4)+stepX,x-42+(i?8:0),sit),mix(346-footLift,345,sit)];
-      const hip=[x+(i?-6:5),y];
-      const knee=[mix((hip[0]+ankle[0])/2+(i?-5:5)+footLift*.2,x-37+(i?3:-3),sit),mix(y+45+footLift*.12,y+9,sit)];
-      line([hip,knee,ankle],i?12:15);
-      line([ankle,[ankle[0]-13,ankle[1]+2]],i?8:10);
+    const offsetX=23+sit*36,offsetY=44+sit*22+walk*key[4]*.55;
+    ctx.save();ctx.translate(offsetX,offsetY);ctx.scale(.23,.23);
+    // The traced tail retains the irregular edge, while occupying less space.
+    ctx.save();ctx.translate(280,665);
+    ctx.rotate(Math.sin(tailPhase)*.024*(1-still)*(1-sit*.5));
+    ctx.scale(.62,.86);ctx.translate(-280,-665);shape('tail');ctx.restore();
+    // Full leg silhouettes deform through their entire contours, preserving
+    // ankles, calves, toes and the original hand-drawn asymmetry.
+    const leg=(name,i)=>{
+      shape(name,(x,y)=>{
+        const t=Math.max(0,Math.min(1,(y-740)/560));
+        const footShift=(key[i]*6.2+(i===1?-85:25))*walk;
+        const lift=key[i+2]*walk*3;
+        const wx=x+footShift*t*t;
+        const wy=y-lift*t*t;
+        return [wx,wy];
+      });
+    };
+    if(sit<.999){
+      ctx.globalAlpha=1-sit;leg('farLeg',1);leg('nearLeg',0);ctx.globalAlpha=1;
     }
-    // Shorts and oversized shirt.
-    ctx.save();ctx.translate(x,y);
-    path('M-17 -14 L17 -15 L21 16 L-19 17 Z');
-    path('M-12 -94 C-26 -85 -27 -64 -23 -46 L-20 -8 Q1 0 25 -16 C27 -51 12 -72 6 -93 Z');
-    line([[-4,-94],[-7,-107]],12);
-    // Scale the head around the neck so the body-to-head ratio stays consistent.
-    ctx.save();ctx.translate(-6,-109);ctx.rotate(-sit*1.18-balloons*.58);ctx.scale(.67,.67);
-    path('M-11 6 L-17 -18 L-29 -27 Q-39 -33 -32 -40 L-28 -46 L-28 -54 L-16 -51 C-14 -68 9 -73 21 -63 L18 -69 Q48 -76 56 -49 L61 -57 Q68 -38 57 -27 L70 -35 Q70 -13 55 -10 L66 -11 Q60 0 47 -2 L50 5 Q38 10 32 2 Q29 13 19 5 Q7 14 1 5 Z');
-    path('M30 -37 L43 -48 L40 -26 L31 -17 L36 -33 Z','#f6f5f1');ctx.restore();
-    // Arms stay pocketed during the still poses and brief cautious step.
-    for(const sign of [-1,1]){
-      const shoulder=[x+sign*8,y-82];
-      let elbow=[x-24+sign*4,y-49], hand=[x-11+sign*3,y-22];
-      elbow=[mix(elbow[0],x-28,balloons),mix(elbow[1],y-53,balloons)];
-      hand=[mix(hand[0],x-43,balloons),mix(hand[1],y-69,balloons)];
-      elbow=[mix(elbow[0],x-26,sit),mix(elbow[1],y-23,sit)];
-      hand=[mix(hand[0],x-62+sign*4,sit),mix(hand[1],y-20+Math.sin(time*15+sign)*2,sit)];
-      ctx.restore();line([shoulder,elbow,hand],9);ctx.save();ctx.translate(x,y);
-    }
-    ctx.restore();
-    // Individual colored balloons share a hand anchor and sway on fine strings.
+    ctx.globalAlpha=sit;
+    path('M190 735 C173 750 95 747 54 784 Q41 801 55 827 L107 837 L115 1183 Q109 1215 73 1244 Q61 1255 71 1265 L158 1265 Q177 1255 169 1218 L169 895 Q175 850 237 825 L263 758 Z');
+    path('M227 748 Q179 760 117 813 L157 861 Q200 837 247 813 L230 1176 Q226 1208 191 1233 Q184 1248 199 1255 L271 1257 Q294 1247 281 1216 L294 864 Q307 815 266 749 Z');
+    ctx.globalAlpha=1;
+    // Pocketed arm belongs to the actual body outline; other poses blend into
+    // a traced torso plus filled, tapered arm shapes rather than stick lines.
+    const gesture=Math.min(1,sit+balloons);
+    ctx.globalAlpha=1-gesture;shape('body');ctx.globalAlpha=gesture;shape('torso');ctx.globalAlpha=1;
+    ctx.save();ctx.translate(199,320);ctx.rotate(-sit*1.08-balloons*.42);ctx.translate(-199,-320);shape('head');ctx.restore();
     ctx.globalAlpha=balloons;
-    const colors=['#b63856','#d9a738','#458783','#7564a0','#d57542'];
-    colors.forEach((color,i)=>{
-      const bx=x-43+(i-2)*19+Math.sin(time*1.4+i*.7)*5;
-      const by=y-185-Math.sin(i*1.7)*17+Math.sin(time*1.8+i)*3;
-      line([[x-43,y-69],[bx,by+20]],.65,'#77746e');
-      ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(bx,by,13,18,-.12+(i-2)*.1,0,Math.PI*2);ctx.fill();
-      path('M'+(bx-2)+' '+(by+18)+' L'+(bx+2)+' '+(by+18)+' L'+bx+' '+(by+22)+' Z',color);
+    path('M159 365 C130 383 125 444 134 487 C145 514 110 475 98 460 L55 450 Q39 454 48 472 L93 492 Q143 555 164 511 L178 405 Q179 378 159 365 Z');
+    ctx.globalAlpha=sit;
+    const tap=Math.sin(time*12)*4;
+    path('M165 365 C137 375 127 479 134 555 Q139 587 110 589 L24 '+(592+tap)+' Q1 '+(588+tap)+' -8 '+(600+tap)+' Q-10 '+(612+tap)+' 9 '+(613+tap)+' L110 620 Q174 625 182 560 L196 395 Q195 375 165 365 Z');
+    ctx.globalAlpha=1;
+    ctx.restore();
+    // Fine strings and muted color keep the balloons quiet and atmospheric.
+    ctx.globalAlpha=balloons;
+    const colors=['#ae5365','#b59645','#4c8986','#797099','#bc784d'];
+    colors.forEach((c,i)=>{
+      const bx=offsetX+10+(i-2)*13+Math.sin(time*.8+i)*2;
+      const by=offsetY+18-Math.sin(i*1.8)*10+Math.sin(time+i)*1.7;
+      line([[offsetX+11,offsetY+107],[bx,by+15]],.6,'#87847c');
+      ctx.fillStyle=c;ctx.beginPath();ctx.ellipse(bx,by,9,14,(i-2)*.08,0,Math.PI*2);ctx.fill();
     });
     ctx.globalAlpha=1;
-    // Pixel sparks rise independently from the head in the Projects section.
-    const palette=['#d34f39','#b57c08','#5d49a4','#187f7d','#cc477e'];
-    for(let i=0;i<36;i++){
-      const progress=(time*(.56+(i%4)*.09)+i*.271)%1;
-      const spread=Math.sin(i*12.9898)*20;
-      const px=x-8+spread+Math.sin(progress*4+i)*5;
-      const py=y-160-progress*(52+(i%3)*13);
-      ctx.globalAlpha=sparks*(1-progress*.7);
-      ctx.fillStyle=palette[i%palette.length];
-      ctx.fillRect(Math.round(px),Math.round(py),i%5===0?6:4,i%5===0?6:4);
+    const colors2=['#bf593e','#a78435','#78639a','#528f89','#b76489'];
+    for(let i=0;i<28;i++){
+      const p=(time*(.35+(i%4)*.065)+i*.271)%1;
+      ctx.globalAlpha=sparks*(1-p)*.85;
+      ctx.fillStyle=colors2[i%colors2.length];
+      const px=offsetX+56+Math.sin(i*12.99)*18*p+Math.sin(p*3+i)*3;
+      const py=offsetY+18-p*(42+(i%3)*10);
+      ctx.fillRect(Math.round(px),Math.round(py),i%6===0?4:2,i%6===0?4:2);
     }
     ctx.restore();
   }
