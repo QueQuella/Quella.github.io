@@ -4,9 +4,17 @@
   const links = [...document.querySelectorAll('.side-main')];
   const sections = [...document.querySelectorAll('main > [id]')];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  const modes = {about:'walk', biography:'balloons', projects:'jump', images:'open', videos:'open', articles:'type'};
+  const modes = {about:'walk', biography:'balloons', projects:'jump', images:'light', videos:'light', articles:'type'};
   let active='about', hover=null, focus=null, target='walk', last=0, time=0, gait=0, tailPhase=0, raf=0;
-  const pose={sit:0,open:0,jump:0,balloons:0,walk:1};
+  const pose={sit:0,light:0,jump:0,balloons:0,walk:1};
+  // Twelve drawings at eight frames per second: contact, down, passing, up,
+  // then the same weight transfer on the opposite leg. Grounded feet linger.
+  const walkKeys=[
+    [-17,15,0,0,0],[-17,14,0,0,2],[-14,11,0,2,2],[-9,5,0,8,0],
+    [-4,-3,0,12,-2],[4,-11,0,6,-1],[15,-17,0,0,0],
+    [14,-17,0,0,2],[11,-14,2,0,2],[5,-9,8,0,0],
+    [-3,-4,12,0,-2],[-11,4,6,0,-1]
+  ];
   function choose() { target=modes[hover || focus || active] || 'walk'; canvas.dataset.state=target; }
   function setSection(id) {
     if (!modes[id]) return;
@@ -38,31 +46,46 @@
   function draw(dt) {
     if(!reduce.matches)time+=dt;
     const easing=reduce.matches?1:1-Math.exp(-dt*7);
-    for(const k of Object.keys(pose))pose[k]=mix(pose[k],Number(target===(k==='sit'?'type':k==='balloons'?'balloons':k==='open'?'open':k==='jump'?'jump':'walk')),easing);
-    const {sit,open,jump,balloons,walk}=pose;
-    if(!reduce.matches){gait+=dt*(4.5+2*jump);tailPhase+=dt*(2.6+jump*2.4);}
+    const poseMode={sit:'type',light:'light',jump:'jump',balloons:'balloons',walk:'walk'};
+    for(const k of Object.keys(pose))pose[k]=mix(pose[k],Number(target===poseMode[k]),easing);
+    const {sit,light,jump,balloons,walk}=pose;
+    if(!reduce.matches){gait+=dt*(4.2+2*jump);tailPhase+=dt*(1.7+jump*2.6);}
     const swing=Math.sin(gait);
-    const stride=walk*15+jump*25;
-    const lift=jump*Math.abs(Math.sin(gait))*16+walk*Math.cos(gait*2)*1.3;
+    const walkKey=walkKeys[Math.floor(time*8)%walkKeys.length];
+    const bounce=jump*Math.abs(Math.sin(gait))*12;
+    const bob=walk*walkKey[4]-bounce;
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.save();ctx.scale(canvas.width/300,canvas.height/380);
+    // A window opens into the dark-blue beam when Images or Videos is selected.
+    ctx.globalAlpha=light;
+    const glow=ctx.createLinearGradient(0,52,205,300);
+    glow.addColorStop(0,'rgba(22,104,174,.56)');glow.addColorStop(1,'rgba(27,111,189,.06)');
+    path('M0 23 L74 34 L224 346 L9 288 Z',glow);
+    // The sash pivots around its right edge as the beam comes in.
+    ctx.save();ctx.translate(69,30);ctx.rotate(-.12*light);ctx.scale(1-.18*light,1);
+    line([[-69,-10],[0,0],[0,68],[-69,48],[-69,-10]],5,'#18334c');
+    line([[-35,-5],[-35,58]],3,'#18334c');
+    line([[-69,18],[0,34]],3,'#18334c');ctx.restore();
+    ctx.globalAlpha=1;
     // Small desk and chair face left, just like the character.
     ctx.globalAlpha=sit;
     line([[37,265],[112,265]],5);line([[52,265],[45,354]],4);
     path('M22 210 L64 213 L66 249 L20 247 Z');path('M43 247 L49 262 L32 262 L38 247 Z');
     line([[133,286],[176,286],[184,350]],5);line([[133,286],[118,349]],4);line([[176,286],[185,244]],5);
     ctx.globalAlpha=1;
-    const x=109+sit*39, y=249+sit*26-lift;
+    const x=109+sit*39, y=249+sit*26+bob;
     // Long fluffy tail, waved from its base with a slower follow-through at the tip.
-    ctx.save();ctx.translate(x+12,y-5);ctx.rotate((Math.sin(tailPhase)*(.09+jump*.05))*(1-sit*.6));ctx.scale(.78-sit*.13,1);
+    ctx.save();ctx.translate(x+12,y-5);ctx.rotate((Math.sin(tailPhase)*(.055+jump*.065))*(1-sit*.6));ctx.scale(.55-sit*.05,.76);
     path('M0 0 C35 -10 48 30 81 36 C110 43 139 34 153 13 C161 0 168 -3 172 2 L171 -5 L178 4 L178 -1 C196 22 179 53 154 65 L159 65 C115 89 68 70 42 43 C24 22 19 8 0 10 Z');ctx.restore();
-    // Articulated legs morph continuously into a seated pose.
-    for(const sign of [1,-1]){
-      const hip=[x+sign*6,y];
-      const knee=[mix(x+sign*swing*stride*.65, x-37+sign*3,sit),mix(y+42, y+9,sit)];
-      const ankle=[mix(x-sign*swing*stride, x-42+sign*12,sit),mix(346-lift-Math.max(0,sign*swing)*stride*.5,345,sit)];
-      line([hip,knee,ankle],sign===1?13:15);
-      line([ankle,[ankle[0]-14,ankle[1]+3]],10);
+    // The front and back feet hold the ground during contact and down poses.
+    for(const i of [1,0]){
+      const stepX=walkKey[i]*walk+jump*(i?1:-1)*Math.sin(gait)*15;
+      const footLift=walk*walkKey[i+2]+jump*Math.max(0,Math.sin(gait+i*Math.PI))*9;
+      const ankle=[mix(x+(i?-5:4)+stepX,x-42+(i?8:0),sit),mix(346-footLift-bounce,345,sit)];
+      const hip=[x+(i?-6:5),y];
+      const knee=[mix((hip[0]+ankle[0])/2+(i?-5:5)+footLift*.2,x-37+(i?3:-3),sit),mix(y+45+footLift*.12,y+9,sit)];
+      line([hip,knee,ankle],i?12:15);
+      line([ankle,[ankle[0]-13,ankle[1]+2]],i?8:10);
     }
     // Shorts and oversized shirt.
     ctx.save();ctx.translate(x,y);
@@ -70,15 +93,13 @@
     path('M-12 -94 C-26 -85 -27 -64 -23 -46 L-20 -8 Q1 0 25 -16 C27 -51 12 -72 6 -93 Z');
     line([[-4,-94],[-7,-107]],12);
     // The upturned face, tousled hair and pointed ear retain the supplied silhouette.
-    ctx.save();ctx.translate(-6,-109);ctx.rotate(sit*.28);
+    ctx.save();ctx.translate(-6,-109);ctx.rotate(-sit*.38-balloons*.38);
     path('M-11 6 L-17 -18 L-29 -27 Q-39 -33 -32 -40 L-28 -46 L-28 -54 L-16 -51 C-14 -68 9 -73 21 -63 L18 -69 Q48 -76 56 -49 L61 -57 Q68 -38 57 -27 L70 -35 Q70 -13 55 -10 L66 -11 Q60 0 47 -2 L50 5 Q38 10 32 2 Q29 13 19 5 Q7 14 1 5 Z');
     path('M30 -37 L43 -48 L40 -26 L31 -17 L36 -33 Z','#f6f5f1');ctx.restore();
-    // Arms: pocketed walk, excited swing, raised welcome, string-holding or typing.
+    // Arms stay pocketed during the cautious walk and the quiet window pose.
     for(const sign of [-1,1]){
       const shoulder=[x+sign*8,y-82];
       let elbow=[x-24+sign*4,y-49], hand=[x-11+sign*3,y-22];
-      elbow=[mix(elbow[0],x+sign*34,open),mix(elbow[1],y-100,open)];
-      hand=[mix(hand[0],x+sign*57,open),mix(hand[1],y-126,open)];
       elbow=[mix(elbow[0],x+sign*(29+swing*8),jump),mix(elbow[1],y-52-sign*swing*13,jump)];
       hand=[mix(hand[0],x+sign*(38+swing*8),jump),mix(hand[1],y-76-sign*swing*18,jump)];
       elbow=[mix(elbow[0],x-28,balloons),mix(elbow[1],y-53,balloons)];
