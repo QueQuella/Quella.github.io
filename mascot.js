@@ -1,6 +1,8 @@
 (() => {
   const canvas = document.getElementById('quella-mascot');
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
+  if (!ctx) return;
   const links = [...document.querySelectorAll('.side-main')];
   const sections = [...document.querySelectorAll('main > [id]')];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
@@ -38,6 +40,7 @@
     const line=innerHeight*.3;
     let current='about';
     for(const section of sections) if(section.getBoundingClientRect().top<=line) current=section.id;
+    if (scrollY + innerHeight >= document.documentElement.scrollHeight - 2) current=sections.at(-1)?.id || current;
     if(current!==active) setSection(current);
   }
   addEventListener('scroll',track,{passive:true});
@@ -75,9 +78,10 @@
     line([[-29,-8],[-29,52]],1.5,'#284659');line([[-58,14],[0,30]],1.5,'#284659');ctx.restore();
     ctx.globalAlpha=sit;
     // A restrained desk silhouette, all furniture facing the same direction.
-    path('M16 164 L44 165 L46 198 L15 197 Z');path('M30 197 L34 207 L22 207 L26 197 Z');
+    path('M12 161 L42 161 L42 194 L12 194 Z');path('M25 194 L29 205 L18 205 L22 194 Z');
+    path('M48 203 L76 203 L79 207 L46 207 Z');
     line([[13,208],[96,208]],3,'#111');line([[22,208],[22,340]],2,'#111');
-    line([[88,268],[126,268],[140,340]],3,'#111');line([[91,268],[81,340]],2,'#111');line([[125,268],[139,226]],3,'#111');
+    line([[98,242],[128,242],[140,340]],3,'#111');line([[100,242],[90,340]],2,'#111');line([[128,242],[134,208]],3,'#111');
     ctx.globalAlpha=1;
     const offsetX=23+sit*36,offsetY=44+sit*22+walk*key[4]*.55;
     ctx.save();ctx.translate(offsetX,offsetY);ctx.scale(.23,.23);
@@ -85,44 +89,41 @@
     ctx.save();ctx.translate(280,665);
     ctx.rotate(Math.sin(tailPhase)*.024*(1-still)*(1-sit*.5));
     ctx.scale(.62,.86);ctx.translate(-280,-665);shape('tail');ctx.restore();
-    // Full leg silhouettes deform through their entire contours, preserving
-    // ankles, calves, toes and the original hand-drawn asymmetry.
+    // Keep complete silhouettes separate so pose changes cannot leave extra limbs.
     const leg=(name,i)=>{
       shape(name,(x,y)=>{
         const t=Math.max(0,Math.min(1,(y-740)/560));
         const footShift=(key[i]*6.2+(i===1?-85:25))*walk;
-        const lift=key[i+2]*walk*3;
-        const wx=x+footShift*t*t;
-        const wy=y-lift*t*t;
-        return [wx,wy];
+        return [x+footShift*t*t,y-key[i+2]*walk*3*t*t];
       });
     };
-    if(sit<.999){
-      ctx.globalAlpha=1-sit;leg('farLeg',1);leg('nearLeg',0);ctx.globalAlpha=1;
-    }
+    ctx.globalAlpha=1-sit;
+    leg('farLeg',1);leg('nearLeg',0);
+    ctx.globalAlpha=(1-sit)*(1-balloons);shape('body');
+    ctx.globalAlpha=(1-sit)*balloons;
+    // A continuous coat, relaxed far arm and bent near arm holding the strings.
+    path('M169 316 L228 312 Q258 343 276 396 L295 488 L272 514 L264 558 L281 644 L294 744 L161 771 L144 656 L154 585 L141 514 L141 422 Q139 353 169 316 Z');
+    path('M235 344 Q259 350 264 393 L284 493 L269 592 Q269 609 257 612 Q242 609 247 590 L255 493 L225 399 Z');
+    path('M160 345 Q139 351 130 391 L109 473 L75 427 L61 393 Q53 378 42 386 Q32 392 40 408 L49 443 L99 511 Q119 534 137 514 L171 415 Q186 358 160 345 Z');
     ctx.globalAlpha=sit;
-    path('M190 735 C173 750 95 747 54 784 Q41 801 55 827 L107 837 L115 1183 Q109 1215 73 1244 Q61 1255 71 1265 L158 1265 Q177 1255 169 1218 L169 895 Q175 850 237 825 L263 758 Z');
-    path('M227 748 Q179 760 117 813 L157 861 Q200 837 247 813 L230 1176 Q226 1208 191 1233 Q184 1248 199 1255 L271 1257 Q294 1247 281 1216 L294 864 Q307 815 266 749 Z');
+    // Seated hips meet the chair, knees bend toward the desk, feet meet the floor.
+    path('M167 320 L228 313 Q249 341 259 392 L271 481 L259 553 L277 724 Q278 753 249 766 L188 762 L157 742 L165 601 L145 512 L145 393 Q142 347 167 320 Z');
+    path('M182 727 Q147 736 93 753 Q64 765 65 799 L87 849 L126 1151 L124 1182 L80 1211 Q64 1222 74 1234 L147 1234 Q165 1229 162 1212 L177 837 L242 801 L263 746 Z');
+    path('M221 747 Q177 756 117 802 L150 852 L218 823 L233 1167 Q231 1190 206 1211 Q192 1225 205 1236 L275 1236 Q292 1230 282 1212 L286 840 Q288 789 253 752 Z');
+    const tap=reduce.matches?0:Math.sin(time*10)*3;
+    path('M228 354 Q250 363 252 402 L247 529 Q243 558 217 573 L80 601 L46 600 Q33 591 40 585 L80 579 L198 544 L213 408 Q205 367 228 354 Z');
+    path('M162 352 Q143 359 139 400 L134 527 Q130 563 103 572 L15 '+(590+tap)+' Q-4 '+(588+tap)+' -10 '+(600+tap)+' Q-11 '+(611+tap)+' 8 '+(612+tap)+' L111 606 Q170 600 179 549 L192 398 Q191 366 162 352 Z');
     ctx.globalAlpha=1;
-    // Pocketed arm belongs to the actual body outline; other poses blend into
-    // a traced torso plus filled, tapered arm shapes rather than stick lines.
-    const gesture=Math.min(1,sit+balloons);
-    ctx.globalAlpha=1-gesture;shape('body');ctx.globalAlpha=gesture;shape('torso');ctx.globalAlpha=1;
-    ctx.save();ctx.translate(199,320);ctx.rotate(-sit*1.08-balloons*.42);ctx.translate(-199,-320);shape('head');ctx.restore();
-    ctx.globalAlpha=balloons;
-    path('M159 365 C130 383 125 444 134 487 C145 514 110 475 98 460 L55 450 Q39 454 48 472 L93 492 Q143 555 164 511 L178 405 Q179 378 159 365 Z');
-    ctx.globalAlpha=sit;
-    const tap=Math.sin(time*12)*4;
-    path('M165 365 C137 375 127 479 134 555 Q139 587 110 589 L24 '+(592+tap)+' Q1 '+(588+tap)+' -8 '+(600+tap)+' Q-10 '+(612+tap)+' 9 '+(613+tap)+' L110 620 Q174 625 182 560 L196 395 Q195 375 165 365 Z');
+    ctx.save();ctx.translate(199,320);ctx.rotate(-sit*.16-balloons*.035);ctx.translate(-199,-320);shape('head');ctx.restore();
     ctx.globalAlpha=1;
     ctx.restore();
     // Fine strings and muted color keep the balloons quiet and atmospheric.
     ctx.globalAlpha=balloons;
     const colors=['#ae5365','#b59645','#4c8986','#797099','#bc784d'];
     colors.forEach((c,i)=>{
-      const bx=offsetX+10+(i-2)*13+Math.sin(time*.8+i)*2;
+      const bx=offsetX+14+(i-2)*11+Math.sin(time*.8+i)*2;
       const by=offsetY+18-Math.sin(i*1.8)*10+Math.sin(time+i)*1.7;
-      line([[offsetX+11,offsetY+107],[bx,by+15]],.6,'#87847c');
+      line([[offsetX+10,offsetY+91],[bx,by+15]],.6,'#87847c');
       ctx.fillStyle=c;ctx.beginPath();ctx.ellipse(bx,by,9,14,(i-2)*.08,0,Math.PI*2);ctx.fill();
     });
     ctx.globalAlpha=1;
@@ -142,3 +143,4 @@
   const initial=document.getElementById(location.hash.slice(1));setSection(initial?.closest('section')?.id || 'about');
   resize();raf=requestAnimationFrame(frame);
 })();
+

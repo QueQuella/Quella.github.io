@@ -19,21 +19,21 @@
     .brand { text-decoration:none; font-size:clamp(1.7rem,3vw,2.9rem); font-weight:800; letter-spacing:-.06em; line-height:1; }
     .brand span { color:var(--accent); }
     .masthead-note { color:var(--muted); text-align:right; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; }
-    .page-layout { display:grid; grid-template-columns:clamp(150px,13vw,210px) clamp(175px,17vw,260px) minmax(0,1fr); gap:0; align-items:start; }
-    body[data-active-section="about"] .page-layout,body[data-active-section="biography"] .page-layout,body[data-active-section="articles"] .page-layout { grid-template-columns:clamp(150px,13vw,210px) minmax(0,1fr); }
+    .page-layout { --primary-width:clamp(120px,10.4vw,168px); --secondary-width:clamp(106px,11.33vw,173px); display:grid; grid-template-columns:var(--primary-width) var(--secondary-width) minmax(0,1fr); gap:0; align-items:start; }
+    body[data-active-section="about"] .page-layout,body[data-active-section="biography"] .page-layout,body[data-active-section="articles"] .page-layout { grid-template-columns:var(--primary-width) minmax(0,1fr); }
     .side-index,.subnav { position:sticky; top:0; max-height:100vh; overflow-y:auto; scrollbar-width:thin; padding:3.2rem 1rem 2rem 0; }
     .side-index { border-right:2px solid var(--ink); }
     .side-index nav,.subnav nav { display:flex; flex-direction:column; align-items:stretch; }
     .side-index a,.subnav a { display:block; text-decoration:none; overflow-wrap:anywhere; line-height:1.25; }
-    .side-main { padding:.55rem .1rem; color:#aaa7a1; font-size:clamp(.9rem,1.2vw,1.15rem); font-weight:700; }
+    .side-main { padding:.55rem .1rem; color:#aaa7a1; font-size:clamp(.78rem,.96vw,.92rem); font-weight:700; }
     .side-main:hover,.side-main[aria-current="page"] { color:var(--accent); }
-    .subnav { display:none; padding-left:1.5rem; padding-right:1rem; border-right:2px solid var(--ink); }
+    .subnav { display:none; padding-left:clamp(.65rem,1vw,1rem); padding-right:.6rem; border-right:2px solid var(--ink); }
     body[data-active-section="projects"] .subnav[data-for="projects"],body[data-active-section="images"] .subnav[data-for="images"],body[data-active-section="videos"] .subnav[data-for="videos"] { display:block; }
-    .subnav a { color:var(--muted); font-size:.85rem; padding:.36rem 0; }
+    .subnav a { color:var(--muted); font-size:clamp(.65rem,.76vw,.76rem); padding:.36rem 0; }
     .subnav a:hover { color:var(--accent); text-decoration:underline; }
-    .subnav .group { font-size:1.25rem; font-family:Georgia,serif; color:var(--ink); margin:.3rem 0 .45rem; }
+    .subnav .group { font-size:clamp(.7rem,.82vw,.82rem); font-family:Georgia,serif; color:var(--ink); margin:.3rem 0 .45rem; }
     .subnav .group:not(:first-child) { margin-top:1.3rem; }
-    .subnav .detail { padding-left:.65rem; font-size:.76rem; }
+    .subnav .detail { padding-left:.4rem; font-size:clamp(.62rem,.68vw,.7rem); }
     .content { min-width:0; padding-left:clamp(1.3rem,3vw,3.2rem); }
     section { scroll-margin-top:2rem; padding:4rem 0 5rem; border-bottom:1px solid var(--ink); }
     article[id] { scroll-margin-top:1.5rem; }
@@ -71,8 +71,7 @@
     .empty { border-top:1px solid var(--line); padding:2rem 0; max-width:700px; color:var(--muted); }
     footer { display:flex; justify-content:space-between; gap:2rem; padding:2rem 0 4rem; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; }
     @media(max-width:1150px) {
-      .page-layout { grid-template-columns:150px 180px minmax(0,1fr); }
-      body[data-active-section="about"] .page-layout,body[data-active-section="biography"] .page-layout,body[data-active-section="articles"] .page-layout { grid-template-columns:150px minmax(0,1fr); }
+      .page-layout { --primary-width:120px; --secondary-width:106px; }
       .content { padding-left:1.4rem; }
       .intro,.section-head,.bio-grid { grid-template-columns:1fr; gap:1.4rem; }
     }
@@ -83,7 +82,7 @@
       .side-main { font-size:.78rem; white-space:nowrap; }
       .subnav { position:relative; z-index:9; top:auto; max-height:170px; overflow-y:auto; padding:.5rem 0; border-right:0; border-bottom:1px solid var(--line); background:var(--paper); }
       .subnav nav { display:flex; flex-direction:row; flex-wrap:wrap; gap:0 1rem; }
-      .subnav a,.subnav .group,.subnav .group:not(:first-child) { font:700 .75rem/1.3 Arial,sans-serif; padding:.35rem 0; margin:0; }
+      .subnav a,.subnav .group,.subnav .group:not(:first-child) { font:700 .68rem/1.3 Arial,sans-serif; padding:.35rem 0; margin:0; }
       .subnav .detail { padding-left:0; font-weight:400; }
       .content { padding-left:0; }
       section,article[id] { scroll-margin-top:8rem; }
@@ -97,7 +96,7 @@
       footer { flex-direction:column; }
     }
     @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
-      #quella-mascot { position:fixed; left:max(1rem,calc((100vw - 1640px)/2 + 2.6vw)); bottom:14px; width:min(clamp(130px,13vw,210px),calc((100vh - 430px)*.789)); aspect-ratio:300/380; height:auto; pointer-events:none; z-index:5; }
+      #quella-mascot { position:fixed; left:max(1rem,calc((100vw - 1640px)/2 + 2.6vw)); bottom:14px; width:min(clamp(104px,10.4vw,168px),calc((100vh - 430px)*.789)); aspect-ratio:300/380; height:auto; pointer-events:none; z-index:5; }
     .intro { border-bottom:1px solid var(--ink); }
     @media(max-width:780px),(max-height:560px) { #quella-mascot { display:none; } }
   </style>
@@ -133,6 +132,8 @@
     <a class="group" href="#image-scenery">Scenery Design</a>
   </nav></aside>
   <aside class="subnav" data-for="videos" aria-label="Video index"><nav>
+    <a href="#video-2d-basic">2D Animation Fundamentals</a>
+    <a href="#video-walk">Walk and Run Cycles</a>
     <a href="#video-ue5">UE5 HLSL Experiment</a>
     <a href="#video-portrait">Portrait Interaction</a>
     <a href="#video-music">Music Interaction</a>
@@ -197,11 +198,13 @@
 
     <section id="videos" aria-labelledby="videos-title">
       <div class="section-head"><div><div class="index">04 / Moving image</div><h2 id="videos-title">Videos</h2></div><p>Independent moving-image and interactive studies.</p></div>
-      <article class="archive-item" id="video-ue5"><div class="item-number">01</div><div><div class="meta">Technical study / Unreal Engine</div><h3>UE5 HLSL Experiment</h3><p>A visual and technical experiment in Unreal Engine.</p></div><div class="media-stack one"><video controls preload="metadata" aria-label="UE5 HLSL Experiment"><source src="assets/UE5 tasks.mp4" type="video/mp4"></video></div></article>
-      <article class="archive-item" id="video-portrait"><div class="item-number">02</div><div><div class="meta">Interactive design / Processing</div><h3>Portrait Interaction</h3><p>An experimental portrait-based interaction study.</p></div><div class="media-stack one"><video controls preload="metadata" aria-label="Portrait Interaction"><source src="assets/portrait_interaction.mp4" type="video/mp4"></video></div></article>
-      <article class="archive-item" id="video-music"><div class="item-number">03</div><div><div class="meta">Interactive design / Processing</div><h3>Music Interaction</h3><p>An experiment connecting visual response and music.</p></div><div class="media-stack one"><video controls preload="metadata" aria-label="Music Interaction"><source src="assets/music interaction.mp4" type="video/mp4"></video></div></article>
-      <article class="archive-item" id="video-children"><div class="item-number">04</div><div><div class="meta">AI video / Music video</div><h3>Children of the Machine</h3></div><div class="media-stack one"><video controls preload="metadata" aria-label="Children of the Machine"><source src="assets/AI MV_childrenofthemechine.mp4" type="video/mp4"></video></div></article>
-      <article class="archive-item" id="video-blendshape"><div class="item-number">05</div><div><div class="meta">3D Animation / Character study</div><h3>Blendshape Study</h3></div><div class="media-stack one"><video controls preload="metadata" aria-label="Blendshape Study"><source src="assets/blendshape.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item" id="video-2d-basic"><div class="item-number">01</div><div><div class="meta">2D Animation / Early studies</div><h3>2D Animation Fundamentals</h3><p>A collection of foundational exercises from my first studies in 2D animation, applying the 12 principles of animation to explore timing, spacing, weight and expressive movement.</p></div><div class="media-stack one"><video controls playsinline preload="metadata" aria-label="2D animation fundamentals: a collection of early exercises"><source src="assets/2Dbasic.mp4" type="video/mp4">Your browser does not support this video. <a href="assets/2Dbasic.mp4">Download the animation exercises</a>.</video></div></article>
+      <article class="archive-item" id="video-walk"><div class="item-number">02</div><div><div class="meta">Character Animation / Movement study</div><h3>Walk and Run Cycles</h3><p>A simple character animation study of walking and running, exploring the rhythm of each gait, weight shifts and coordinated arm and leg movement.</p></div><div class="media-stack one"><video controls playsinline preload="metadata" aria-label="Simple character walk and run animations"><source src="assets/walk.mp4" type="video/mp4">Your browser does not support this video. <a href="assets/walk.mp4">Download the walk and run study</a>.</video></div></article>
+      <article class="archive-item" id="video-ue5"><div class="item-number">03</div><div><div class="meta">Technical study / Unreal Engine</div><h3>UE5 HLSL Experiment</h3><p>A visual and technical experiment in Unreal Engine.</p></div><div class="media-stack one"><video controls preload="metadata" aria-label="UE5 HLSL Experiment"><source src="assets/UE5 tasks.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item" id="video-portrait"><div class="item-number">04</div><div><div class="meta">Interactive design / Processing</div><h3>Portrait Interaction</h3><p>An experimental portrait-based interaction study.</p></div><div class="media-stack one"><video controls preload="metadata" aria-label="Portrait Interaction"><source src="assets/portrait_interaction.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item" id="video-music"><div class="item-number">05</div><div><div class="meta">Interactive design / Processing</div><h3>Music Interaction</h3><p>An experiment connecting visual response and music.</p></div><div class="media-stack one"><video controls preload="metadata" aria-label="Music Interaction"><source src="assets/music interaction.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item" id="video-children"><div class="item-number">06</div><div><div class="meta">AI video / Music video</div><h3>Children of the Machine</h3></div><div class="media-stack one"><video controls preload="metadata" aria-label="Children of the Machine"><source src="assets/AI MV_childrenofthemechine.mp4" type="video/mp4"></video></div></article>
+      <article class="archive-item" id="video-blendshape"><div class="item-number">07</div><div><div class="meta">3D Animation / Character study</div><h3>Blendshape Study</h3></div><div class="media-stack one"><video controls preload="metadata" aria-label="Blendshape Study"><source src="assets/blendshape.mp4" type="video/mp4"></video></div></article>
     </section>
 
     <section id="articles" aria-labelledby="articles-title"><div class="section-head"><div><div class="index">05 / Writing</div><h2 id="articles-title">Articles</h2></div><p>Notes, essays and reflections on the creative process.</p></div><div class="empty">The writing archive is being prepared. No articles have been published here yet.</div></section>
