@@ -66,9 +66,12 @@
     .bio-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,.65fr); gap:3rem; border-top:1px solid var(--line); padding-top:2rem; }
     .bio-grid p { max-width:690px; font:clamp(1.35rem,2.3vw,2.4rem)/1.3 Georgia,serif; }
     .cv-list { list-style:none; padding:0; margin:0; }
-    .cv-list li { border-top:1px solid var(--line); padding:.8rem 0; display:flex; justify-content:space-between; gap:1rem; }
-    .cv-list span { color:var(--muted); }
-    .empty { border-top:1px solid var(--line); padding:2rem 0; max-width:700px; color:var(--muted); }
+    .cv-list li { border-top:1px solid var(--line); padding:.8rem 0; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.25fr); gap:1rem; }
+    .cv-list span { color:var(--muted); overflow-wrap:anywhere; }
+    .writing-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.5rem; }
+    .writing-category { border:1px solid var(--line); min-height:180px; padding:1.5rem; }
+    .writing-category h3 { font:normal clamp(1.35rem,2.2vw,2rem)/1.15 Georgia,serif; margin:.7rem 0 1.5rem; overflow-wrap:anywhere; }
+    .writing-category p { color:var(--muted); margin:0; font-size:.85rem; }
     footer { display:flex; justify-content:space-between; gap:2rem; padding:2rem 0 4rem; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; }
     @media(max-width:1150px) {
       .page-layout { --primary-width:120px; --secondary-width:106px; }
@@ -91,6 +94,7 @@
     }
     @media(max-width:560px) {
       .shell { padding:0 1rem; }
+      .writing-grid { grid-template-columns:1fr; }
       section { padding:3rem 0; }
       .archive-item { padding:2rem 0 3rem; }
       footer { flex-direction:column; }
@@ -111,8 +115,8 @@
     <a class="side-main" href="#about" data-section="about">About</a>
     <a class="side-main" href="#biography" data-section="biography">Biography and CV</a>
     <a class="side-main" href="#projects" data-section="projects">Projects</a>
-    <a class="side-main" href="#images" data-section="images">Images</a>
     <a class="side-main" href="#videos" data-section="videos">Videos</a>
+    <a class="side-main" href="#images" data-section="images">Images</a>
     <a class="side-main" href="#articles" data-section="articles">Articles</a>
   </nav><canvas id="quella-mascot" width="300" height="380" aria-hidden="true"></canvas></aside>
   <aside class="subnav" data-for="projects" aria-label="Project index"><nav>
@@ -127,9 +131,9 @@
     <a class="detail" href="#project-voidraft">VOIDRAFT</a>
   </nav></aside>
   <aside class="subnav" data-for="images" aria-label="Image index"><nav>
+    <a class="group" href="#image-scenery">Scenery Design</a>
     <a class="group" href="#image-storyboard">Storyboard</a>
     <a class="group" href="#image-illustration">Illustration</a>
-    <a class="group" href="#image-scenery">Scenery Design</a>
   </nav></aside>
   <aside class="subnav" data-for="videos" aria-label="Video index"><nav>
     <a href="#video-2d-basic">2D Animation Fundamentals</a>
@@ -153,6 +157,9 @@
         <div><div class="eyebrow">CV / selected practice</div><ul class="cv-list">
           <li>Game design <span>Unity / Unreal Engine</span></li>
           <li>3D animation <span>Maya / Blender</span></li>
+          <li>2D animation <span>Photoshop (PS) / Clip Studio Paint (CSP)</span></li>
+          <li>Interaction design <span>Processing / TouchDesigner</span></li>
+          <li>Basic video editing <span>DaVinci Resolve / Premiere Pro (Pr) / 剪映 (Jianying)</span></li>
           <li>Web & UI design <span>Figma / Web</span></li>
           <li>Visual storytelling <span>Storyboards / Illustration</span></li>
         </ul><p class="meta" style="margin-top:2rem">Contact</p><a href="mailto:2780745213@qq.com">2780745213@qq.com</a></div>
@@ -162,12 +169,13 @@
     <section id="projects" aria-labelledby="projects-title">
       <div class="section-head"><div><div class="index">02 / Selected work</div><h2 id="projects-title">Projects</h2></div><p>Explore work by discipline. Animation, games and interface projects, each with its own documentation.</p></div>
       <article class="archive-item" id="project-rift"><div class="item-number">01 / 3D Animation</div><div><div class="meta">Maya · Dynamic simulation</div><h3>The Rift Park</h3><p>A study of changing materials, movement and spatial transformation. The sequence below records the simulation as an animation.</p></div><div class="media-stack"><video controls preload="metadata" aria-label="The Rift Park animation"><source src="assets/simulation.mp4" type="video/mp4"></video><p class="media-note"><strong>Animation study.</strong> The evolving scene is presented as one continuous moving-image work.</p></div></article>
-      <article class="archive-item" id="project-manipulation"><div class="item-number">02 / 3D Animation</div><div><div class="meta">Animated short · Work in progress</div><h3>The Manipulation of Power</h3><p>An animated short in development, exploring a puppet-like character and the visual language of control. These images show character, stage and poster development, followed by an animation test.</p></div><div class="media-stack">
+      <article class="archive-item" id="project-manipulation"><div class="item-number">02 / 3D Animation</div><div><div class="meta">Experimental animated short</div><h3>The Manipulation of Power</h3><p>An experimental animated short exploring a puppet-like character and the visual language of control. These images show character, stage and poster development, followed by an animation test and a link to the complete film.</p></div><div class="media-stack">
         <img loading="lazy" src="assets/Girl2.png" alt="Main character design for The Manipulation of Power"><p class="media-note"><strong>Character study.</strong> The protagonist's form establishes the film's visual direction.</p>
         <img loading="lazy" src="assets/puppet-front.png" alt="Front view of the puppet character"><p class="media-note"><strong>Puppet study.</strong> A front view of the character and its theatrical references.</p>
         <img loading="lazy" src="assets/Girl[00h00m00s-00h00m03s].gif" alt="Animated character turnaround"><p class="media-note"><strong>Turnaround.</strong> A short movement study of the character.</p>
         <img loading="lazy" src="assets/poster.png" alt="The Manipulation of Power poster"><p class="media-note"><strong>Poster.</strong> The project's key visual.</p>
         <video controls preload="metadata" aria-label="The Manipulation of Power animation test"><source src="assets/try1.mp4" type="video/mp4"></video><p class="media-note"><strong>Animation test.</strong> An early moving-image exploration of the film.</p>
+        <p class="media-note"><a class="item-link" href="https://xhslink.cn/o/6FZ2FLdkNK" target="_blank" rel="noopener noreferrer">Watch the full short animation — The Manipulation of Power ↗</a><br>Full film on Xiaohongshu / 小红书.</p>
       </div></article>
       <article class="archive-item" id="project-lab211"><div class="item-number">03 / Game</div><div><div class="meta">Unity · Level design</div><h3>Lab 211</h3><p>A game project featuring a maze world. My contributions include level design and implementation, as well as the promotional poster.</p></div><div class="media-stack"><img loading="lazy" src="assets/Poster_Lab 211.jpg" alt="Lab 211 promotional poster"><p class="media-note"><strong>Poster design.</strong> The promotional image introduces the game's world.</p><video controls preload="metadata" aria-label="Lab 211 game trailer"><source src="assets/Lab211_trail.mp4" type="video/mp4"></video><p class="media-note"><strong>Gameplay trailer.</strong> A look at the maze level in motion.</p></div></article>
       <article class="archive-item" id="project-programming"><div class="item-number">04 / Game · Interactive</div><div><div class="meta">Unreal Engine · In development</div><h3>Programming Daydream</h3><p>A compact interactive experiment set around a floating computer on an animated sea. The participant enters a programming space where input, interpretation and audiovisual response form a loop.</p></div><div class="media-stack"><img loading="lazy" src="assets/programming-daydream.webp" alt="Programming Daydream title scene with a floating computer in a starry sea"><p class="media-note"><strong>Scene and interface concept.</strong> The floating computer sits beyond the ornate frame, while the right side introduces the project's title and menu. Gameplay documentation will follow as the experiment develops.</p></div></article>
@@ -175,29 +183,8 @@
       <article class="archive-item" id="project-voidraft"><div class="item-number">06 / Website</div><div><div class="meta">Website · UI · Figma</div><h3>VOIDRAFT</h3><p>A website interface concept and visual identity developed through a Figma prototype and design studies. <a class="item-link" href="https://www.figma.com/design/kDGXzLiS2urJjuBvBqnfNS/web_Voidraft?node-id=0-1&amp;t=e3RLNUxpmsJSbW8U-1" target="_blank" rel="noopener noreferrer">Open Figma design ↗</a></p></div><div class="media-stack"><img loading="lazy" src="assets/WebUI_poster.png" alt="VOIDRAFT interface poster"><p class="media-note"><strong>Interface poster.</strong> A visual introduction to the website concept.</p><img loading="lazy" src="assets/web_concept.png" alt="VOIDRAFT website concept"><p class="media-note"><strong>Web concept.</strong> An exploration of layout, typography and interaction.</p></div></article>
     </section>
 
-    <section id="images" aria-labelledby="images-title">
-      <div class="section-head"><div><div class="index">03 / Visual archive</div><h2 id="images-title">Images</h2></div><p>Storyboards, scripts and illustrations collected by format.</p></div>
-      <article class="archive-item" id="image-storyboard"><div class="item-number">01 / Storyboard</div><div><div class="meta">Images · Narrative planning</div><h3>Scripts and Storyboards</h3><p>Visual planning for scripts, shot sequences, a music video and a book adaptation.</p></div><div class="media-stack">
-        <img loading="lazy" src="assets/scriptppt.png" alt="Script structure presentation"><p class="media-note"><strong>Script structure.</strong> An overview of narrative development.</p>
-        <img loading="lazy" src="assets/storyboard4.png" alt="Storyboard panels"><p class="media-note"><strong>Storyboard.</strong> Shot-by-shot visual planning.</p>
-        <img loading="lazy" src="assets/storyline_MV.png" alt="Music video storyline"><p class="media-note"><strong>Music video storyline.</strong> A sequence of narrative beats.</p>
-        <img loading="lazy" src="assets/treatment_book.png" alt="Book adaptation treatment"><p class="media-note"><strong>Adaptation treatment.</strong> A script development document.</p>
-      </div></article>
-      <article class="archive-item" id="image-illustration"><div class="item-number">02 / Illustration</div><div><div class="meta">Images · Visual development</div><h3>Illustration and Character Studies</h3><p>A selection of character, scene, cover and thematic illustration work.</p></div><div class="media-stack">
-        <img loading="lazy" src="assets/characterDesign.png" alt="Character design"><p class="media-note">Character design study.</p>
-        <img loading="lazy" src="assets/illustration2.png" alt="Scene illustration"><p class="media-note">Scene illustration.</p>
-        <img loading="lazy" src="assets/bookcover1.png" alt="Book cover design"><p class="media-note">Book cover design.</p>
-        <img loading="lazy" src="assets/illustration1.png" alt="Thematic illustration"><p class="media-note">Thematic illustration.</p>
-      </div></article>
-      <article class="archive-item" id="image-scenery"><div class="item-number">03 / Scenery Design</div><div><div class="meta">Images · Blender environments</div><h3>Environment Studies</h3><p>Experiments in environment, lighting and atmosphere across cave, historical-inspired and snowy settings.</p></div><div class="media-stack">
-        <img loading="lazy" src="assets/cave2.png" alt="Cave scenery design"><p class="media-note"><strong>Cave.</strong> An interior environment and lighting study.</p>
-        <img loading="lazy" src="assets/gufeng.jpg" alt="Historical-inspired scenery design"><p class="media-note"><strong>Historical-inspired setting.</strong> An architectural and atmospheric study.</p>
-        <img loading="lazy" src="assets/snow.png" alt="Snowy scenery design"><p class="media-note"><strong>Snow.</strong> A landscape study in light and mood.</p>
-      </div></article>
-    </section>
-
     <section id="videos" aria-labelledby="videos-title">
-      <div class="section-head"><div><div class="index">04 / Moving image</div><h2 id="videos-title">Videos</h2></div><p>Independent moving-image and interactive studies.</p></div>
+      <div class="section-head"><div><div class="index">03 / Moving image</div><h2 id="videos-title">Videos</h2></div><p>Independent moving-image and interactive studies.</p></div>
       <article class="archive-item" id="video-2d-basic"><div class="item-number">01</div><div><div class="meta">2D Animation / Early studies</div><h3>2D Animation Fundamentals</h3><p>A collection of foundational exercises from my first studies in 2D animation, applying the 12 principles of animation to explore timing, spacing, weight and expressive movement.</p></div><div class="media-stack one"><video controls playsinline preload="metadata" aria-label="2D animation fundamentals: a collection of early exercises"><source src="assets/2Dbasic.mp4" type="video/mp4">Your browser does not support this video. <a href="assets/2Dbasic.mp4">Download the animation exercises</a>.</video></div></article>
       <article class="archive-item" id="video-walk"><div class="item-number">02</div><div><div class="meta">Character Animation / Movement study</div><h3>Walk and Run Cycles</h3><p>A simple character animation study of walking and running, exploring the rhythm of each gait, weight shifts and coordinated arm and leg movement.</p></div><div class="media-stack one"><video controls playsinline preload="metadata" aria-label="Simple character walk and run animations"><source src="assets/walk.mp4" type="video/mp4">Your browser does not support this video. <a href="assets/walk.mp4">Download the walk and run study</a>.</video></div></article>
       <article class="archive-item" id="video-ue5"><div class="item-number">03</div><div><div class="meta">Technical study / Unreal Engine</div><h3>UE5 HLSL Experiment</h3><p>A visual and technical experiment in Unreal Engine.</p></div><div class="media-stack one"><video controls preload="metadata" aria-label="UE5 HLSL Experiment"><source src="assets/UE5 tasks.mp4" type="video/mp4"></video></div></article>
@@ -207,10 +194,36 @@
       <article class="archive-item" id="video-blendshape"><div class="item-number">07</div><div><div class="meta">3D Animation / Character study</div><h3>Blendshape Study</h3></div><div class="media-stack one"><video controls preload="metadata" aria-label="Blendshape Study"><source src="assets/blendshape.mp4" type="video/mp4"></video></div></article>
     </section>
 
-    <section id="articles" aria-labelledby="articles-title"><div class="section-head"><div><div class="index">05 / Writing</div><h2 id="articles-title">Articles</h2></div><p>Notes, essays and reflections on the creative process.</p></div><div class="empty">The writing archive is being prepared. No articles have been published here yet.</div></section>
+    <section id="images" aria-labelledby="images-title">
+      <div class="section-head"><div><div class="index">04 / Visual archive</div><h2 id="images-title">Images</h2></div><p>Scenery design, storyboards and illustrations collected by format.</p></div>
+      <article class="archive-item" id="image-scenery"><div class="item-number">01 / Scenery Design</div><div><div class="meta">Images · Blender environments</div><h3>Environment Studies</h3><p>Experiments in environment, lighting and atmosphere across cave, historical-inspired and snowy settings.</p></div><div class="media-stack">
+        <img loading="lazy" src="assets/cave2.png" alt="Cave scenery design"><p class="media-note"><strong>Cave.</strong> An interior environment and lighting study.</p>
+        <img loading="lazy" src="assets/gufeng.jpg" alt="Historical-inspired scenery design"><p class="media-note"><strong>Historical-inspired setting.</strong> An architectural and atmospheric study.</p>
+        <img loading="lazy" src="assets/snow.png" alt="Snowy scenery design"><p class="media-note"><strong>Snow.</strong> A landscape study in light and mood.</p>
+      </div></article>
+      <article class="archive-item" id="image-storyboard"><div class="item-number">02 / Storyboard</div><div><div class="meta">Images · Narrative planning</div><h3>Scripts and Storyboards</h3><p>Visual planning for scripts, shot sequences, a music video and a book adaptation.</p></div><div class="media-stack">
+        <img loading="lazy" src="assets/scriptppt.png" alt="Script structure presentation"><p class="media-note"><strong>Script structure.</strong> An overview of narrative development.</p>
+        <img loading="lazy" src="assets/storyboard4.png" alt="Storyboard panels"><p class="media-note"><strong>Storyboard.</strong> Shot-by-shot visual planning.</p>
+        <img loading="lazy" src="assets/storyline_MV.png" alt="Music video storyline"><p class="media-note"><strong>Music video storyline.</strong> A sequence of narrative beats.</p>
+        <img loading="lazy" src="assets/treatment_book.png" alt="Book adaptation treatment"><p class="media-note"><strong>Adaptation treatment.</strong> A script development document.</p>
+      </div></article>
+      <article class="archive-item" id="image-illustration"><div class="item-number">03 / Illustration</div><div><div class="meta">Images · Visual development</div><h3>Illustration and Character Studies</h3><p>A selection of character, scene, cover and thematic illustration work.</p></div><div class="media-stack">
+        <img loading="lazy" src="assets/characterDesign.png" alt="Character design"><p class="media-note">Character design study.</p>
+        <img loading="lazy" src="assets/illustration2.png" alt="Scene illustration"><p class="media-note">Scene illustration.</p>
+        <img loading="lazy" src="assets/bookcover1.png" alt="Book cover design"><p class="media-note">Book cover design.</p>
+        <img loading="lazy" src="assets/illustration1.png" alt="Thematic illustration"><p class="media-note">Thematic illustration.</p>
+      </div></article>
+    </section>
+
+    <section id="articles" aria-labelledby="articles-title"><div class="section-head"><div><div class="index">05 / Writing</div><h2 id="articles-title">Articles</h2></div><p>Notes, essays and reflections on the creative process.</p></div><div class="writing-grid">
+        <article class="writing-category" id="articles-communication-theory" aria-labelledby="articles-communication-theory-title"><div class="item-number">01 / Writing</div><h3 id="articles-communication-theory-title">Communication Theory</h3><p>Coming soon.</p></article>
+        <article class="writing-category" id="articles-game" aria-labelledby="articles-game-title"><div class="item-number">02 / Writing</div><h3 id="articles-game-title">Game</h3><p>Coming soon.</p></article>
+        <article class="writing-category" id="articles-anime" aria-labelledby="articles-anime-title"><div class="item-number">03 / Writing</div><h3 id="articles-anime-title">Anime</h3><p>Coming soon.</p></article>
+        <article class="writing-category" id="articles-film" aria-labelledby="articles-film-title"><div class="item-number">04 / Writing</div><h3 id="articles-film-title">Film</h3><p>Coming soon.</p></article>
+      </div></section>
   </main>
   </div>
   <footer class="shell"><span>© Quella · Portfolio archive</span><a href="#top">Back to top ↑</a></footer>
-  <script src="mascot.js" defer></script>
+  <script src="mascot.js?v=20261007-poses2" defer></script>
 </body>
 </html>

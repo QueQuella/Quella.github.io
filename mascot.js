@@ -57,6 +57,68 @@
   }
   function path(d,color='#090909'){ctx.fillStyle=color;ctx.fill(new Path2D(d));}
   function line(p,width=1,color='#535450'){ctx.beginPath();p.forEach((v,i)=>i?ctx.lineTo(...v):ctx.moveTo(...v));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.stroke();}
+  // Draw each special pose as a complete figure in the 300 × 380 canvas.
+  // Neck, waist, hips and joints share coordinates instead of mixing outlines.
+  function portraitHead(x,y,tilt=0) {
+    ctx.save();ctx.translate(x,y);ctx.rotate(tilt);ctx.scale(.23,.23);
+    ctx.translate(-199,-320);shape('head');ctx.restore();
+  }
+  function portraitTail(x,y,amount=1) {
+    ctx.save();ctx.translate(x,y);
+    ctx.rotate(reduce.matches?0:Math.sin(tailPhase)*.022*amount);
+    ctx.scale(.15,.19);ctx.translate(-280,-665);shape('tail');ctx.restore();
+  }
+  function drawBiography(alpha) {
+    if(alpha<.001)return;
+    ctx.save();ctx.globalAlpha=alpha;
+    portraitTail(101,214);
+    // Far leg, then near leg: both connect inside the same pelvis.
+    path('M88 213 Q102 213 105 227 L111 270 Q111 279 117 289 L132 325 L143 332 Q148 338 141 341 L123 341 Q117 340 116 333 L102 294 Q98 283 97 276 L84 241 Z');
+    path('M72 214 L94 216 Q98 237 92 258 L86 282 L84 323 Q84 329 88 334 Q91 341 83 342 L52 342 Q46 340 49 336 L68 326 L70 282 L68 255 Z');
+    // A straight shirt and softly shaped pelvis preserve a substantial waist.
+    path('M73 116 L88 116 Q98 121 102 133 Q107 149 104 167 L101 189 Q100 201 104 214 L108 228 Q91 234 68 228 L71 211 Q74 202 72 189 L65 164 Q62 149 65 135 Q66 123 73 116 Z');
+    // Relaxed far hand rests by the hip.
+    path('M96 130 Q104 131 106 143 L111 181 L105 211 Q103 219 98 217 Q94 216 97 209 L101 182 L92 146 Z');
+    // Bent near arm and closed hand meet the balloon strings at (38,158).
+    path('M77 127 Q66 127 64 142 L61 173 L44 158 Q40 151 35 154 Q30 158 36 163 L56 186 Q65 193 74 182 L84 151 Q91 134 77 127 Z');
+    portraitHead(81,119,-.025);
+    const colors=['#ae5365','#b59645','#4c8986','#797099','#bc784d'];
+    const centers=[[19,47],[32,31],[45,55],[58,42],[71,30]];
+    centers.forEach(([x,y],i)=>{
+      const bx=x+(reduce.matches?0:Math.sin(time*.8+i)*1.7);
+      const by=y+(reduce.matches?0:Math.sin(time+i)*1.4);
+      line([[38,158],[bx,by+14]],.65,'#87847c');
+      ctx.fillStyle=colors[i];ctx.beginPath();ctx.ellipse(bx,by,9,14,(i-2)*.06,0,Math.PI*2);ctx.fill();
+    });
+    // Repaint the fingers above the strings so the grip is unambiguous.
+    path('M35 154 Q40 152 43 157 L45 164 L39 166 L34 160 Z');
+    ctx.restore();
+  }
+  function drawArticles(alpha) {
+    if(alpha<.001)return;
+    ctx.save();ctx.globalAlpha=alpha;
+    // Desk and chair use the same floor (y=342) and a seat at y=246.
+    path('M22 145 L58 145 L58 181 L22 181 Z');
+    path('M37 181 L42 181 L43 188 L51 190 L28 190 L36 188 Z');
+    path('M72 189 L104 189 L107 192 L70 192 Z');
+    line([[17,195],[118,195]],3,'#111');
+    line([[26,196],[26,342]],2.2,'#111');line([[113,196],[113,342]],2.2,'#111');
+    line([[114,246],[164,246],[169,195]],3,'#111');
+    line([[124,247],[119,342]],2.5,'#111');line([[158,247],[173,342]],2.5,'#111');
+    portraitTail(147,224,.7);
+    // Far thigh is horizontal; the calf and shoe sit slightly behind the near leg.
+    path('M139 216 Q157 216 157 231 Q153 244 136 247 L102 249 L110 322 L122 331 Q130 339 122 342 L97 342 Q91 340 94 332 L95 322 L85 252 Q82 234 96 228 Z');
+    // The near thigh extends from the seat toward a clear knee below the desk.
+    path('M125 219 Q143 216 149 231 Q151 240 138 245 L88 245 L89 323 L91 333 Q96 341 87 343 L60 343 Q54 341 58 336 L74 325 L71 246 Q69 231 83 228 Z');
+    // Continuous torso: shoulders → ribcage → waist → seated pelvis.
+    path('M112 117 L126 116 Q138 123 141 138 L146 175 L142 198 Q140 209 151 222 Q157 232 148 238 L123 237 Q115 232 116 221 L116 205 L110 183 L106 154 Q104 131 112 117 Z');
+    // Far forearm rests on the keyboard; near elbow bends through a full contour.
+    path('M130 133 Q137 133 139 143 L138 176 Q139 186 130 189 L98 192 L94 188 L122 180 L122 148 Z');
+    const tap=reduce.matches?0:Math.sin(time*9)*.7;
+    path('M116 133 Q107 133 108 146 L111 176 Q112 184 104 185 L78 '+(187+tap)+' Q70 '+(187+tap)+' 70 '+(190+tap)+' L77 '+(193+tap)+' L108 193 Q123 193 124 179 L124 147 Q126 136 116 133 Z');
+    portraitHead(119,120,-.42);
+    ctx.restore();
+  }
   function draw(dt) {
     if(!reduce.matches){time+=dt;tailPhase+=dt*1.2;walkClock+=dt;arrival=Math.max(0,arrival-dt*.5);}
     const ease=reduce.matches?1:1-Math.exp(-dt*5);
@@ -76,20 +138,14 @@
     ctx.save();ctx.translate(58,36);ctx.rotate(-.13*light);ctx.scale(1-.16*light,1);
     line([[-58,-16],[0,0],[0,60],[-58,44],[-58,-16]],3,'#284659');
     line([[-29,-8],[-29,52]],1.5,'#284659');line([[-58,14],[0,30]],1.5,'#284659');ctx.restore();
-    ctx.globalAlpha=sit;
-    // A restrained desk silhouette, all furniture facing the same direction.
-    path('M12 161 L42 161 L42 194 L12 194 Z');path('M25 194 L29 205 L18 205 L22 194 Z');
-    path('M48 203 L76 203 L79 207 L46 207 Z');
-    line([[13,208],[96,208]],3,'#111');line([[22,208],[22,340]],2,'#111');
-    line([[98,242],[128,242],[140,340]],3,'#111');line([[100,242],[90,340]],2,'#111');line([[128,242],[134,208]],3,'#111');
-    ctx.globalAlpha=1;
-    const offsetX=23+sit*36,offsetY=44+sit*22+walk*key[4]*.55;
-    ctx.save();ctx.translate(offsetX,offsetY);ctx.scale(.23,.23);
-    // The traced tail retains the irregular edge, while occupying less space.
+    // Ordinary standing/walking poses retain their original traced silhouette.
+    const standing=Math.max(0,1-sit-balloons);
+    const offsetX=23,offsetY=44+walk*key[4]*.55;
+    ctx.save();ctx.globalAlpha=standing;
+    ctx.translate(offsetX,offsetY);ctx.scale(.23,.23);
     ctx.save();ctx.translate(280,665);
-    ctx.rotate(Math.sin(tailPhase)*.024*(1-still)*(1-sit*.5));
+    ctx.rotate(Math.sin(tailPhase)*.024*(1-still));
     ctx.scale(.62,.86);ctx.translate(-280,-665);shape('tail');ctx.restore();
-    // Keep complete silhouettes separate so pose changes cannot leave extra limbs.
     const leg=(name,i)=>{
       shape(name,(x,y)=>{
         const t=Math.max(0,Math.min(1,(y-740)/560));
@@ -97,35 +153,10 @@
         return [x+footShift*t*t,y-key[i+2]*walk*3*t*t];
       });
     };
-    ctx.globalAlpha=1-sit;
-    leg('farLeg',1);leg('nearLeg',0);
-    ctx.globalAlpha=(1-sit)*(1-balloons);shape('body');
-    ctx.globalAlpha=(1-sit)*balloons;
-    // A continuous coat, relaxed far arm and bent near arm holding the strings.
-    path('M169 316 L228 312 Q258 343 276 396 L295 488 L272 514 L264 558 L281 644 L294 744 L161 771 L144 656 L154 585 L141 514 L141 422 Q139 353 169 316 Z');
-    path('M235 344 Q259 350 264 393 L284 493 L269 592 Q269 609 257 612 Q242 609 247 590 L255 493 L225 399 Z');
-    path('M160 345 Q139 351 130 391 L109 473 L75 427 L61 393 Q53 378 42 386 Q32 392 40 408 L49 443 L99 511 Q119 534 137 514 L171 415 Q186 358 160 345 Z');
-    ctx.globalAlpha=sit;
-    // Seated hips meet the chair, knees bend toward the desk, feet meet the floor.
-    path('M167 320 L228 313 Q249 341 259 392 L271 481 L259 553 L277 724 Q278 753 249 766 L188 762 L157 742 L165 601 L145 512 L145 393 Q142 347 167 320 Z');
-    path('M182 727 Q147 736 93 753 Q64 765 65 799 L87 849 L126 1151 L124 1182 L80 1211 Q64 1222 74 1234 L147 1234 Q165 1229 162 1212 L177 837 L242 801 L263 746 Z');
-    path('M221 747 Q177 756 117 802 L150 852 L218 823 L233 1167 Q231 1190 206 1211 Q192 1225 205 1236 L275 1236 Q292 1230 282 1212 L286 840 Q288 789 253 752 Z');
-    const tap=reduce.matches?0:Math.sin(time*10)*3;
-    path('M228 354 Q250 363 252 402 L247 529 Q243 558 217 573 L80 601 L46 600 Q33 591 40 585 L80 579 L198 544 L213 408 Q205 367 228 354 Z');
-    path('M162 352 Q143 359 139 400 L134 527 Q130 563 103 572 L15 '+(590+tap)+' Q-4 '+(588+tap)+' -10 '+(600+tap)+' Q-11 '+(611+tap)+' 8 '+(612+tap)+' L111 606 Q170 600 179 549 L192 398 Q191 366 162 352 Z');
-    ctx.globalAlpha=1;
-    ctx.save();ctx.translate(199,320);ctx.rotate(-sit*.16-balloons*.035);ctx.translate(-199,-320);shape('head');ctx.restore();
-    ctx.globalAlpha=1;
+    leg('farLeg',1);leg('nearLeg',0);shape('body');shape('head');
     ctx.restore();
-    // Fine strings and muted color keep the balloons quiet and atmospheric.
-    ctx.globalAlpha=balloons;
-    const colors=['#ae5365','#b59645','#4c8986','#797099','#bc784d'];
-    colors.forEach((c,i)=>{
-      const bx=offsetX+14+(i-2)*11+Math.sin(time*.8+i)*2;
-      const by=offsetY+18-Math.sin(i*1.8)*10+Math.sin(time+i)*1.7;
-      line([[offsetX+10,offsetY+91],[bx,by+15]],.6,'#87847c');
-      ctx.fillStyle=c;ctx.beginPath();ctx.ellipse(bx,by,9,14,(i-2)*.08,0,Math.PI*2);ctx.fill();
-    });
+    drawBiography(balloons);
+    drawArticles(sit);
     ctx.globalAlpha=1;
     const colors2=['#bf593e','#a78435','#78639a','#528f89','#b76489'];
     for(let i=0;i<28;i++){
