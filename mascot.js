@@ -6,7 +6,7 @@
   const links = [...document.querySelectorAll('.side-main')];
   const sections = [...document.querySelectorAll('main > [id]')];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  const modes = {about:'still', biography:'balloons', projects:'sparks', images:'light', videos:'light', articles:'type'};
+  const modes = {about:'still', biography:'balloons', projects:'sparks', archive:'light', research:'type'};
   let active='about', hover=null, focus=null, target='still', last=0, time=0, tailPhase=0, walkClock=0, arrival=0, raf=0;
   const pose={sit:0,light:0,sparks:0,balloons:0,still:1};
   // Twelve drawings at eight frames per second: contact, down, passing, up,
@@ -174,4 +174,3 @@
   const initial=document.getElementById(location.hash.slice(1));setSection(initial?.closest('section')?.id || 'about');
   resize();raf=requestAnimationFrame(frame);
 })();
-
