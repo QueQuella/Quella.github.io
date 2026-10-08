@@ -297,3 +297,19 @@ body[data-archive-active="images"] [data-archive-for="images"],body[data-archive
 @media(max-width:780px) { .project-card { grid-template-columns:51% minmax(0,1fr); height:420px; } .card-copy { padding:1.2rem; } .card-copy h3 { font-size:1.3rem; } .top-button { left:12px; right:auto; } }
 @media(max-width:600px) { .project-card { grid-template-columns:1fr; grid-template-rows:210px minmax(0,1fr); height:540px; } .card-copy { padding:1.1rem 1.2rem 1rem; } .post-byline { margin-bottom:.65rem; } .post-tags { margin-bottom:.75rem; } .card-copy h3 { font-size:1.3rem; margin-bottom:.65rem; } .card-copy p { font-size:.82rem; } .post-footer { padding-top:.65rem; } }
 @media(prefers-reduced-motion:reduce) { .top-button { transition:none; } }
+
+/* Academic Journey: five chronological anchors and paired, uncropped study images. */
+.journey-layout.shell { max-width:1440px; display:grid; grid-template-columns:140px minmax(0,1fr); align-items:start; }
+.journey-index { position:sticky; top:0; padding:2.8rem 20px 2rem 0; border-right:2px solid var(--ink); }
+.journey-index nav { display:flex; flex-direction:column; gap:.6rem; }
+.journey-index a { padding:.55rem 0; text-decoration:none; font-size:.81rem; font-weight:700; color:var(--muted); }
+.journey-index a:hover,.journey-index a:focus-visible { color:var(--accent); }
+.journey-course { margin-top:2rem; padding-top:2rem; border-top:1px solid var(--line); }
+.journey-course h3 { margin-bottom:1rem; }
+.journey-course p { max-width:800px; }
+.journey-project { margin-top:2.5rem; }
+.journey-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; margin:1.2rem 0 2rem; }
+.journey-pair a { display:block; min-width:0; background:#e7e5df; border:1px solid var(--line); }
+.journey-pair img { width:100%; height:auto; aspect-ratio:16/10; object-fit:contain; }
+.journey-placeholder { color:var(--muted); margin:1rem 0 0; font-style:italic; }
+@media(max-width:780px) { .journey-layout.shell { display:block; } .journey-index { z-index:10; background:var(--paper); border-right:0; border-bottom:1px solid var(--ink); padding:.6rem 0; } .journey-index nav { flex-direction:row; justify-content:space-between; gap:.5rem; } .journey-layout .content { padding-left:0; } .journey-pair { gap:.5rem; } }
