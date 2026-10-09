@@ -323,3 +323,47 @@ body[data-archive-active="images"] [data-archive-for="images"],body[data-archive
 .archive-video .media-note { margin:0; }
 .journey-single { grid-template-columns:minmax(0,1fr); max-width:800px; }
 @media(max-width:780px) { .archive-video-pair { grid-template-columns:1fr; gap:2rem; } .archive-video { scroll-margin-top:8rem; } }
+
+/* Shared paired works: consistent frames preserve each complete image. */
+.paired-media { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.8rem 1.2rem; margin:1.4rem 0; }
+.paired-media figure,.workshop-pair figure { margin:0; min-width:0; }
+.paired-media a { display:block; border:1px solid var(--line); background:#ebe9e3; }
+.paired-media img { display:block; width:100%; height:auto; aspect-ratio:16/10; object-fit:contain; max-height:none; border:0; }
+.paired-media figcaption,.workshop-pair figcaption { font:.8rem/1.6 Arial,Helvetica,sans-serif; color:var(--muted); padding-top:.65rem; }
+.illustration-pair { width:100%; margin:1.8rem 0 2.6rem; }
+.media-stack .illustration-pair img { aspect-ratio:16/10; max-height:none; border:0; }
+.workshop-pair figcaption p { margin:0; }
+.journey-page .journey-period { border-bottom:0; }
+.journey-page .journey-period + .journey-period { border-top:2px solid var(--ink); }
+.practice-button { display:flex; align-items:center; justify-content:space-between; gap:1.5rem; margin-top:1.7rem; padding:1.15rem 1.4rem; border:1px solid var(--ink); color:var(--paper); background:var(--ink); text-decoration:none; box-shadow:4px 4px 0 #c8c5bf; transition:background .25s,transform .25s,box-shadow .25s; }
+.practice-button small { display:block; margin-bottom:.35rem; font:.64rem/1.4 Arial,Helvetica,sans-serif; text-transform:uppercase; letter-spacing:.09em; color:#d8d6d1; }
+.practice-button strong { font:600 1rem/1.35 Arial,Helvetica,sans-serif; }
+.practice-button > span:last-child { font-size:1.6rem; }
+.practice-button:hover,.practice-button:focus-visible { background:var(--accent); transform:translateY(-2px); box-shadow:4px 6px 0 #c8c5bf; }
+.practice-button:focus-visible,.studio-portal:focus-visible { outline:2px solid var(--accent); outline-offset:6px; }
+#about.home-intro { display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,280px); align-items:center; gap:clamp(2rem,4vw,5rem); }
+.studio-portal { display:flex; flex-direction:column; align-items:center; text-align:center; padding:.75rem; color:var(--ink); text-decoration:none; }
+.studio-stage { width:100%; max-width:240px; display:block; }
+.studio-walker { display:block; width:100%; overflow:visible; }
+.studio-label { font:700 .85rem/1.5 Arial,Helvetica,sans-serif; letter-spacing:.1em; border-bottom:1px solid var(--ink); padding-bottom:.45rem; }
+.studio-purpose { max-width:260px; margin-top:.75rem; font:.78rem/1.65 Arial,Helvetica,sans-serif; color:var(--muted); }
+.studio-hint { margin-top:.65rem; font:.64rem/1.5 Arial,Helvetica,sans-serif; color:var(--muted); }
+.walker-body { transform-origin:120px 174px; transition:transform .3s; }
+.walker-arm { transform-origin:113px 84px; }
+.walker-leg-a,.walker-leg-b { transform-origin:120px 123px; }
+.studio-spark,.studio-friction { opacity:.35; transition:opacity .3s; }
+.studio-portal:hover .walker-body,.studio-portal:focus-visible .walker-body { animation:studio-bob .65s ease-in-out infinite alternate; }
+.studio-portal:hover .walker-arm,.studio-portal:focus-visible .walker-arm { animation:studio-wave .55s ease-in-out infinite alternate; }
+.studio-portal:hover .walker-leg-a,.studio-portal:focus-visible .walker-leg-a { animation:studio-step .65s ease-in-out infinite alternate; }
+.studio-portal:hover .walker-leg-b,.studio-portal:focus-visible .walker-leg-b { animation:studio-step .65s ease-in-out infinite alternate-reverse; }
+.studio-portal:hover .studio-spark,.studio-portal:hover .studio-friction,.studio-portal:focus-visible .studio-spark,.studio-portal:focus-visible .studio-friction { opacity:1; }
+.studio-portal:hover .studio-label { color:var(--accent); border-color:var(--accent); }
+@keyframes studio-bob { from { transform:translateY(0) rotate(-3deg); } to { transform:translateY(-5px) rotate(3deg); } }
+@keyframes studio-wave { from { transform:rotate(-12deg); } to { transform:rotate(13deg); } }
+@keyframes studio-step { from { transform:rotate(-7deg); } to { transform:rotate(7deg); } }
+@media(max-width:1100px) { #about.home-intro { grid-template-columns:minmax(0,1fr) 210px; gap:1.7rem; } }
+@media(max-width:780px) { #about.home-intro { grid-template-columns:1fr; } .studio-portal { max-width:280px; justify-self:center; } }
+@media(max-width:540px) { .paired-media { gap:1.1rem .65rem; } .paired-media figcaption { font-size:.7rem; } }
+@media(prefers-reduced-motion:reduce) { .studio-portal * { animation:none !important; transition:none; } .practice-button { transition:none; } }
+
+.workshop-pair figcaption a { display:inline; background:transparent; border:0; }
