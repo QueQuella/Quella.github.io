@@ -478,3 +478,18 @@ body[data-archive-active="images"] [data-archive-for="images"],body[data-archive
 @media(max-width:600px) { .reading-shelf { gap:.65rem; } .reading-cover-link { height:155px; padding:8px; } .reading-shelf h5 { font-size:.78rem; } .reading-shelf figcaption p { font-size:.65rem; } .meaning-sources { grid-template-columns:1fr; } .chinese-essay-page .reading { font-size:.95rem; } }
 @media(max-width:380px) { .reading-cover-link { height:130px; padding:5px; } }
 @media(prefers-reduced-motion:reduce) { .reading-cover-link img { transition:none; } }
+
+/* Essay additions share the established typography and compact navigation. */
+.essay-poster { max-width:320px; margin:1.8rem 0 0; }
+.essay-poster img { display:block; width:100%; height:auto; border:1px solid var(--line); }
+.essay-poster figcaption { margin:.65rem 0 0; font:.72rem/1.6 Arial,Helvetica,sans-serif; color:var(--muted); }
+.essay-references { margin-top:3rem; font: .88rem/1.8 Arial,Helvetica,sans-serif; }
+.essay-references p { padding-left:1.5rem; text-indent:-1.5rem; overflow-wrap:anywhere; margin:0 0 1.3rem; }
+.essay-citation { font: .8rem/1.6 Arial,Helvetica,sans-serif; }
+.video-essay-chapter { margin:0 0 2.8rem; }
+.video-essay-chapter .eyebrow { margin-top:2rem; }
+.chinese-essay-page .video-essay-chapter h2 { margin-top:.6rem; }
+.essay-visual-note { margin:1.5rem 0 2rem; padding:.9rem 1.1rem; background:#e7e5df; border-left:2px solid var(--accent); font:.8rem/1.8 Arial,Helvetica,sans-serif; }
+.essay-visual-note p { margin:.5rem 0 0 !important; }
+.essay-screen-sources { font:.85rem/1.8 Arial,Helvetica,sans-serif; }
+@media(max-width:600px) { .essay-poster { max-width:260px; } }
