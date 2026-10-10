@@ -441,3 +441,40 @@ body[data-archive-active="images"] [data-archive-for="images"],body[data-archive
 .cv-experiences article:first-child { border-top:0; padding-top:.4rem; }
 .cv-experiences h3 { margin:.55rem 0 .75rem; }
 .cv-experiences p { margin:0; font-size:.93rem; color:var(--muted); }
+
+/* Media History: compact, consistent reading covers and Chinese essay typography. */
+.reading-shelf { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.5rem; max-width:800px; margin:1.5rem 0 1rem; }
+.reading-shelf figure { min-width:0; margin:0; }
+.reading-cover-link { display:flex; align-items:center; justify-content:center; height:235px; padding:12px; border:1px solid var(--line); background:#e7e5df; overflow:hidden; }
+.reading-cover-link img { display:block; width:auto; max-width:100%; height:100%; object-fit:contain; transition:transform .25s ease; }
+.reading-cover-link:hover img,.reading-cover-link:focus-visible img { transform:scale(1.045); }
+.reading-cover-link:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.reading-shelf figcaption { padding:.9rem 0 0; }
+.reading-shelf h5 { margin:0 0 .4rem; font:600 .9rem/1.5 Arial,Helvetica,sans-serif; }
+.reading-shelf figcaption p { margin:.2rem 0; font:.72rem/1.6 Arial,Helvetica,sans-serif; color:var(--muted); }
+.reading-credit { font-size:.7rem; color:var(--muted); }
+.research-entry { margin:1.3rem 0 2rem; }
+.research-entry strong:lang(zh-CN),.course-research-entry strong:lang(zh-CN) { font-family:Georgia,"Noto Serif CJK SC","Songti SC",SimSun,serif; }
+.chinese-essay-page h1 { max-width:900px; font-family:Georgia,"Noto Serif CJK SC","Songti SC",SimSun,serif; font-size:clamp(1.8rem,3.2vw,3rem); line-height:1.5; }
+.chinese-essay-page .reading { max-width:800px; font-family:Georgia,"Noto Serif CJK SC","Songti SC",SimSun,serif; font-size:1rem; line-height:2; overflow-wrap:anywhere; }
+.chinese-essay-page .reading h2 { font-size:1.45rem; line-height:1.6; margin:2.8rem 0 1.2rem; }
+.essay-status { max-width:800px; padding:.8rem 1rem; border-left:2px solid var(--accent); color:var(--muted); font-size:.85rem; }
+.essay-note { margin-top:2rem; color:var(--muted); font-size:.76rem; }
+.mechanism-figure { margin:1.5rem 0 2.5rem; font-family:Arial,Helvetica,sans-serif; }
+.mechanism-figure figcaption { margin:.8rem 0; font-size:.75rem; line-height:1.7; color:var(--muted); }
+.ln-flow { list-style:none; margin:0 auto; padding:0; max-width:620px; counter-reset:ln-stage; }
+.ln-flow li { position:relative; margin-bottom:2.1rem; padding:1rem; border:1px solid var(--line); text-align:center; font-size:.85rem; line-height:1.7; counter-increment:ln-stage; }
+.ln-flow li::before { content:counter(ln-stage,decimal-leading-zero); margin-right:.7rem; color:var(--accent); font-weight:bold; }
+.ln-flow li:not(:last-child)::after { content:"↓"; position:absolute; left:50%; bottom:-1.9rem; transform:translateX(-50%); color:var(--muted); font-size:1.25rem; }
+.loop-caption { max-width:620px; margin-left:auto !important; margin-right:auto !important; padding:.75rem; border-left:2px solid var(--accent); }
+.meaning-sources { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.75rem; }
+.meaning-sources > div,.meaning-stage { padding:1rem; border:1px solid var(--line); font-size:.82rem; line-height:1.7; }
+.meaning-flow strong,.meaning-flow span:not(.flow-arrow) { display:block; }
+.meaning-flow strong { margin-bottom:.4rem; }
+.meaning-flow .flow-arrow { display:block; text-align:center; margin:.5rem; font-size:1.3rem; color:var(--muted); }
+.meaning-stage { max-width:620px; margin:auto; }
+.meaning-stage ul { margin:.5rem 0 0; padding-left:1.2rem; }
+.future-format { margin:1.5rem 0; padding:.2rem 0 .2rem 1.2rem; border-left:2px solid var(--accent); }
+@media(max-width:600px) { .reading-shelf { gap:.65rem; } .reading-cover-link { height:155px; padding:8px; } .reading-shelf h5 { font-size:.78rem; } .reading-shelf figcaption p { font-size:.65rem; } .meaning-sources { grid-template-columns:1fr; } .chinese-essay-page .reading { font-size:.95rem; } }
+@media(max-width:380px) { .reading-cover-link { height:130px; padding:5px; } }
+@media(prefers-reduced-motion:reduce) { .reading-cover-link img { transition:none; } }
