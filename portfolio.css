@@ -410,3 +410,22 @@ body[data-archive-active="images"] [data-archive-for="images"],body[data-archive
 @media(max-width:780px) { .proposal-framework { grid-template-columns:1fr; } .proposal-model { grid-template-columns:1fr; text-align:center; } .proposal-model span[aria-hidden] { transform:rotate(90deg); } }
 @media(hover:none) { .portal-chat { opacity:1; visibility:visible; transform:translate(-50%,0); } }
 @media(prefers-reduced-motion:reduce) { .pixel-portal .portal-chat { transition:none; } .pixel-portal:hover .pixel-wave,.pixel-portal:focus-visible .pixel-wave { transform:rotate(-150deg); } }
+
+/* Course navigation: compact outlined actions, distinct from the solid Journey entry. */
+.course-button { display:inline-flex; align-items:center; justify-content:center; gap:.6rem; padding:.65rem 1rem; margin:.6rem 0 1rem; border:1px solid var(--ink); background:transparent; color:var(--ink); text-decoration:none; font:600 .75rem/1.35 Arial,Helvetica,sans-serif; letter-spacing:.015em; transition:color .2s,background .2s; }
+.course-button:hover,.course-button:focus-visible { color:var(--paper); background:var(--ink); }
+.course-button:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.journey-page .workshop-pair figcaption .course-button { display:inline-flex; background:transparent; border:1px solid var(--ink); padding:.65rem 1rem; color:var(--ink); }
+.journey-page .workshop-pair figcaption .course-button:hover,.journey-page .workshop-pair figcaption .course-button:focus-visible { color:var(--paper); background:var(--ink); }
+.journey-period > .journey-course { border-top:0; }
+.journey-period > .journey-course + .journey-course { border-top:1px solid var(--line); }
+.journey-project,.course-research-entry { border:0; }
+.course-research-entry { margin-top:1.5rem; max-width:800px; }
+.course-research-entry .eyebrow { display:block; margin-bottom:.5rem; font-size:.64rem; }
+.course-research-entry strong { display:block; font:normal 1.3rem/1.4 Georgia,serif; }
+.journey-entry-button { max-width:600px; }
+.research-game-cover { max-width:600px; margin:2rem 0 .75rem; }
+.research-game-cover img { display:block; width:100%; height:auto; border:1px solid var(--line); }
+.research-game-cover figcaption { margin-top:.55rem; font:.72rem/1.5 Arial,Helvetica,sans-serif; color:var(--muted); }
+.proposal-references p { padding-left:1.5rem; text-indent:-1.5rem; overflow-wrap:anywhere; }
+@media(prefers-reduced-motion:reduce) { .course-button { transition:none; } }
