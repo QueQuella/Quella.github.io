@@ -493,3 +493,27 @@ body[data-archive-active="images"] [data-archive-for="images"],body[data-archive
 .essay-visual-note p { margin:.5rem 0 0 !important; }
 .essay-screen-sources { font:.85rem/1.8 Arial,Helvetica,sans-serif; }
 @media(max-width:600px) { .essay-poster { max-width:260px; } }
+
+/* Shared course frames: full images, consistent heights and captions. */
+.journey-page .journey-pair img,.project-process .journey-pair img { display:block; height:clamp(180px,24vw,320px); aspect-ratio:auto; width:100%; object-fit:contain; }
+.journey-triptych { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.journey-triptych .split-presentation { display:block; width:100%; height:clamp(180px,24vw,320px); background:#e7e5df; }
+.journey-page .pipeline-reference img { height:auto; max-height:360px; }
+.journey-poster { max-width:360px; margin:1.3rem 0 .7rem; }
+.journey-poster img { display:block; width:100%; height:auto; border:1px solid var(--line); }
+.journey-poster figcaption { margin:.65rem 0 0; color:var(--muted); font:.8rem/1.6 Arial,Helvetica,sans-serif; }
+.character-girl-pair { display:flex; align-items:flex-start; gap:1.2rem; margin-top:1.5rem; }
+.character-girl-pair figure { margin:0; min-width:0; }
+.character-girl-pair img { height:clamp(180px,24vw,320px); width:auto; max-width:100%; object-fit:contain; }
+.character-girl-pair a { display:block; }
+.project-process { max-width:1100px; }
+.film-watch-button { max-width:650px; margin:1.5rem 0 2.2rem; }
+.film-poster { margin-top:2.2rem; }
+@media(max-width:650px) {
+ .journey-triptych { grid-template-columns:1fr; }
+ .journey-page .journey-pair img,.project-process .journey-pair img { height:180px; }
+ .journey-triptych .split-presentation,.journey-page .journey-triptych img { height:240px; }
+ .character-girl-pair { gap:.65rem; }
+ .character-girl-pair img { height:180px; }
+ .journey-page .pipeline-reference img { height:auto; }
+}
