@@ -517,3 +517,6 @@ body[data-archive-active="images"] [data-archive-for="images"],body[data-archive
  .character-girl-pair img { height:180px; }
  .journey-page .pipeline-reference img { height:auto; }
 }
+
+/* Archive entry uses the established solid navigation button. */
+.archive-entry-button { max-width:600px; margin:0 0 2rem; }
