@@ -520,3 +520,19 @@ body[data-archive-active="images"] [data-archive-for="images"],body[data-archive
 
 /* Archive entry uses the established solid navigation button. */
 .archive-entry-button { max-width:600px; margin:0 0 2rem; }
+
+/* Academic Journey: course, work and caption hierarchy with compact action spacing. */
+.journey-page .journey-course > h3 { font:600 clamp(1.3rem,1.8vw,1.65rem)/1.35 Arial,Helvetica,sans-serif; letter-spacing:-.02em; margin:0 0 1rem; }
+.journey-page .journey-work-title { font:normal 1.2rem/1.45 Georgia,"Noto Serif CJK SC","Songti SC",SimSun,serif; letter-spacing:0; margin:.45rem 0 0; max-width:800px; }
+.journey-page .journey-work-title + p { margin-top:.8rem; }
+.journey-page .journey-course .eyebrow { margin-bottom:.4rem; font-size:.64rem; }
+.journey-page .journey-course .course-button { margin:.65rem 0 0; vertical-align:top; }
+.journey-page .journey-course p:has(+ .course-button) { margin-bottom:0; }
+.journey-page .journey-pair { margin-bottom:0; }
+.journey-page .journey-poster { margin-bottom:0; }
+.journey-page .course-research-entry { margin:1.5rem 0 0; }
+.journey-page .course-research-entry.research-entry { margin-bottom:0; }
+.journey-page .workshop-pair figcaption { padding-top:.65rem; }
+.journey-page .workshop-pair figcaption h4 { margin:0; }
+.journey-page .workshop-pair figcaption .course-button { margin-top:.65rem; }
+.journey-page .journey-project > .course-button + .journey-pair { margin-top:1.2rem; }
