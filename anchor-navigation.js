@@ -55,7 +55,15 @@
     const link = event.target.closest('a[href]');
     if (!link || link.target === '_blank' || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     const url = new URL(link.href, location.href);
-    if (url.origin === location.origin && url.pathname === location.pathname && url.hash && url.hash === location.hash) requestAnimationFrame(alignHash);
+    if (url.origin !== location.origin || url.pathname !== location.pathname || !url.hash) return;
+    let target;
+    try { target = document.getElementById(decodeURIComponent(url.hash.slice(1))); } catch { return; }
+    if (!target) return;
+    event.preventDefault();
+    if (url.hash !== location.hash) {
+      history.pushState(null, '', url.hash);
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+    } else alignHash();
   });
   alignHash();
 })();

@@ -13,6 +13,8 @@
     const courses = [...period.querySelectorAll('.journey-course[id]')];
     let activeCourse = courses[0];
     for (const course of courses) if (course.getBoundingClientRect().top <= innerHeight * .32) activeCourse = course;
+    const hashCourse = courses.find(course => '#' + course.id === location.hash);
+    if (scrollY + innerHeight >= document.documentElement.scrollHeight - 3 && hashCourse) activeCourse = hashCourse;
     courseLinks.forEach(link => {
       if (activeCourse && link.hash === '#' + activeCourse.id) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
@@ -27,6 +29,7 @@
     frame = null;
     let active = periods[0];
     for (const period of periods) if (period.getBoundingClientRect().top <= innerHeight * .28) active = period;
+    if (scrollY + innerHeight >= document.documentElement.scrollHeight - 3) active = periods[periods.length - 1];
     activate(active);
   };
   const schedule = () => { if (!frame) frame = requestAnimationFrame(track); };
