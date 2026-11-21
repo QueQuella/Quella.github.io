@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OneTwoThe — Quella's animation, interactive design and creative research archive.">
+<title>OneTwoThe — QUELLA</title><link rel="stylesheet" href="../portfolio.css?v=20261008-posts2"></head>
+<body class="detail-page">
+<header class="masthead" id="top"><div class="shell masthead-inner"><a class="brand" href="../index.html">QUELLA</a></div></header>
+<div class="detail-layout shell">
+<main class="content">
+<section class="intro">
+  <div class="eyebrow">Interactive narrative / Visual novel</div>
+  <h1>OneTwoThe</h1>
+  <a class="practice-button" href="onetwothe/prototype.html" target="_blank" rel="noopener"><span><small>Twine / SugarCube · Opens in a new tab</small><strong>Play the Branching Narrative</strong></span><span aria-hidden="true">↗</span></a>
+  <p>I wrote the first playable version in Twine using SugarCube to track what the player had discovered behind each door. Those choices shaped the script for the visual novel in Unreal Engine 5. I used Unreal Motion Graphics (UMG) widgets to present dialogue and choices over illustrated scenes, turning a passage link in the prototype into an on-screen action, such as reaching for a door handle.</p>
+  <table class="profile-table"><caption>Project details</caption><tbody>
+    <tr><th scope="row">Genre</th><td>First-person psychological mystery</td></tr>
+    <tr><th scope="row">Format</th><td>Branching visual novel</td></tr>
+    <tr><th scope="row">Prototype</th><td>Twine / SugarCube</td></tr>
+    <tr><th scope="row">Engine</th><td>Unreal Engine 5 / UMG</td></tr>
+  </tbody></table>
+</section>
+<section>
+  <h2>Core Concept</h2>
+  <div class="reading"><p>You wake beside a woman in a medical room. You remember nothing about her, and nothing about yourself. Two doors lead out. Somewhere beyond them is a figure called HER. How do you recognise a threat when you cannot trust your own memory?</p>
+  <p>I wanted the player to have grounds for disagreeing with the ending the game gives them. Staying in the forest can earn the words “Happy ending.” Whether a peaceful life is worth giving up the chance to know who you are is a question the player takes away.</p></div>
+</section>
+<section>
+  <h2>Branch Structure</h2>
+  <div class="reading"><p>Either door can be opened first. Each route gives the player a different way to recognise HER. Discoveries carry over when the player returns to the doors.</p>
+  <h3>Left door · The forest</h3>
+  <p>A bow lies on the ground. Picking it up changes what you can offer the old man and whether you receive an arrow. That exchange shapes your encounter with the forest guardian. By the time someone asks you to identify HER, even “I don’t know” has a consequence.</p>
+  <h3>Right door · Digital space</h3>
+  <p>A firefly draws your eye to a key among floating screens. Taking it gives you a way to open a locked box. Leaving it behind means waiting for another way out. A red button offers a further choice about restarting the world you are standing in.</p>
+  <details><summary>Reveal the four endings</summary><ul>
+    <li>Recognise HER on both routes and return to the medical room. You discover that you are the older woman’s independent digital consciousness, created to bring her back.</li>
+    <li>Reach the forest confrontation with an arrow and answer “I don’t know.” The figure you failed to recognise swallows you.</li>
+    <li>Follow the forest path without an arrow. You live out your life there in peace, with your memories still missing.</li>
+    <li>Give up before exploring the other route. Back in the medical room, the heartbeat stops.</li>
+  </ul></details></div>
+</section>
+<section>
+  <h2>Technical Workflow</h2>
+  <div class="reading"><h3>Map and test the choices</h3><p>I mapped the two routes, then used AI to help compare drafts and combine passages that led to the same decision. In SugarCube, I tracked the bow, arrow and key separately from the two discoveries about HER. This let me test both door orders and check which ending each sequence reached.</p>
+  <h3>Stage the transition from footage to dialogue</h3><p>I used first-person footage for movement and illustrated scenes for encounters. The lakeside sequence guided the edit: the walk establishes the player’s viewpoint, then a held frame leaves room for a character and a line of dialogue. With limited filming locations, I also used free footage and AI-assisted illustrations.</p>
+  <h3>Build the visual novel interface</h3><p>In UE5, I arranged the backgrounds, character images, dialogue and clickable choices in UMG. At the doors, the player reaches for a handle before the cut to the next scene. The action gives a Twine branch a physical place in the frame.</p></div>
+</section>
+</main></div>
+<footer class="shell"><span>© Quella · Creative archive</span><a href="../index.html">Back to home ↑</a></footer>
+
+
+<a class="top-button" href="#top" aria-label="Return to top" aria-hidden="true" tabindex="-1"><span aria-hidden="true">↑</span> Top</a><script src="../detail-top.js?v=20261008-logo" defer></script></body></html>
