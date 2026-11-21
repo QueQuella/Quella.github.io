@@ -591,7 +591,7 @@ body[data-active-section="archive"] .page-layout { grid-template-columns:var(--p
  body[data-active-section="archive"] .page-layout { display:block; }
 }
 
-.card-image .ott-panel {
-  background: linear-gradient(110deg, #11172c 47%, #233b71 47%, #101c36 76%);
-  color: #ff9794;
+#project-onetwothe .card-image img {
+  object-fit: contain;
+  transform: none;
 }
