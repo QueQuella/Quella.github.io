@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Lakespeaker: Soliloquy — a narrative exploration game in development.">
+<title>LAKESPEAKER: SOLILOQUY</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+  <header class="intro" id="top">
+    <div class="masthead">
+      <nav aria-label="Page sections">
+        <a href="#gameplay">Gameplay</a>
+        <a href="#concept">Game Concept</a>
+      </nav>
+    </div>
+    <h1>LAKESPEAKER: SOLILOQUY</h1>
+    <p class="subtitle">Mid-Presentation</p>
+    <dl class="facts">
+      <div><dt>Genre:</dt><dd>Narrative Exploration</dd></div>
+      <div><dt>Platform:</dt><dd>PC</dd></div>
+      <div><dt>Engine:</dt><dd>Unreal Engine 5</dd></div>
+      <div><dt>Project Type:</dt><dd>Final Year Project</dd></div>
+      <div><dt>Role:</dt><dd>Individual Project</dd></div>
+      <div><dt>Status:</dt><dd>In Development</dd></div>
+    </dl>
+    <div class="tags">
+      <h2>Tags:</h2>
+      <ul>
+        <li>3D Adventure</li><li>Indie Game</li><li>Walking Simulator</li>
+        <li>Exploration-Focused</li><li>Psychological Narrative</li><li>Philosophical Themes</li>
+        <li>Choice-Driven</li><li>Branching Narrative</li><li>Environmental Storytelling</li>
+      </ul>
+    </div>
+  </header>
+  <section id="gameplay" aria-label="Gameplay video placeholder">
+    <figure>
+      <div class="video-placeholder">
+        <div class="video-caption"><span class="play-mark" aria-hidden="true"></span><span class="muted">Video Placeholder</span></div>
+      </div>
+    </figure>
+  </section>
+  <hr>
+  <section id="concept" aria-labelledby="concept-title">
+    <h2 id="concept-title">GAME CONCEPT</h2>
+    <div class="concept-rows">
+      <article>
+        <h3>Why Create This Game?</h3>
+        <div><p>Begin with my personal experiences, as a game creator, I find myself less interested in completing large-scale games. And I prefer games that cover exploration, emotional experiences, and the mysteries that make players think. During my university years, I often question my own identity and circumstances. In a summer holiday, after rewatching the TV adaptations of <em>The Lost Tomb</em> (<span lang="zh">盗墓笔记</span>), I'm fascinated by the atmosphere of entering unknown spaces and the mystery of the Bronze Gate, where fate and destiny seem deeply connected. These experiences inspire me to begin creating this game.</p></div>
+      </article>
+      <article>
+        <h3>How to Play?</h3>
+        <div><p>The player takes the role of Lin Shen (<span lang="zh">林深</span>), a 28-year-old postgraduate student in folklore studies. As a child, he was told by an old fortune-teller that he was the "Heir of the Lake". He has always been uncertain about this prophecy, until he accidentally drowns during a field investigation by the lake. And he is trapped in his own dream.</p>
+        <p>To find the exits, players go through three levels: finding memories, exploring beliefs, and making choices. The ultimate goal is to escape the dream, build own narrative and choose the self.</p></div>
+      </article>
+      <article>
+        <h3>What Will Players Experience?</h3>
+        <div><p>This game takes players through a journey of uncertainty, fate, and personal choice. Ultimately, I want players to experience a rich narrative journey that leaves them with personal emotions, memories, and questions to reflect on, even after the game ends.</p></div>
+      </article>
+    </div>
+  </section>
+  <hr>
+  <section id="mechanics" aria-labelledby="mechanics-title">
+    <h2 id="mechanics-title">GAME MECHANICS</h2>
+    <article class="showcase">
+      <h3>Player Control</h3>
+      <p>From character model to animation blueprint, I use the rigged girl model that was completed in 3D animation course. Players can press Q to shift perspectives, press shift to switch state between walking and running, press 1 to turn on the flashlight.</p>
+      <div class="media-grid">
+        <button type="button" class="media-tile" aria-label="Enlarge Switch between walking and running"><video src="media/switch-state.mp4" loop muted playsinline preload="metadata" aria-hidden="true"></video></button>
+        <button type="button" class="media-tile" aria-label="Enlarge Shift camera perspective"><video src="media/shift-perspective.mp4" loop muted playsinline preload="metadata" aria-hidden="true"></video></button>
+      </div>
+      <p><strong>Problem:</strong> When the players rotate the viewpoint, they can see inside the model and it looks scary and blocks the sight.</p>
+      <p><strong>Solution:</strong> Modify the character's material that can become transparent within certain distance.</p>
+      <div class="media-grid">
+        <button type="button" class="media-tile" aria-label="Enlarge Distance-based transparency material nodes"><img src="media/material-nodes.webp" alt="Distance-based transparency material nodes" loading="lazy"></button>
+        <button type="button" class="media-tile" aria-label="Enlarge Character transparency in play"><video src="media/transparent-material.mp4" loop muted playsinline preload="metadata" aria-hidden="true"></video></button>
+      </div>
+    </article>
+    <article class="showcase">
+      <h3>Interaction Systems</h3>
+      <h4>Computer System</h4>
+      <div class="media-grid">
+        <button type="button" class="media-tile" aria-label="Enlarge Turn on the computer"><video src="media/open-computer.mp4" loop muted playsinline preload="metadata" aria-hidden="true"></video></button>
+        <button type="button" class="media-tile" aria-label="Enlarge Search the in-game website"><video src="media/search-computer.mp4" loop muted playsinline preload="metadata" aria-hidden="true"></video></button>
+      </div>
+      <p><strong>Location:</strong> Level 1, in the secret room</p>
+      <p>This computer works for the web searching and email checking. Players should find fragmented memories and get a message: the owner of this computer goes to the same place every year. And, players can guess and find hints to search for the key clues, like video, journal or diary, etc. This is where players can get more information and background stories.</p>
+      <h4>Door Interaction</h4>
+      <div class="media-grid">
+        <button type="button" class="media-tile" aria-label="Enlarge Open a standard door with E"><video src="media/normal-door.mp4" loop muted playsinline preload="metadata" aria-hidden="true"></video></button>
+        <button type="button" class="media-tile" aria-label="Enlarge Unlock the password-protected door"><video src="media/door-lock.mp4" loop muted playsinline preload="metadata" aria-hidden="true"></video></button>
+      </div>
+      <p><strong>Location:</strong> Bedroom and secret room</p>
+      <p>The door with lock uses toon shader and animation transition to automatically open. And the lock's password answer "GAZE" would be related to the hidden gaze system. (Players can accidentally gaze at mirrors for more than 3s to trigger the dialogue system, and make choices to influence the ending outcome.)</p>
+    </article>
+  </section>
+  <hr>
+  <section aria-labelledby="level-design-title">
+    <h2 id="level-design-title" class="section-title">Level Design</h2>
+    <article class="showcase">
+      <p>The complete branch maps for level 1&amp;2:</p>
+      <div class="media-grid">
+        <button type="button" class="media-tile media-tile--portrait" aria-label="Enlarge Level 1 branching narrative map">
+          <img src="media/level-1-branch.webp" alt="Level 1 branching narrative map" loading="lazy">
+        </button>
+        <button type="button" class="media-tile media-tile--portrait" aria-label="Enlarge Level 2 branching narrative map">
+          <img src="media/level-2-branch.webp" alt="Level 2 branching narrative map" loading="lazy">
+        </button>
+      </div>
+      <p>The two maps are for the player flow and world building.</p>
+      <h3>Current progress</h3>
+      <h4>Level_Valley</h4>
+      <div class="media-grid">
+        <button type="button" class="media-tile" aria-label="Enlarge Valley environment view 1"><img src="media/valley-1.webp" alt="Valley environment view 1" loading="lazy"></button>
+        <button type="button" class="media-tile" aria-label="Enlarge Valley environment view 2"><img src="media/valley-2.webp" alt="Valley environment view 2" loading="lazy"></button>
+      </div>
+      <h4>Level 1</h4>
+      <div class="media-grid">
+        <button type="button" class="media-tile" aria-label="Enlarge Level 1 environment view 1"><img src="media/level-1-a.webp" alt="Level 1 environment view 1" loading="lazy"></button>
+        <button type="button" class="media-tile" aria-label="Enlarge Level 1 environment view 2"><img src="media/level-1-b.webp" alt="Level 1 environment view 2" loading="lazy"></button>
+        <button type="button" class="media-tile" aria-label="Enlarge Level 1 environment view 3"><img src="media/level-1-c.webp" alt="Level 1 environment view 3" loading="lazy"></button>
+        <button type="button" class="media-tile" aria-label="Enlarge Level 1 environment view 4"><img src="media/level-1-d.webp" alt="Level 1 environment view 4" loading="lazy"></button>
+      </div>
+      <h4>Reference Board: Level 2</h4>
+      <div class="media-grid media-grid--single">
+        <button type="button" class="media-tile" aria-label="Enlarge Level 2 environment reference board"><img src="media/level-2-reference.webp" alt="Level 2 environment reference board" loading="lazy"></button>
+      </div>
+    </article>
+  </section>
+  <hr>
+  <section aria-labelledby="next-title">
+    <h2 id="next-title" class="section-title">Next</h2>
+    <article><p>Work on the systems and level building.</p></article>
+  </section>
+  <footer><a href="#top" class="muted">Back to top <span aria-hidden="true">↑</span></a></footer>
+</main>
+<dialog class="media-dialog" aria-label="Media viewer">
+  <div class="viewer">
+    <div class="viewer-media"></div>
+    <button type="button" class="viewer-close" aria-label="Close media viewer" autofocus>×</button>
+    <button type="button" class="viewer-prev" aria-label="Previous item">‹</button>
+    <button type="button" class="viewer-next" aria-label="Next item">›</button>
+    <div class="viewer-count" aria-live="polite"></div>
+  </div>
+</dialog>
+<script src="media-viewer.js" defer></script>
+</body>
+</html>
