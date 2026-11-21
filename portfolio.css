@@ -590,8 +590,3 @@ body[data-active-section="archive"] .page-layout { grid-template-columns:var(--p
  .cv-experience-table tr:first-child td + td { border-top:1px solid var(--line); }
  body[data-active-section="archive"] .page-layout { display:block; }
 }
-
-#project-onetwothe .card-image img {
-  object-fit: contain;
-  transform: none;
-}
